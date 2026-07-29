@@ -1,0 +1,300 @@
+{
+ "clips": [
+  {
+   "bench": "rlbench",
+   "slug": "close_jar",
+   "task": "close_jar",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/close_jar/videos/episode_1_close_the_olive_jar_success_1.mp4",
+   "out": "static/videos/sim/rlbench/close_jar/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__close_jar.jpg",
+   "frames": 143,
+   "dur": 5.72,
+   "kind": "motion",
+   "instr": "close_the_olive_jar"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "drag_stick",
+   "task": "reach_and_drag",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/reach_and_drag/videos/episode_0_use_the_stick_to_drag_the_cube_onto_the_purple_target_success_0.mp4",
+   "out": "static/videos/sim/rlbench/drag_stick/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__drag_stick.jpg",
+   "frames": 154,
+   "dur": 6.16,
+   "kind": "motion",
+   "instr": "use_the_stick_to_drag_the_cube_onto_the_purple_target"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "meat_off_grill",
+   "task": "meat_off_grill",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/meat_off_grill/videos/episode_1_take_the_chicken_off_the_grill_success_1.mp4",
+   "out": "static/videos/sim/rlbench/meat_off_grill/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__meat_off_grill.jpg",
+   "frames": 144,
+   "dur": 5.76,
+   "kind": "motion",
+   "instr": "take_the_chicken_off_the_grill"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "open_drawer",
+   "task": "open_drawer",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/open_drawer/videos/episode_0_open_the_bottom_drawer_success_0.mp4",
+   "out": "static/videos/sim/rlbench/open_drawer/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__open_drawer.jpg",
+   "frames": 110,
+   "dur": 4.4,
+   "kind": "motion",
+   "instr": "open_the_bottom_drawer"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "place_cups",
+   "task": "place_cups",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_222517/visualize/place_cups/videos/episode_0_place_1_cup_on_the_cup_holder_success_0.mp4",
+   "out": "static/videos/sim/rlbench/place_cups/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__place_cups.jpg",
+   "frames": 646,
+   "dur": 25.84,
+   "kind": "motion",
+   "instr": "place_1_cup_on_the_cup_holder"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "place_wine",
+   "task": "place_wine_at_rack_location",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/place_wine_at_rack_location/videos/episode_2_stack_the_wine_bottle_to_the_right_of_the_rack_success_2.mp4",
+   "out": "static/videos/sim/rlbench/place_wine/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__place_wine.jpg",
+   "frames": 199,
+   "dur": 7.96,
+   "kind": "motion",
+   "instr": "stack_the_wine_bottle_to_the_right_of_the_rack"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "push_buttons",
+   "task": "push_buttons",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/push_buttons/videos/episode_0_push_the_maroon_button,_then_push_the_green_button,_then_push_the_gray_button_success_0.mp4",
+   "out": "static/videos/sim/rlbench/push_buttons/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__push_buttons.jpg",
+   "frames": 137,
+   "dur": 5.48,
+   "kind": "motion",
+   "instr": "push_the_maroon_button,_then_push_the_green_button,_then_push_the_gray_button"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "put_in_cupboard",
+   "task": "put_groceries_in_cupboard",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/put_groceries_in_cupboard/videos/episode_1_put_the_crackers_in_the_cupboard_success_1.mp4",
+   "out": "static/videos/sim/rlbench/put_in_cupboard/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__put_in_cupboard.jpg",
+   "frames": 248,
+   "dur": 9.92,
+   "kind": "motion",
+   "instr": "put_the_crackers_in_the_cupboard"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "put_in_drawer",
+   "task": "put_item_in_drawer",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/put_item_in_drawer/videos/episode_0_put_the_item_in_the_top_drawer_success_0.mp4",
+   "out": "static/videos/sim/rlbench/put_in_drawer/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__put_in_drawer.jpg",
+   "frames": 373,
+   "dur": 14.92,
+   "kind": "motion",
+   "instr": "put_the_item_in_the_top_drawer"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "put_in_safe",
+   "task": "put_money_in_safe",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/put_money_in_safe/videos/episode_1_put_the_money_away_in_the_safe_on_the_middle_shelf_success_1.mp4",
+   "out": "static/videos/sim/rlbench/put_in_safe/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__put_in_safe.jpg",
+   "frames": 185,
+   "dur": 7.4,
+   "kind": "motion",
+   "instr": "put_the_money_away_in_the_safe_on_the_middle_shelf"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "screw_bulb",
+   "task": "light_bulb_in",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/light_bulb_in/videos/episode_2_screw_in_the_azure_light_bulb_success_2.mp4",
+   "out": "static/videos/sim/rlbench/screw_bulb/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__screw_bulb.jpg",
+   "frames": 245,
+   "dur": 9.8,
+   "kind": "motion",
+   "instr": "screw_in_the_azure_light_bulb"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "slide_block",
+   "task": "slide_block_to_color_target",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/slide_block_to_color_target/videos/episode_1_slide_the_block_to_blue_target_success_1.mp4",
+   "out": "static/videos/sim/rlbench/slide_block/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__slide_block.jpg",
+   "frames": 164,
+   "dur": 6.56,
+   "kind": "motion",
+   "instr": "slide_the_block_to_blue_target"
+  },
+  {
+   "bench": "rlbench",
+   "slug": "sort_shape",
+   "task": "place_shape_in_shape_sorter",
+   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/place_shape_in_shape_sorter/videos/episode_0_put_the_moon_in_the_shape_sorter_success_0.mp4",
+   "out": "static/videos/sim/rlbench/sort_shape/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__sort_shape.jpg",
+   "frames": 174,
+   "dur": 6.96,
+   "kind": "motion",
+   "instr": "put_the_moon_in_the_shape_sorter"
+  },
+  {
+   "bench": "rmbench",
+   "slug": "observe_and_pick_up",
+   "task": "observe_and_pickup",
+   "src": "train_rmbench/7_1_new_rot_observe_and_pickup_07_01_22_30/eval/rmbench/observe_and_pickup/demo_clean/model_1380/07_02_12_51_05_force_center_0_sparsePC_force_center_0/episode0.mp4",
+   "out": "static/videos/sim/rmbench/observe_and_pick_up/trial_1.mp4",
+   "poster": "static/images/sim_posters/rmbench__observe_and_pick_up.jpg",
+   "frames": 4,
+   "dur": 0.4,
+   "kind": "keyframes",
+   "instr": "Initially, there is one target object on the shelf and five random objects on the table. Then, a screen obscures the target object. Pick up the corresponding target object from the table and lift it up."
+  },
+  {
+   "bench": "rmbench",
+   "slug": "battery_try",
+   "task": "battery_try",
+   "src": "train_rmbench/6_28_new_rot_retrain_battery_try_06_29_13_34/eval/rmbench/battery_try/demo_clean/model_450/06_29_17_31_40_force_center_0_sparsePC_force_center_0/episode59.mp4",
+   "out": "static/videos/sim/rmbench/battery_try/trial_1.mp4",
+   "poster": "static/images/sim_posters/rmbench__battery_try.jpg",
+   "frames": 1013,
+   "dur": 33.77,
+   "kind": "motion",
+   "instr": "There are two batteries and a battery slot on the table. Combining the two batteries in different orientations causes the dashboard needle to rotate."
+  },
+  {
+   "bench": "rmbench",
+   "slug": "press_button",
+   "task": "press_button",
+   "src": "train_rmbench/6_28_new_rot_press_button_06_29_21_37/eval/rmbench/press_button/demo_clean/model_270/06_30_21_33_15_force_center_0_sparsePC_force_center_0/episode10.mp4",
+   "out": "static/videos/sim/rmbench/press_button/trial_1.mp4",
+   "poster": "static/images/sim_posters/rmbench__press_button.jpg",
+   "frames": 26,
+   "dur": 2.6,
+   "kind": "keyframes",
+   "instr": "Observe the two numbers on the table. Press the left button the number of times corresponding to the number on the left, and press the middle button the number of times corresponding to the number on the right. Then press the right button once to confirm."
+  },
+  {
+   "bench": "memorybench",
+   "slug": "reopen_drawer",
+   "task": "reopen_drawer",
+   "src": "train_memorybench/6_30_new_logic_07_01_16_29/eval/memorybench_viz/model_160_07_17_22_03/seed606/videos/reopen_drawer+0/1_SR1.0/global.mp4",
+   "out": "static/videos/sim/memorybench/reopen_drawer/trial_1.mp4",
+   "poster": "static/images/sim_posters/memorybench__reopen_drawer.jpg",
+   "frames": 315,
+   "dur": 10.5,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "memorybench",
+   "slug": "put_block_back",
+   "task": "put_block_back",
+   "src": "train_memorybench/6_30_new_logic_07_01_16_29/eval/memorybench_viz/model_160_07_17_22_03/seed606/videos/put_block_back+3/0_SR1.0/global.mp4",
+   "out": "static/videos/sim/memorybench/put_block_back/trial_1.mp4",
+   "poster": "static/images/sim_posters/memorybench__put_block_back.jpg",
+   "frames": 298,
+   "dur": 9.93,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "memorybench",
+   "slug": "rearrange_block",
+   "task": "rearrange_block",
+   "src": "train_memorybench/6_30_new_logic_07_01_16_29/eval/memorybench_viz/model_160_07_17_22_03/seed606/videos/rearrange_block+1/1_SR1.0/global.mp4",
+   "out": "static/videos/sim/memorybench/rearrange_block/trial_1.mp4",
+   "poster": "static/images/sim_posters/memorybench__rearrange_block.jpg",
+   "frames": 274,
+   "dur": 9.13,
+   "kind": "motion",
+   "instr": ""
+  }
+ ],
+ "missing": [
+  [
+   "rlbench",
+   "insert_peg",
+   "insert_onto_square_peg",
+   "no successful clip saved"
+  ],
+  [
+   "rlbench",
+   "stack_blocks",
+   "stack_blocks",
+   "no successful clip saved"
+  ],
+  [
+   "rlbench",
+   "stack_cups",
+   "stack_cups",
+   "no successful clip saved"
+  ],
+  [
+   "rlbench",
+   "sweep_to_dustpan",
+   "sweep_to_dustpan_of_size",
+   "no successful clip saved"
+  ],
+  [
+   "rlbench",
+   "turn_tap",
+   "turn_tap",
+   "no successful clip saved"
+  ],
+  [
+   "rmbench",
+   "rearrange_blocks",
+   "rearrange_blocks",
+   "no successful clip saved"
+  ],
+  [
+   "rmbench",
+   "put_back_block",
+   "put_back_block",
+   "no successful clip saved"
+  ],
+  [
+   "rmbench",
+   "swap_blocks",
+   "swap_blocks",
+   "no successful clip saved"
+  ],
+  [
+   "rmbench",
+   "swap_t",
+   "swap_T",
+   "no successful clip saved"
+  ],
+  [
+   "rmbench",
+   "blocks_ranking_try",
+   "blocks_ranking_try",
+   "no successful clip saved"
+  ],
+  [
+   "rmbench",
+   "cover_blocks",
+   "cover_blocks",
+   "no successful clip saved"
+  ]
+ ]
+}

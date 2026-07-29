@@ -408,9 +408,13 @@
 
   /* --------------------------------------------------------- Franka explorer */
   /* Same stage pattern as the DOBOT explorer, but a flat picker: 13 basic
-     tasks + 6 generalization settings, one clip each. The clips are not
-     recorded yet — a load error swaps in the "coming soon" overlay showing
-     the exact path, so dropping a file in activates it with no HTML change. */
+     tasks + 6 generalization settings. An item with a `clips` array has one
+     rollout per entry (the six generalization settings were each recorded on
+     three different tasks) and gets a rollout switch over the stage; an item
+     without one derives the single path `<group>/<id>.mp4`. The 13 basic tasks
+     are not recorded yet — a load error swaps in the "coming soon" overlay
+     showing the exact path, so dropping a file in activates it with no HTML
+     change. */
 
   (function initFrankaExplorer() {
     var root = document.getElementById('franka-explorer');
@@ -434,7 +438,13 @@
     var missingNote = root.querySelector('[data-fr-missing-note]');
 
     var buttons = {};
-    var state = { item: data.items[0].id };
+    var state = { item: data.items[0].id, clip: 0 };
+
+    // Widest `clips` array on the page decides how many switch buttons exist;
+    // render() shows only as many as the selected item actually has.
+    var MAX_CLIPS = data.items.reduce(function (n, t) {
+      return Math.max(n, (t.clips || []).length);
+    }, 0);
 
     function itemById(id) {
       for (var i = 0; i < data.items.length; i++) if (data.items[i].id === id) return data.items[i];
@@ -458,6 +468,7 @@
           : t.label;
         b.addEventListener('click', function () {
           state.item = t.id;
+          state.clip = 0;
           render();
         });
         row.appendChild(b);
@@ -465,23 +476,61 @@
       });
     });
 
+    // Rollout switch, mirroring the DOBOT trial switch: absolutely positioned
+    // over the stage, hidden for items with a single clip.
+    var clipWrap = document.createElement('div');
+    clipWrap.className = 'demo-trials';
+    clipWrap.style.cssText =
+      'position:absolute;top:.6rem;right:.6rem;z-index:2;display:none;gap:.25rem;';
+    var clipButtons = [];
+    for (var ci = 0; ci < MAX_CLIPS; ci++) {
+      clipButtons.push((function (i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = 'Rollout ' + (i + 1);
+        b.style.cssText =
+          'font:inherit;font-size:.68rem;font-weight:700;letter-spacing:.04em;' +
+          'padding:.2rem .55rem;border-radius:999px;cursor:pointer;' +
+          'border:1px solid rgba(255,255,255,.22);background:rgba(12,18,38,.55);color:#eef3ff;' +
+          'backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);';
+        b.addEventListener('click', function () {
+          state.clip = i;
+          render();
+        });
+        clipWrap.appendChild(b);
+        return b;
+      })(ci));
+    }
+    if (MAX_CLIPS > 1) root.querySelector('.demo-video').appendChild(clipWrap);
+
     function render() {
       var item = itemById(state.item);
       if (!item) return;
       var group = groupById(item.group);
+      var clips = item.clips || [];
+      if (state.clip >= clips.length) state.clip = 0;
+      var clip = clips[state.clip] || null;
 
       Object.keys(buttons).forEach(function (id) {
         buttons[id].setAttribute('aria-pressed', id === state.item ? 'true' : 'false');
       });
 
-      var src = VIDEO_ROOT + '/' + item.group + '/' + item.id + '.mp4';
+      clipWrap.style.display = clips.length > 1 ? 'flex' : 'none';
+      clipButtons.forEach(function (b, i) {
+        b.style.display = i < clips.length ? '' : 'none';
+        b.style.background = (i === state.clip) ? 'rgba(79,96,203,.85)' : 'rgba(12,18,38,.55)';
+        b.title = clips[i] ? clips[i].instruction : '';
+      });
+
+      var stem = clip ? clip.id : item.id;
+      var src = VIDEO_ROOT + '/' + item.group + '/' + stem + '.mp4';
       if (missingNote) missingNote.textContent = src;
       if (video.getAttribute('src') !== src) {
         // Only a real source change clears the overlay — the error listener
         // re-adds it if the new clip is missing too. Re-clicking the active
         // chip must not hide the overlay over a video that never loaded.
         root.classList.remove('is-unavailable');
-        video.setAttribute('poster', POSTER_ROOT + '/' + item.group + '__' + item.id + '.jpg');
+        video.setAttribute('poster', POSTER_ROOT + '/' + item.group + '__' + stem + '.jpg');
         video.setAttribute('src', src);
         video.load();
         var p = video.play();
@@ -491,8 +540,9 @@
       badge.textContent = group ? group.label : '';
       family.textContent = group ? group.label : '';
       family.classList.toggle('is-free', item.group !== 'basic');
-      instruction.textContent = item.instruction
-        ? '“' + item.instruction + '”'
+      var instr = (clip && clip.instruction) || item.instruction;
+      instruction.textContent = instr
+        ? '“' + instr + '”'
         : item.label + ' setting';
       var noteText = item.note || (group && group.note) || '';
       if (!item.scores) {

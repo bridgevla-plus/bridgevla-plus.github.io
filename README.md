@@ -16,9 +16,14 @@ python3 start_server.py     # http://localhost:8011
 | `static/js/bridgevla_plus.js` | Missing-media placeholders, lazy video playback, tab switchers, the two demo explorers, scroll-spy, BibTeX copy. |
 | `static/images/paper/` | Figures rendered from `manuscript_tpami/figures/*.pdf`. |
 | `static/videos/real/dobot/` | All 35 DOBOT rollouts (7 tasks × 5 settings), rotated upright and re-encoded. |
-| `static/videos/real/franka/` | Franka rollouts — **not recorded yet**; 19 expected paths listed in `VIDEO_ASSETS.md`. |
+| `static/videos/real/franka/` | 18 generalization rollouts (6 settings × 3) + 3 failure cases, imported from the BridgeVLA page. The 13 basic-task clips are **not recorded yet**; their expected paths are in `VIDEO_ASSETS.md`. |
+| `static/videos/overview/` | The narrated BridgeVLA explainer shown in the method section — the only clip on the page with an audio track. |
+| `static/videos/sim/` | 19 simulation rollouts pulled out of the training logs by `tools/build_sim_demos.py`, plus `MANIFEST.json` recording which episode each one came from. |
+| `static/videos/IMPORTED_MANIFEST.json` | Provenance of everything `tools/import_bridgevla_assets.py` brought over from the BridgeVLA page. |
 | `static/images/dobot_posters/` | First frame of each rollout, used as the `<video poster>`. |
 | `static/images/dobot_keyframes/` | The 5-keyframe rollout strip per task (basic setting). |
+| `static/images/sim_posters/` | `<video poster>` for the simulation clips. |
+| `static/images/franka_posters/` | `<video poster>` for the Franka clips. |
 | `static/images/bridgevla_plus_logo.svg` | Placeholder logo / favicon (hand-drawn SVG — swap for the real mark). |
 | `welcome.html` | Optional splash screen from the original template, rebranded. Not linked from anywhere. |
 | `home_page.html` | Redirect to `index.html` (the template served content from this filename). |
@@ -45,8 +50,10 @@ Everything below is marked in `index.html` with a `TODO(author)` comment or a
    entry below it is real.
 6. **Acknowledgements / funding / contact** — footer.
 7. **Logo** — `static/images/bridgevla_plus_logo.svg` is a placeholder mark.
-8. **Videos** — all 35 DOBOT rollouts are in place; 35 clips are still
-   placeholders (19 Franka + 16 simulation). See `VIDEO_ASSETS.md`.
+8. **Videos** — all 35 DOBOT rollouts, all 18 Franka generalization rollouts,
+   the 3 failure cases and 19 of the 30 simulation rollouts are in place;
+   24 clips are still placeholders (13 Franka basic tasks + 11 simulation, the
+   latter needing an eval re-run). See `VIDEO_ASSETS.md`.
 
 ## Tabbed switchers
 
@@ -81,11 +88,14 @@ Driven by the JSON in `<script type="application/json" id="dobot-demo-data">`;
 paths are derived, not listed: `static/videos/real/dobot/<task>/<setting>.mp4`.
 
 **Franka** (`#franka-explorer`): a flat picker — 13 basic-task instructions +
-6 generalization settings, one clip each, driven by `#franka-demo-data`.
-Success counts come from the paper (10-demo / 3-demo / RVT-2). No clip exists
-yet: every selection shows a "Video coming soon" overlay with the exact path
-(`static/videos/real/franka/<group>/<id>.mp4`); dropping a file there
-activates it with no HTML change.
+6 generalization settings, driven by `#franka-demo-data`. Success counts come
+from the paper (10-demo / 3-demo / RVT-2). An item with a `clips` array holds
+one rollout per entry and gets a **Rollout 1 / 2 / 3** switch over the stage
+(each generalization setting was recorded on three different tasks, so the
+instruction line changes with the rollout); an item without one derives the
+single path `static/videos/real/franka/<group>/<id>.mp4`. The 13 basic tasks
+have no clip yet and show a "Video coming soon" overlay with the exact path —
+dropping a file there activates it with no HTML change.
 
 Only the selected clip is ever fetched — one `<video>` whose `src` is swapped.
 Inlining all 35 DOBOT players would have pulled ~39 MB on page load.
@@ -146,6 +156,47 @@ It reads `/DATA/disk1/zyz/projects/BridgeVLA_sam/data/selected_demo`, writes int
 `static/videos/real/dobot/`, `static/images/dobot_posters/` and
 `static/images/dobot_keyframes/`, and prints the `keyframes` step arrays — if those
 change, copy them into `#dobot-demo-data` in `index.html`.
+
+## Regenerating the simulation rollouts
+
+```bash
+python3 tools/build_sim_demos.py            # --dry-run to see the picks only
+```
+
+It walks the training logs under
+`/DATA/disk1/zyz/projects/BridgeVLA_sam/data/bridgevla_data/logs`, takes one
+**successful** episode per task from the **main-model** runs only — anything
+whose run name contains `no_mem` / `no_spatial_mem` / `no_temporal_mem` is an
+ablation and must never be shown as a BridgeVLA++ rollout — and writes
+`static/videos/sim/<bench>/<slug>/trial_1.mp4` plus a poster. Success is
+recorded differently in each suite (RLBench: in the file name; RMBench: in
+`_result.txt`; MemoryBench: in the `<episode>_SR1.0` directory name), so the
+script has one reader per convention.
+
+Tasks with no successful main-model clip are printed as `MISSING` and left as
+page placeholders; `VIDEO_ASSETS.md` lists which evals need re-running. Every
+chosen clip's provenance lands in `static/videos/sim/MANIFEST.json`.
+
+## Importing from the BridgeVLA page
+
+```bash
+python3 tools/import_bridgevla_assets.py    # --dry-run to see the picks only
+```
+
+Copies the reusable material from the BridgeVLA (NeurIPS 2025) project page:
+the 18 Franka generalization rollouts, the 3 Category failure cases and the
+narrated explainer. **Real-robot material only** — that page also ships
+RLBench, COLOSSEUM and GemBench clips, but those are base-model recordings and
+the simulation panels here show BridgeVLA++ rollouts, so importing them would
+misattribute them. The Franka tables are BridgeVLA results in the journal
+extension too, so those clips carry no such problem.
+
+Every source is already H.264 / yuv420p, so each clip is remuxed with
+`-c:v copy` — a bit-identical video bitstream — purely to move `moov` to the
+front; none of the originals are faststart. Provenance lands in
+`static/videos/IMPORTED_MANIFEST.json`. The Franka clips carry a burned-in
+`X6` badge and play at 6× real time, which the page states in the explorer's
+lede.
 
 ## Attribution
 
