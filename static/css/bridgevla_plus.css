@@ -384,15 +384,6 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--heading); line-h
 }
 .figure:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
 .figure img { display: block; width: 100%; height: auto; border-radius: var(--radius-sm); }
-/* The overview video sits in a .figure rather than a .media-slot: it is the one
-   clip with narration, so it must never be auto-played by the viewport
-   observer. Dark backing because it letterboxes its 16:9 title cards. */
-.figure.explainer video {
-  display: block; width: 100%; height: auto;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--radius-sm);
-  background: #0f1428;
-}
 .figcap {
   margin: .85rem .25rem 0;
   font-size: .89rem;

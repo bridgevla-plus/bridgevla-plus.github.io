@@ -17,7 +17,6 @@ python3 start_server.py     # http://localhost:8011
 | `static/images/paper/` | Figures rendered from `manuscript_tpami/figures/*.pdf`. |
 | `static/videos/real/dobot/` | All 35 DOBOT rollouts (7 tasks × 5 settings), rotated upright and re-encoded. |
 | `static/videos/real/franka/` | 18 generalization rollouts (6 settings × 3) + 3 failure cases, imported from the BridgeVLA page. The 13 basic-task clips are **not recorded yet**; their expected paths are in `VIDEO_ASSETS.md`. |
-| `static/videos/overview/` | The narrated BridgeVLA explainer shown in the method section — the only clip on the page with an audio track. |
 | `static/videos/sim/` | 19 simulation rollouts pulled out of the training logs by `tools/build_sim_demos.py`, plus `MANIFEST.json` recording which episode each one came from. |
 | `static/videos/IMPORTED_MANIFEST.json` | Provenance of everything `tools/import_bridgevla_assets.py` brought over from the BridgeVLA page. |
 | `static/images/dobot_posters/` | First frame of each rollout, used as the `<video poster>`. |
@@ -29,10 +28,13 @@ python3 start_server.py     # http://localhost:8011
 | `home_page.html` | Redirect to `index.html` (the template served content from this filename). |
 | `VIDEO_ASSETS.md` | Every video path the page expects, with what each one shows. |
 
-The template's own assets (`static/css/bulma*`, `static/js/jquery*`,
-`static/images/Overview.png`, `static/videos/Metaworld`, `static/videos/Real-World`,
-`static/videos/Video_Generation`, …) are **left untouched but no longer referenced**.
-Delete them before publishing so the site does not ship another paper's media.
+The MV-VDP template's own assets — Bulma / FontAwesome / jQuery / GSAP, the
+`Overview.png` and `Video predictions*.png` figures, and the `Metaworld`,
+`Real-World` and `Video_Generation` video trees — have been **deleted**: 106
+files, 33.3 MB, none of them referenced by the page. `static/css` and
+`static/js` are now one file each. Everything under `static/` is reachable from
+`index.html` (directly or via a path the two demo explorers derive), except the
+two manifests, which are documentation.
 
 ## Placeholders left for you
 
@@ -184,12 +186,15 @@ python3 tools/import_bridgevla_assets.py    # --dry-run to see the picks only
 ```
 
 Copies the reusable material from the BridgeVLA (NeurIPS 2025) project page:
-the 18 Franka generalization rollouts, the 3 Category failure cases and the
-narrated explainer. **Real-robot material only** — that page also ships
-RLBench, COLOSSEUM and GemBench clips, but those are base-model recordings and
-the simulation panels here show BridgeVLA++ rollouts, so importing them would
-misattribute them. The Franka tables are BridgeVLA results in the journal
-extension too, so those clips carry no such problem.
+the 18 Franka generalization rollouts and the 3 Category failure cases.
+**Real-robot material only** — that page also ships RLBench, COLOSSEUM and
+GemBench clips, but those are base-model recordings and the simulation panels
+here show BridgeVLA++ rollouts, so importing them would misattribute them. The
+Franka tables are BridgeVLA results in the journal extension too, so those
+clips carry no such problem.
+
+The page's narrated BridgeVLA explainer was removed; `--with-overview` brings
+the file back, and `VIDEO_ASSETS.md` says what else to restore alongside it.
 
 Every source is already H.264 / yuv420p, so each clip is remuxed with
 `-c:v copy` — a bit-identical video bitstream — purely to move `moov` to the

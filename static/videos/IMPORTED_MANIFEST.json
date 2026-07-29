@@ -274,19 +274,6 @@
    "pix_fmt": "yuv420p",
    "dur": 3.55,
    "bytes": 346034
-  },
-  {
-   "group": "overview",
-   "slug": "bridgevla_overview",
-   "src": "long.mp4",
-   "out": "static/videos/overview/bridgevla_overview.mp4",
-   "poster": "static/images/bridgevla_overview_poster.jpg",
-   "how": "copy",
-   "w": 1280,
-   "h": 720,
-   "pix_fmt": "yuv420p",
-   "dur": 92.2,
-   "bytes": 13780450
   }
  ]
 }

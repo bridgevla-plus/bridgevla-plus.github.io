@@ -10,7 +10,6 @@
 | 真机 · Franka 基础任务（选择式浏览器） | ⬜ 待补 | 13 |
 | 真机 · Franka 泛化设置（选择式浏览器，每设置 3 段） | ✅ 已就位 | 18（全满） |
 | 真机 · Franka 失败案例（Category） | ✅ 已就位 | 3（全满） |
-| 方法区 · BridgeVLA 讲解视频 | ✅ 已就位 | 1 |
 | 仿真 · RLBench（18 任务） | ✅ 13 / ⬜ 5 | 18 |
 | 仿真 · RMBench（9 任务） | ✅ 3 / ⬜ 6 | 9 |
 | 仿真 · MemoryBench（3 任务） | ✅ 已就位 | 3（全满） |
@@ -146,7 +145,7 @@ RMBench 是 **320×240**。所以 RMBench 的卡片用 4:3 舞台（`.media-slot
 
 ---
 
-## ✅ 已就位：从 BridgeVLA 页面导入（22 段，27.9 MB）
+## ✅ 已就位：从 BridgeVLA 页面导入（21 段，14.1 MB）
 
 来源是 BridgeVLA（NeurIPS 2025）的项目页：
 `/DATA/disk1/zyz/projects/TPAMI_bridgevla/project_page/BridgeVLA.github.io/static/videos`
@@ -169,9 +168,7 @@ python3 tools/import_bridgevla_assets.py       # --dry-run 只看会拷哪些
 | --- | --- |
 | `static/videos/real/franka/generalization/<setting>[_2\|_3].mp4` | 6 个泛化设置 × 3 段 rollout |
 | `static/videos/real/franka/failure/<slug>.mp4` | 3 段 Category 设置的失败案例 |
-| `static/videos/overview/bridgevla_overview.mp4` | BridgeVLA 讲解视频，1:32，**全页唯一带音轨的片子** |
 | `static/images/franka_posters/…` | 21 张封面 |
-| `static/images/bridgevla_overview_poster.jpg` | 讲解视频封面 |
 
 来源 episode、原始分辨率、时长、处理方式都记在
 `static/videos/IMPORTED_MANIFEST.json`。
@@ -199,14 +196,23 @@ Franka 浏览器现在支持一个 chip 挂多段录像：`#franka-demo-data` �
 源页面把 `illumination_put_the_RedBull_can_in_the_top_shelf_2_34` 标成了
 "Put RedBull can on bottom shelf"，与文件名矛盾；这里按文件名写 **top shelf**。
 
-### 讲解视频
+### 讲解视频（⛔ 目前不放在页面上）
 
-`long.mp4` 在源页面里没有被引用过。它是 BridgeVLA 的**旁白讲解片**，片尾还有
-BridgeVLA 的 logo 和副标题，讲的全是 Part I 的内容，所以放在方法区
-「Part I — BridgeVLA」下面，并在图注里写明它来自 NeurIPS 2025 那版、不含 Part II 的记忆。
+`long.mp4` 在源页面里也没有被引用过。它是 BridgeVLA 的**旁白讲解片**，片尾还有
+BridgeVLA 的 logo 和副标题，讲的全是 Part I 的内容。曾经放在方法区
+「Part I — BridgeVLA」下面，现已撤下，文件也从仓库里删了。
 
-它是全页唯一带音轨的视频，因此**故意不放在 `.media-slot` 里**——`.media-slot video`
-会被 `IntersectionObserver` 自动播放，一个有旁白的片子自动播是灾难。它用的是
+要放回来：
+
+```bash
+python3 tools/import_bridgevla_assets.py --with-overview
+```
+
+然后把 `.figure.explainer` 那段 HTML 加回 `index.html` 的 Part I 之后、
+以及对应的 CSS 规则（两者和视频文件在同一个 commit 里一起删的，`git show` 能捞回来）。
+
+注意它是**唯一带音轨**的片子，所以**不能放进 `.media-slot`**——`.media-slot video`
+会被 `IntersectionObserver` 自动播放，一个有旁白的片子自动播是灾难。原来用的是
 `.figure.explainer` + `preload="none"` + 原生控件，只有点了才加载那 13.8 MB。
 
 ---

@@ -12,7 +12,8 @@ they are deliberately left behind.  What comes across:
     numbers already in the Franka panel — those are BridgeVLA results in the
     journal extension too, so no attribution problem;
   * the 3 Category-setting failure cases;
-  * the narrated BridgeVLA explainer, shown beside "Part I — BridgeVLA".
+  * with `--with-overview` only, the narrated BridgeVLA explainer — it is not
+    on the page at the moment.
 
 Encoding follows the page convention — H.264 / yuv420p / faststart.  Every
 source already meets the codec spec, so each clip is remuxed with `-c:v copy`
@@ -21,7 +22,7 @@ the originals are faststart.  A source that ever fails the spec is re-encoded
 instead — the source page's simulation clips, for instance, are yuv444p (High
 4:4:4 Predictive), which Chrome and Safari cannot decode.
 
-Usage:  python3 tools/import_bridgevla_assets.py [--dry-run]
+Usage:  python3 tools/import_bridgevla_assets.py [--dry-run] [--with-overview]
 """
 from __future__ import annotations
 import argparse, json, os, shutil, subprocess, sys
@@ -68,8 +69,11 @@ FRANKA_FAILURE = {
     'peach_bottom_shelf': 'real_reduce_size/failure/category_put_the_peach_in_the_bottom_shelf_5_22_caption.mp4',
 }
 
-# The narrated BridgeVLA explainer, shown next to "Part I — BridgeVLA" in the
-# method section.  The only clip on the page with an audio track.
+# The narrated BridgeVLA explainer.  Currently **not** on the page and behind
+# `--with-overview`, so a plain re-run does not resurrect a 13.8 MB file that
+# nothing references.  To put it back: run with the flag, then re-add the
+# `.figure.explainer` block under "Part I — BridgeVLA" in index.html and its
+# rule in the CSS (both were removed in the same commit as the file).
 OVERVIEW = {'bridgevla_overview': 'long.mp4'}
 
 
@@ -131,6 +135,8 @@ def poster(clip: str, dst: str, at=None, dry=False) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument('--dry-run', action='store_true')
+    ap.add_argument('--with-overview', action='store_true',
+                    help='also import the narrated explainer (not on the page)')
     args = ap.parse_args()
     dry = args.dry_run
 
@@ -147,10 +153,12 @@ def main() -> None:
         ('real/franka/failure', FRANKA_FAILURE,
          lambda s: os.path.join(FRANKA_OUT, 'failure', f'{s}.mp4'),
          lambda s: os.path.join(FRANKA_POSTERS, f'failure__{s}.jpg'), False, None),
-        ('overview', OVERVIEW,
-         lambda s: os.path.join(OVERVIEW_OUT, f'{s}.mp4'),
-         lambda s: os.path.join(HERE, 'static/images', f'{s}_poster.jpg'), True, 40.0),
     ]
+    if args.with_overview:
+        jobs.append(
+            ('overview', OVERVIEW,
+             lambda s: os.path.join(OVERVIEW_OUT, f'{s}.mp4'),
+             lambda s: os.path.join(HERE, 'static/images', f'{s}_poster.jpg'), True, 40.0))
 
     manifest, total = [], 0
     for label, mapping, dst_of, poster_of, keep_audio, poster_at in jobs:
