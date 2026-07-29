@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BridgeVLA++: A Data-Efficient, Generalizable, and Memory-Augmented VLA Framework for 3D Manipulation</title>
+<meta name="description" content="BridgeVLA++ extends BridgeVLA with a unified spatio-temporal memory: temporal memory decides what to do next, spatial memory decides where exactly to act. State-of-the-art results on RLBench, COLOSSEUM, GemBench, RMBench, MemoryBench and two real robot embodiments.">
+
+<link rel="icon" href="static/images/bridgevla_plus_logo.svg">
+<meta property="og:title" content="BridgeVLA++: A Data-Efficient, Generalizable, and Memory-Augmented Vision-Language-Action Framework for 3D Manipulation">
+<meta property="og:description" content="A unified spatio-temporal memory for 3D vision-language-action models.">
+<meta property="og:image" content="static/images/paper/teaser.png">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="static/css/bridgevla_plus.css">
+</head>
+<body>
+
+<!-- ======================================================================== -->
+<!-- HERO                                                                     -->
+<!-- ======================================================================== -->
+<header class="hero">
+  <div class="wrap-wide">
+    <div class="hero-topbar">
+      <span class="brandline">
+        <img src="static/images/bridgevla_plus_logo.svg" alt="">
+        BridgeVLA++
+      </span>
+      <div class="more-research">
+        <button type="button" aria-expanded="false" aria-controls="more-research-menu">🔥 More Research</button>
+        <nav class="menu" id="more-research-menu" aria-label="More research from our group">
+          <a href="https://bridgevla.github.io/" target="_blank" rel="noopener">BridgeVLA <span style="opacity:.6">(NeurIPS 2025)</span></a>
+          <a href="https://robovlms.github.io/" target="_blank" rel="noopener">RoboVLMs</a>
+          <a href="https://gr-mg.github.io/" target="_blank" rel="noopener">GR-MG</a>
+          <a href="https://bridgev2w.github.io/" target="_blank" rel="noopener">BridgeV2W</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap hero-inner">
+    <img class="hero-logo" src="static/images/bridgevla_plus_logo.svg" alt="BridgeVLA++ logo">
+    <h1 class="hero-title">BridgeVLA<span style="letter-spacing:-.04em">++</span></h1>
+    <p class="hero-subtitle">
+      A Data-Efficient, Generalizable, and Memory-Augmented<br>
+      Vision-Language-Action Framework for 3D Manipulation
+    </p>
+    <span class="hero-venue">
+      <span>Journal extension of
+        <a href="https://arxiv.org/abs/2506.07961" target="_blank" rel="noopener"
+           style="color:#fff;border-bottom:1px solid rgba(255,255,255,.5);white-space:nowrap">BridgeVLA&nbsp;(NeurIPS&nbsp;2025)</a></span>
+      <span class="placeholder-tag">venue TBD</span>
+    </span>
+
+    <!-- TODO(author): replace the placeholder author list below with the real
+         author names, personal-page links and superscript affiliation indices. -->
+    <div class="authors">
+      <span class="author"><a href="#" title="TODO: personal page">Author One</a><sup>1,*</sup></span>
+      <span class="author"><a href="#" title="TODO: personal page">Author Two</a><sup>1,2,*</sup></span>
+      <span class="author"><a href="#" title="TODO: personal page">Author Three</a><sup>1</sup></span>
+      <span class="author"><a href="#" title="TODO: personal page">Author Four</a><sup>2</sup></span>
+      <span class="author"><a href="#" title="TODO: personal page">Author Five</a><sup>3</sup></span>
+      <br>
+      <span class="author"><a href="#" title="TODO: personal page">Author Six</a><sup>1,2</sup></span>
+      <span class="author"><a href="#" title="TODO: personal page">Author Seven</a><sup>3</sup></span>
+      <span class="author"><a href="#" title="TODO: personal page">Author Eight</a><sup>1,†</sup></span>
+      <span class="author"><a href="#" title="TODO: personal page">Author Nine</a><sup>1,2,†</sup></span>
+      <span class="placeholder-tag">placeholder</span>
+    </div>
+
+    <div class="author-notes">
+      <sup>*</sup>Equal contribution &nbsp;·&nbsp; <sup>†</sup>Corresponding author
+    </div>
+
+    <div class="affiliations">
+      <!-- TODO(author): replace with the real affiliations. -->
+      <span><sup>1</sup>Institution One</span>
+      <span><sup>2</sup>Institution Two</span>
+      <span><sup>3</sup>Institution Three</span>
+      <span class="placeholder-tag">placeholder</span>
+    </div>
+
+    <div class="links">
+      <a class="link-btn is-muted" href="#" aria-disabled="true" title="TODO: link the arXiv preprint">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v2H4zm0 5h16v2H4zm0 5h10v2H4zm0 5h10v2H4z"/></svg>
+        <span>arXiv &nbsp;(coming soon)</span>
+      </a>
+      <a class="link-btn is-muted" href="#" aria-disabled="true" title="TODO: link the PDF">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm8 1.5V8h4.5L14 3.5zM8 13h8v1.6H8zm0 3.4h8V18H8z"/></svg>
+        <span>Paper PDF &nbsp;(coming soon)</span>
+      </a>
+      <a class="link-btn is-muted" href="#" aria-disabled="true" title="TODO: link the code release">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.35-1.29-1.71-1.29-1.71-1.06-.72.08-.71.08-.71 1.17.08 1.79 1.2 1.79 1.2 1.04 1.79 2.73 1.27 3.4.97.1-.76.41-1.27.74-1.56-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.12 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.27 5.69.42.36.8 1.08.8 2.18v3.23c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+        <span>Code &nbsp;(coming soon)</span>
+      </a>
+      <a class="link-btn is-muted" href="#" aria-disabled="true" title="TODO: link the model checkpoints">
+        <span aria-hidden="true">🤗</span>
+        <span>Checkpoints &nbsp;(coming soon)</span>
+      </a>
+      <a class="link-btn" href="https://bridgevla.github.io/" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm6.9 9h-3a15.7 15.7 0 0 0-1.2-5.3A8 8 0 0 1 18.9 11zM12 4c.8 1.2 1.5 3.2 1.7 7h-3.4C10.5 7.2 11.2 5.2 12 4zM5.1 11a8 8 0 0 1 4.2-5.3A15.7 15.7 0 0 0 8.1 11h-3zm0 2h3a15.7 15.7 0 0 0 1.2 5.3A8 8 0 0 1 5.1 13zM12 20c-.8-1.2-1.5-3.2-1.7-7h3.4c-.2 3.8-.9 5.8-1.7 7zm2.7-1.7A15.7 15.7 0 0 0 15.9 13h3a8 8 0 0 1-4.2 5.3z"/></svg>
+        <span>BridgeVLA (NeurIPS&nbsp;2025)</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ======================================================================== -->
+<!-- STICKY SECTION NAV                                                       -->
+<!-- ======================================================================== -->
+<nav class="docnav" aria-label="Section navigation">
+  <div class="wrap-wide">
+    <a href="#overview">Overview</a>
+    <a href="#method">Method</a>
+    <a href="#simulation">Simulation</a>
+    <a href="#real-robot">Real Robot</a>
+    <a href="#ablations">Ablations</a>
+    <a href="#efficiency">Efficiency</a>
+    <a href="#bibtex">BibTeX</a>
+  </div>
+</nav>
+
+<!-- ======================================================================== -->
+<!-- OVERVIEW                                                                 -->
+<!-- ======================================================================== -->
+<main>
+<section id="overview" class="section">
+  <div class="wrap">
+
+    <div class="tldr reveal">
+      <h2>TL;DR</h2>
+      <p>
+        <b>BridgeVLA</b> makes 3D manipulation learning data-efficient by aligning
+        <em>both</em> ends of a pre-trained VLM: point clouds are rendered into multi-view
+        orthographic images, and actions are predicted as 2D heatmaps in that same image space.
+        <b>BridgeVLA++</b> adds a <b>unified spatio-temporal memory</b> — temporal memory keeps the
+        interaction history to decide <em>what to do next</em>, spatial memory re-renders earlier,
+        less-occluded geometry to decide <em>where exactly to act</em> — reaching state of the art on
+        memory-dependent manipulation <em>without</em> giving up the data efficiency or
+        out-of-distribution generalization of the base model.
+      </p>
+    </div>
+
+    <div class="stats reveal" style="margin-top:1.6rem">
+      <div class="stat">
+        <div class="value">93.7%</div>
+        <div class="label">RLBench (18 tasks)</div>
+        <div class="note">+6.9 pts over SAM2Act, the previous state of the art</div>
+      </div>
+      <div class="stat">
+        <div class="value">65.2%</div>
+        <div class="label">COLOSSEUM</div>
+        <div class="note">14 evaluation settings (12 unseen perturbation axes); RVT-2 reaches 56.7%</div>
+      </div>
+      <div class="stat">
+        <div class="value">51.1%</div>
+        <div class="label">GemBench</div>
+        <div class="note">Four generalization levels; 3D-LOTUS++ reaches 48.0%</div>
+      </div>
+      <div class="stat">
+        <div class="value">96.0%</div>
+        <div class="label">RMBench</div>
+        <div class="note">Nine dual-arm memory tasks; +13.0 pts over MemoryWAM</div>
+      </div>
+      <div class="stat">
+        <div class="value">99.7%</div>
+        <div class="label">MemoryBench</div>
+        <div class="note">Single-arm memory suite; SAM2Act+ reaches 94.3%</div>
+      </div>
+      <div class="stat">
+        <div class="value">93.3%</div>
+        <div class="label">Real memory tasks</div>
+        <div class="note">DOBOT CR5A, 10 demos per instruction; memory-free base: 20.0%</div>
+      </div>
+    </div>
+
+    <h2 class="subhead reveal" id="abstract">Abstract</h2>
+    <div class="abstract lede reveal">
+      <p>
+        Leveraging pre-trained vision-language models (VLMs) to construct vision-language-action (VLA)
+        models has emerged as a promising paradigm for 3D robot manipulation. However, existing 3D VLA
+        methods remain data-hungry, generalize poorly to distribution shifts, and lack explicit memory
+        of past observations. These limitations hinder their application to data-scarce, open-world and
+        memory-dependent manipulation scenarios. In our previous work, <b>BridgeVLA</b> improves data
+        efficiency and generalization by preserving the input–output alignment of a pre-trained VLM
+        during 3D action learning: raw point clouds are projected into multi-view images, and
+        intermediate heatmaps are predicted before generating robot actions.
+      </p>
+      <p>
+        In this work, we further extend BridgeVLA with a <b>unified spatio-temporal memory
+        architecture</b> that models persistent spatial context and temporal interaction history. The
+        resulting memory-augmented framework can reason over historical observations while preserving
+        the hallmark data efficiency and strong generalization capability of BridgeVLA. Extensive
+        experiments show that our framework establishes a strong foundation for spatial manipulation
+        tasks and robust generalization (evaluating the base BridgeVLA on RLBench, COLOSSEUM and
+        GemBench). When equipped with the unified spatio-temporal memory, <b>BridgeVLA++</b> further
+        achieves state-of-the-art performance on two challenging memory-dependent manipulation
+        benchmarks without sacrificing the data efficiency and generalization of the original
+        BridgeVLA. In addition, BridgeVLA++ extends effectively to bimanual manipulation and is
+        validated on a new real-world robot embodiment, demonstrating its scalability across tasks,
+        environments and robot embodiments. These results establish BridgeVLA++ as a unified 3D
+        vision-language-action framework that simultaneously supports data-efficient learning, robust
+        generalization and memory-aware robot manipulation.
+      </p>
+    </div>
+
+    <figure class="figure reveal" style="margin-top:1.6rem">
+      <img src="static/images/paper/teaser.png" alt="Overview of BridgeVLA++: multi-view heatmap alignment plus a unified spatio-temporal memory, with benchmark radar chart and real-world generalization settings.">
+      <figcaption class="figcap">
+        <b>Figure 1 — Overview of BridgeVLA++.</b>
+        BridgeVLA aligns 3D observations and actions in a shared multi-view 2D heatmap space,
+        enabling data-efficient and generalizable 3D manipulation learning with a pre-trained VLM.
+        BridgeVLA++ further introduces a unified spatio-temporal memory: temporal memory preserves the
+        interaction history to determine <em>what to do next</em>, while spatial memory restores
+        previously observed geometry to determine <em>where exactly to act</em>. Both memories are
+        accessed through a shared memory-injection module in the VLM patch-token space, without
+        changing the heatmap-based action interface. The scene-level memory can also be shared across
+        two arms, extending the framework naturally to bimanual manipulation.
+      </figcaption>
+    </figure>
+
+  </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- METHOD                                                                   -->
+<!-- ======================================================================== -->
+<section class="banner" id="method">
+  <div class="wrap">
+    <p class="eyebrow">How it works</p>
+    <h2 class="gradient-text">Method</h2>
+    <p>From input–output alignment to a unified spatio-temporal memory.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1.4rem">
+  <div class="wrap">
+
+    <h3 class="subhead reveal">Part I — BridgeVLA: spatial input–output alignment</h3>
+    <p class="lede reveal">
+      A pre-trained VLM is fluent in 2D images and language, not in point clouds and 6-DoF poses.
+      BridgeVLA closes that gap from both sides: the <em>input</em> is rendered back into images, and
+      the <em>output</em> is expressed as heatmaps that live in the very same image space.
+    </p>
+
+    <div class="idea-grid reveal" style="margin-top:1.2rem">
+      <div class="idea">
+        <div class="num">1</div>
+        <h4>Multi-view orthographic projection</h4>
+        <p>
+          RGB-D observations from calibrated cameras are fused into a colored point cloud and rendered
+          into three orthographic views (top, front, right), following RVT / RVT-2. The VLM sees only
+          images and language — no proprioceptive state is injected into its forward pass, which keeps
+          the input distribution close to pre-training.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">2</div>
+        <h4>2D-heatmap pre-training</h4>
+        <p>
+          Before any robot data is touched, the VLM (PaliGemma: SigLIP + Gemma) is taught to ground
+          language-specified objects as spatial heatmaps on the 120K object-detection split of
+          RoboPoint. Output image tokens are rearranged into a patch grid and decoded by a
+          convex-upsampling module, supervised with a cross-entropy loss against truncated Gaussian
+          targets.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">3</div>
+        <h4>Coarse-to-fine 3D action decoding</h4>
+        <p>
+          Candidate 3D locations are scored by summing the per-view heatmap values at their
+          projections; the arg-max becomes the next-keyframe translation. A second pass re-renders a
+          zoomed crop around the coarse prediction for precision. Rotation (continuous 6D), gripper
+          state and the collision flag come from a three-layer MLP on pooled global plus local
+          per-view tokens.
+        </p>
+      </div>
+    </div>
+
+    <h3 class="subhead reveal">Part II — BridgeVLA++: unified spatio-temporal memory</h3>
+    <p class="lede reveal">
+      The coarse-to-fine design exposes exactly two stages where past observations help, and they need
+      different things. The coarse stage reasons over the whole workspace and must know
+      <em>what has already happened</em>; the fine stage localizes inside a zoomed crop and must see
+      <em>geometry the arm is currently hiding</em>. BridgeVLA++ therefore injects a different memory
+      at each stage — both in the VLM patch-token space, so the heatmap action interface is unchanged.
+    </p>
+
+    <div class="idea-grid reveal" style="margin-top:1.2rem">
+      <div class="idea">
+        <div class="num">𝒯</div>
+        <h4>Temporal memory → <em>what to do next</em></h4>
+        <p>
+          Injected at the <b>coarse</b> stage as three token banks:
+          <b>initial anchor views</b> (the episode's first render, a fixed global reference),
+          <b>neighbouring keyframes</b> (the most recent <em>n</em> = 2 executed keyframes, short-term
+          context), and <b>sub-goal keyframes</b> (longer-term evidence of completed milestones).
+        </p>
+        <p>
+          A lightweight <b>adaptive sub-goal gate</b> decides what is worth keeping: a learnable query
+          token pools the <em>memory-conditioned</em> tokens and a small MLP predicts a retention
+          probability, so a frame is stored only when it adds information the memory does not already
+          hold.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">𝒮</div>
+        <h4>Spatial memory → <em>where exactly to act</em></h4>
+        <p>
+          Injected at the <b>fine</b> stage. The colored point cloud of the initial observation,
+          <em>P</em><sub>0</sub>, is stored once and — unlike a fixed 2D image — can be
+          <b>re-rendered under any later zoom</b>. Once the coarse stage picks a waypoint, the same
+          crop is applied to both the live cloud and <em>P</em><sub>0</sub>, and the reference is
+          re-rendered through the fine-stage virtual cameras.
+        </p>
+        <p>
+          Because the two share a camera configuration they are aligned view by view, so tokens of each
+          current view attend only to memory tokens of the corresponding reference view: complementary
+          geometry, never a replacement for the live observation.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">⇄</div>
+        <h4>Injection &amp; bimanual extension</h4>
+        <p>
+          Each memory-injection block is two attention layers: current tokens are queries,
+          memory tokens are keys/values in cross-attention, then self-attention and a feed-forward
+          fuse the result. The output keeps the input token-grid shape (<em>V</em>×<em>N</em>×<em>d</em>),
+          so the convex-upsampling decoder and action heads run unmodified.
+        </p>
+        <p>
+          Because both memories describe the <em>scene</em> rather than an arm, bimanual manipulation
+          needs only duplicated upsampling modules and action heads on a shared VLM backbone, shared
+          memories and a shared sub-goal gate.
+        </p>
+      </div>
+    </div>
+
+    <figure class="figure reveal" style="margin-top:1.8rem">
+      <img src="static/images/paper/architecture.png" alt="BridgeVLA and BridgeVLA++ architecture: 2D-heatmap pre-training, 3D-action fine-tuning, and the temporal and spatial memory injection blocks.">
+      <figcaption class="figcap">
+        <b>Figure 2 — Architecture.</b> Top: the 2D-heatmap pre-training and 3D-action fine-tuning
+        pipeline of BridgeVLA. Bottom: the spatio-temporal memory of BridgeVLA++. At the coarse stage
+        the temporal memory supplies interaction history; at the fine stage the spatial memory
+        re-renders an earlier, less-occluded point cloud under the current zoom. Memory is injected in
+        the VLM patch-token space without modifying the heatmap-based action interface.
+      </figcaption>
+    </figure>
+
+    <figure class="figure reveal" style="margin-top:1.4rem">
+      <img src="static/images/paper/spatial_memory.jpg" alt="Left: current zoomed observation occluded by the gripper. Right: the stored initial point cloud re-rendered under the same zoom, revealing the target geometry.">
+      <figcaption class="figcap">
+        <b>Figure 3 — Occlusion-robust fine localization.</b> The current zoomed observation (left)
+        is partially occluded by the gripper and the manipulated object. The stored point cloud
+        <em>P</em><sub>0</sub> is re-rendered (right) with the same waypoint and zoom, producing a
+        spatially aligned reference of the same local region. Fine-stage tokens attend to this
+        reference for complementary geometric evidence.
+      </figcaption>
+    </figure>
+
+    <figure class="figure figure-narrow reveal" style="margin-top:1.4rem">
+      <img src="static/images/paper/pretrain_dataset.jpg" alt="Examples of ground-truth heatmaps built from object detection annotations used for 2D-heatmap pre-training.">
+      <figcaption class="figcap">
+        <b>Figure 4 — Pre-training targets.</b> Ground-truth heatmaps constructed from the object
+        bounding boxes of the RoboPoint detection split: per-object truncated Gaussians, averaged and
+        normalized when a prompt names several objects.
+      </figcaption>
+    </figure>
+
+    <div class="callout reveal" style="margin-top:1.4rem">
+      <span aria-hidden="true" style="font-size:1.3rem">💡</span>
+      <div>
+        <b>The memory is strictly additive.</b> It adds 269.77M parameters — 9.2% on top of the
+        2.92B-parameter backbone — and raises end-to-end latency from 0.51&nbsp;s to 0.55&nbsp;s per
+        prediction step (+7.8%) on a single RTX&nbsp;4090. Temporal entries are cached as
+        <em>already-encoded</em> tokens, so history never costs an extra backbone forward pass.
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- SIMULATION                                                               -->
+<!-- ======================================================================== -->
+<section class="banner" id="simulation">
+  <div class="wrap">
+    <p class="eyebrow">Five benchmarks</p>
+    <h2 class="gradient-text">Simulation Experiments</h2>
+    <p>General manipulation, out-of-distribution generalization, and memory-dependent reasoning.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1.4rem">
+  <div class="wrap-wide">
+
+    <!-- ------------------------------------------------------------ RLBench -->
+    <h3 class="subhead reveal">RLBench — general 3D manipulation</h3>
+    <p class="lede reveal">
+      18 multi-task RLBench tasks, 100 demonstrations per task, mean success rate over five evaluation
+      runs of 25 episodes. BridgeVLA reaches <b>90.5%</b>, already 3.7 points above the previous state
+      of the art; its remaining failures concentrate in occlusion-heavy tasks — exactly what the
+      spatio-temporal memory addresses, lifting BridgeVLA++ to <b>93.7%</b> with
+      <em>sort shape</em> +16.8 and <em>place cups</em> +18.4.
+    </p>
+
+    <div class="table-card reveal" style="margin-top:1rem">
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr>
+              <th rowspan="2">Method</th>
+              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+              <th rowspan="2" class="avg">Avg. Rank ↓</th>
+              <th>Close</th><th>Drag</th><th>Insert</th><th>Meat off</th><th>Open</th>
+              <th>Place</th><th>Place</th><th>Push</th><th>Put in</th><th>Put in</th>
+              <th>Put in</th><th>Screw</th><th>Slide</th><th>Sort</th><th>Stack</th>
+              <th>Stack</th><th>Sweep to</th><th>Turn</th>
+            </tr>
+            <tr>
+              <th>Jar</th><th>Stick</th><th>Peg</th><th>Grill</th><th>Drawer</th>
+              <th>Cups</th><th>Wine</th><th>Buttons</th><th>Cupboard</th><th>Drawer</th>
+              <th>Safe</th><th>Bulb</th><th>Block</th><th>Shape</th><th>Blocks</th>
+              <th>Cups</th><th>Dustpan</th><th>Tap</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PerAct <span class="cite">[Shridhar et al. 2023]</span></td>
+              <td class="avg">49.4</td><td class="avg">11.33</td>
+              <td>55.2</td><td>89.6</td><td>5.6</td><td>70.4</td><td>88.0</td><td>2.4</td><td>44.8</td><td>92.8</td>
+              <td>28.0</td><td>51.2</td><td>84.0</td><td>17.6</td><td>74.0</td><td>16.8</td><td>26.4</td><td>2.4</td><td>52.0</td><td>88.0</td>
+            </tr>
+            <tr>
+              <td>Act3D <span class="cite">[Gervet et al. 2023]</span></td>
+              <td class="avg">65.0</td><td class="avg">9.17</td>
+              <td>92.0</td><td>92.0</td><td>27.0</td><td>94.0</td><td>93.0</td><td>3.0</td><td>80.0</td><td>99.0</td>
+              <td>51.0</td><td>90.0</td><td>95.0</td><td>47.0</td><td>93.0</td><td>8.0</td><td>12.0</td><td>9.0</td><td>92.0</td><td>94.0</td>
+            </tr>
+            <tr>
+              <td>RVT <span class="cite">[Goyal et al. 2023]</span></td>
+              <td class="avg">62.9</td><td class="avg">9.08</td>
+              <td>52.0</td><td>99.2</td><td>11.2</td><td>88.0</td><td>71.2</td><td>4.0</td><td>91.0</td><td>100.0</td>
+              <td>49.6</td><td>88.0</td><td>91.2</td><td>48.0</td><td>81.6</td><td>36.0</td><td>28.8</td><td>26.4</td><td>72.0</td><td>93.6</td>
+            </tr>
+            <tr>
+              <td>3D Diffuser Actor <span class="cite">[Ke et al. 2024]</span></td>
+              <td class="avg">81.3</td><td class="avg">6.19</td>
+              <td>96.0</td><td>100.0</td><td>65.6</td><td>96.8</td><td>89.6</td><td>24.0</td><td>93.6</td><td>98.4</td>
+              <td>85.6</td><td>96.0</td><td>97.6</td><td>82.4</td><td>97.6</td><td>44.0</td><td>68.3</td><td>47.2</td><td>84.0</td><td>99.2</td>
+            </tr>
+            <tr>
+              <td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td>
+              <td class="avg">81.4</td><td class="avg">5.97</td>
+              <td>100.0</td><td>99.0</td><td>40.0</td><td>99.0</td><td>74.0</td><td>38.0</td><td>95.0</td><td>100.0</td>
+              <td>66.0</td><td>96.0</td><td>96.0</td><td>88.0</td><td>92.0</td><td>35.0</td><td>80.0</td><td>69.0</td><td>100.0</td><td>99.0</td>
+            </tr>
+            <tr>
+              <td>SAM2Act <span class="cite">[Fang et al. 2025]</span></td>
+              <td class="avg">86.8</td><td class="avg">5.47</td>
+              <td>99.0</td><td>99.0</td><td>84.0</td><td>98.0</td><td>83.0</td><td>47.0</td><td>93.0</td><td>100.0</td>
+              <td>75.0</td><td>99.0</td><td>98.0</td><td>89.0</td><td>86.0</td><td>64.0</td><td>76.0</td><td>78.0</td><td>99.0</td><td>96.0</td>
+            </tr>
+            <tr class="ours">
+              <td>BridgeVLA <span class="cite">(ours, base)</span></td>
+              <td class="avg">90.5</td><td class="avg">4.75</td>
+              <td>100.0</td><td>97.6</td><td>91.2</td><td>100.0</td><td>99.2</td><td>58.4</td><td>89.6</td><td>100.0</td>
+              <td>91.2</td><td>96.0</td><td>95.2</td><td>93.6</td><td>95.2</td><td>55.2</td><td>84.8</td><td>88.8</td><td>100.0</td><td>92.8</td>
+            </tr>
+            <tr class="ours">
+              <td>BridgeVLA++ <span class="cite">(ours)</span></td>
+              <td class="avg best">93.7</td><td class="avg best">3.64</td>
+              <td>100.0</td><td>98.4</td><td>99.2</td><td>100.0</td><td>99.2</td><td>76.8</td><td>95.2</td><td>100.0</td>
+              <td>92.0</td><td>99.2</td><td>92.8</td><td>95.2</td><td>96.0</td><td>72.0</td><td>85.6</td><td>98.4</td><td>97.6</td><td>89.6</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        <b>Table 1 — RLBench.</b> Success rate (%) on the 18 standard tasks with average success rate
+        and average rank (lower is better). Our rows report the mean over five seeds of 25 episodes;
+        per-seed standard deviations are given in the paper. Best average in bold. Design and memory
+        ablations of the same table are collected in the <a href="#ablations">Ablations</a> section.
+      </p>
+    </div>
+
+    <div class="media-grid cols-4 reveal" style="margin-top:1.2rem">
+      <div class="media-card">
+        <span class="task-chip">RLBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata">
+            <source src="static/videos/sim/rlbench/sort_shape/trial_1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>Sort Shape</b> — occlusion-heavy precision insertion (55.2% → 72.0%)</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RLBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata">
+            <source src="static/videos/sim/rlbench/place_cups/trial_1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>Place Cups</b> — long-horizon placement (58.4% → 76.8%)</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RLBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata">
+            <source src="static/videos/sim/rlbench/stack_cups/trial_1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>Stack Cups</b> — fine-grained localization (98.4%)</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RLBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata">
+            <source src="static/videos/sim/rlbench/insert_peg/trial_1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>Insert Peg</b> — high-precision insertion (99.2%)</p>
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------------- COLOSSEUM -->
+    <h3 class="subhead reveal">COLOSSEUM — robustness to unseen perturbations</h3>
+    <p class="lede reveal">
+      All models are trained on unperturbed RLBench data for the 20 COLOSSEUM tasks and evaluated under
+      12 perturbation axes never seen in training, plus the original RLBench variation and a combined
+      all-perturbations setting. BridgeVLA reaches <b>64.0%</b>, over 7 points above RVT-2, and the
+      memory extension keeps that robustness (<b>65.2%</b>) — with its largest single gain exactly in
+      the hardest <em>all perturbations</em> setting (18.7% → 38.9%).
+    </p>
+
+    <div class="table-card reveal" style="margin-top:1rem">
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr>
+              <th rowspan="2">Method</th>
+              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+              <th rowspan="2" class="avg">Avg. Rank ↓</th>
+              <th>All</th><th>MO</th><th>RO</th><th>MO</th><th>RO</th><th>MO</th><th>RO</th>
+              <th>Light</th><th>Table</th><th>Table</th><th rowspan="2">Distractor</th>
+              <th>Background</th><th rowspan="2">RLBench</th><th>Camera</th>
+            </tr>
+            <tr>
+              <th>Perturb.</th><th>Color</th><th>Color</th><th>Texture</th><th>Texture</th>
+              <th>Size</th><th>Size</th><th>Color</th><th>Color</th><th>Texture</th>
+              <th>Texture</th><th>Pose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>R3M-MLP <span class="cite">[Nair et al. 2022]</span></td>
+              <td class="avg">0.8</td><td class="avg">6.71</td>
+              <td>0.6</td><td>0.4</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1.8</td><td>0.0</td>
+              <td>1.0</td><td>1.4</td><td>0.2</td><td>1.6</td><td>1.2</td><td>2.0</td><td>0.8</td>
+            </tr>
+            <tr>
+              <td>MVP-MLP <span class="cite">[Xiao et al. 2022]</span></td>
+              <td class="avg">1.6</td><td class="avg">6.00</td>
+              <td>0.8</td><td>1.2</td><td>0.0</td><td>0.4</td><td>0.0</td><td>4.44</td><td>0.0</td>
+              <td>1.6</td><td>1.6</td><td>1.0</td><td>3.8</td><td>2.2</td><td>2.0</td><td>2.6</td>
+            </tr>
+            <tr>
+              <td>PerAct <span class="cite">[Shridhar et al. 2023]</span></td>
+              <td class="avg">27.9</td><td class="avg">4.71</td>
+              <td>7.2</td><td>24.0</td><td>29.2</td><td>28.8</td><td>17.71</td><td>35.6</td><td>29.3</td>
+              <td>29.1</td><td>30.4</td><td>23.2</td><td>27.1</td><td>33.5</td><td>39.4</td><td>36.3</td>
+            </tr>
+            <tr>
+              <td>RVT <span class="cite">[Goyal et al. 2023]</span></td>
+              <td class="avg">35.4</td><td class="avg">4.29</td>
+              <td>6.4</td><td>26.0</td><td>31.3</td><td>44.8</td><td>41.1</td><td>35.3</td><td>40.5</td>
+              <td>34.0</td><td>30.0</td><td>45.2</td><td>18.8</td><td>46.4</td><td>53.4</td><td>42.2</td>
+            </tr>
+            <tr>
+              <td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td>
+              <td class="avg">56.7</td><td class="avg">2.86</td>
+              <td>15.6</td><td>53.0</td><td>54.6</td><td>59.7</td><td>56.7</td><td>60.9</td><td>53.4</td>
+              <td>58.0</td><td>62.6</td><td>56.6</td><td>60.8</td><td>68.7</td><td>68.8</td><td>64.4</td>
+            </tr>
+            <tr class="ours">
+              <td>BridgeVLA <span class="cite">(ours, base)</span></td>
+              <td class="avg">64.0</td><td class="avg best">1.50</td>
+              <td>18.7</td><td>60.5</td><td>63.8</td><td>63.5</td><td>68.4</td><td>69.3</td><td>61.7</td>
+              <td>69.7</td><td>75.7</td><td>71.3</td><td>51.8</td><td>74.8</td><td>73.1</td><td>73.8</td>
+            </tr>
+            <tr class="ours">
+              <td>BridgeVLA++ <span class="cite">(ours)</span></td>
+              <td class="avg best">65.2</td><td class="avg">1.64</td>
+              <td>38.9</td><td>68.7</td><td>62.7</td><td>65.7</td><td>65.5</td><td>71.5</td><td>62.0</td>
+              <td>68.2</td><td>71.5</td><td>69.2</td><td>61.6</td><td>69.5</td><td>68.5</td><td>68.7</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        <b>Table 2 — COLOSSEUM.</b> Success rate (%) across the 14 evaluation settings. MO and RO
+        denote perturbations of the manipulated object and the receptacle object. Baseline numbers for
+        R3M-MLP, MVP-MLP, PerAct and RVT are quoted from the benchmark; RVT-2 and our models were
+        trained and evaluated by us (mean over three test repetitions; variances in the paper).
+      </p>
+    </div>
+
+    <!-- ---------------------------------------------------------- GemBench -->
+    <h3 class="subhead reveal">GemBench — hierarchical systematic generalization</h3>
+    <p class="lede reveal">
+      Trained on 16 tasks (31 variations) and evaluated on 44 held-out tasks (92 variations) across four
+      generalization levels. BridgeVLA sets a state-of-the-art <b>50.0%</b> average, and BridgeVLA++
+      raises it to <b>51.1%</b> — notably turning the long-horizon L4 level from 0.0% to 8.2%, where the
+      episodic memory finally gives the policy something to sequence over.
+    </p>
+
+    <div class="stack reveal" style="margin-top:1rem">
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Method</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+                <th>L1</th><th>L2</th><th>L3</th><th>L4</th>
+              </tr>
+              <tr><th>Placement</th><th>Rigid</th><th>Articulated</th><th>Long-Horizon</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Hiveformer <span class="cite">[Guhur et al. 2023]</span></td><td class="avg">30.4</td><td>60.3</td><td>26.1</td><td>35.1</td><td>0.0</td></tr>
+              <tr><td>PolarNet <span class="cite">[Chen et al. 2023]</span></td><td class="avg">38.4</td><td>77.7</td><td>37.1</td><td>38.5</td><td>0.1</td></tr>
+              <tr><td>3D Diffuser Actor <span class="cite">[Ke et al. 2024]</span></td><td class="avg">43.1</td><td>91.9</td><td>43.4</td><td>37.0</td><td>0.0</td></tr>
+              <tr><td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td><td class="avg">44.0</td><td>89.1</td><td>51.0</td><td>36.0</td><td>0.0</td></tr>
+              <tr><td>3D-LOTUS <span class="cite">[Garcia et al. 2024]</span></td><td class="avg">45.7</td><td class="best">94.3</td><td>49.9</td><td>38.1</td><td>0.3</td></tr>
+              <tr><td>3D-LOTUS++ <span class="cite">[Garcia et al. 2024]</span></td><td class="avg">48.0</td><td>68.7</td><td>64.5</td><td>41.5</td><td class="best">17.4</td></tr>
+              <tr class="ours"><td>BridgeVLA <span class="cite">(ours, base)</span></td><td class="avg">50.0</td><td>91.1</td><td>65.0</td><td class="best">43.8</td><td>0.0</td></tr>
+              <tr class="ours"><td>BridgeVLA++ <span class="cite">(ours)</span></td><td class="avg best">51.1</td><td>88.6</td><td class="best">68.9</td><td>38.5</td><td>8.2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 3 — GemBench.</b> Success rate (%) over 20 trials per task variation, five random
+          seeds; per-level standard deviations are given in the paper. Baselines are quoted from the
+          GemBench benchmark [Garcia et al. 2024], except the 3D Diffuser Actor average, recomputed
+          as the mean of its four levels (its source prints 44.0). Our rows were trained and
+          evaluated on keyframes only, without demo augmentation.
+        </p>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Method</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+                <th>Reopen</th><th>Put Block</th><th>Rearrange</th>
+              </tr>
+              <tr><th>Drawer</th><th>Back</th><th>Block</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td><td class="avg">54.0 <span class="std">±5.3</span></td><td>60.0 <span class="std">±0.0</span></td><td>50.0 <span class="std">±2.3</span></td><td>52.0 <span class="std">±3.3</span></td></tr>
+              <tr><td>SAM2Act <span class="cite">[Fang et al. 2025]</span></td><td class="avg">55.0 <span class="std">±24.3</span></td><td>48.0 <span class="std">±0.0</span></td><td>35.0 <span class="std">±3.8</span></td><td>82.0 <span class="std">±2.3</span></td></tr>
+              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td class="avg">94.3 <span class="std">±9.0</span></td><td>84.0 <span class="std">±0.0</span></td><td class="best">100.0 <span class="std">±0.0</span></td><td class="best">99.0 <span class="std">±2.0</span></td></tr>
+              <tr class="ours"><td>BridgeVLA <span class="cite">(ours, base)</span></td><td class="avg">11.3 <span class="std">±0.8</span></td><td>29.6 <span class="std">±4.3</span></td><td>2.8 <span class="std">±1.8</span></td><td>1.6 <span class="std">±2.6</span></td></tr>
+              <tr class="ours"><td>BridgeVLA++ <span class="cite">(ours)</span></td><td class="avg best">99.7 <span class="std">±0.3</span></td><td class="best">100.0 <span class="std">±0.0</span></td><td>99.8 <span class="std">±0.4</span></td><td>99.2 <span class="std">±1.1</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 4 — MemoryBench.</b> Single-arm memory-dependent suite. Baselines are quoted from
+          [Fang et al. 2025] as mean±std over four evaluation runs; in the Avg. column the deviation
+          is the spread across the three tasks. Our rows are mean±std over five evaluation seeds.
+          The memory-free base policy collapses to 11.3%, confirming that these tasks genuinely
+          require episodic memory.
+        </p>
+      </div>
+    </div>
+
+    <!-- ----------------------------------------------------------- RMBench -->
+    <h3 class="subhead reveal">RMBench — memory-dependent bimanual manipulation</h3>
+    <p class="lede reveal">
+      Nine dual-arm tasks that cannot be solved from the current frame alone, split into short-term
+      <em>M</em>(1) and long-term <em>M</em>(<em>n</em>) horizons; 50 demonstrations per task, 100
+      evaluation episodes. This is simultaneously the validation of the bimanual extension.
+      BridgeVLA++ reaches a near-perfect <b>96.0%</b>, ranking best or tied-best on eight of the nine
+      tasks, while the memory-free base collapses to 18.9%.
+    </p>
+
+    <div class="table-card reveal" style="margin-top:1rem">
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr>
+              <th rowspan="2">Method</th>
+              <th rowspan="2" class="avg">Overall Avg. ↑</th>
+              <th colspan="6" style="border-left:1px solid rgba(95,104,184,.25)"><em>M</em>(1) tasks</th>
+              <th colspan="5" style="border-left:1px solid rgba(95,104,184,.25)"><em>M</em>(<em>n</em>) tasks</th>
+            </tr>
+            <tr>
+              <th style="border-left:1px solid rgba(95,104,184,.25)">Observe &amp; Pick Up</th>
+              <th>Rearrange Blocks</th><th>Put Back Block</th><th>Swap Blocks</th><th>Swap T</th>
+              <th class="avg"><em>Avg.</em></th>
+              <th style="border-left:1px solid rgba(95,104,184,.25)">Battery Try</th>
+              <th>Blocks Ranking Try</th><th>Cover Blocks</th><th>Press Button</th>
+              <th class="avg"><em>Avg.</em></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>DP <span class="cite">[Chi et al. 2024]</span></td><td class="avg">5.8</td><td>1</td><td>0</td><td>0</td><td>11</td><td>20</td><td class="avg">6.4</td><td>10</td><td>10</td><td>0</td><td>0</td><td class="avg">5.0</td></tr>
+            <tr><td>ACT <span class="cite">[Zhao et al. 2023]</span></td><td class="avg">5.9</td><td>1</td><td>29</td><td>0</td><td>2</td><td>2</td><td class="avg">6.8</td><td>19</td><td>0</td><td>0</td><td>0</td><td class="avg">4.8</td></tr>
+            <tr><td>π<sub>0.5</sub> <span class="cite">[Physical Intelligence 2025]</span></td><td class="avg">10.4</td><td>9</td><td>13</td><td>11</td><td>24</td><td>15</td><td class="avg">14.4</td><td>16</td><td>6</td><td>0</td><td>0</td><td class="avg">5.5</td></tr>
+            <tr><td>X-VLA <span class="cite">[Zheng et al. 2025]</span></td><td class="avg">9.8</td><td>9</td><td>13</td><td>18</td><td>16</td><td>3</td><td class="avg">11.8</td><td>26</td><td>1</td><td>2</td><td>0</td><td class="avg">7.3</td></tr>
+            <tr><td>Mem-0 <span class="cite">[Chen et al. 2026]</span></td><td class="avg">42.0</td><td>4</td><td>89</td><td>90</td><td>67</td><td>14</td><td class="avg">52.8</td><td>28</td><td>18</td><td>68</td><td>0</td><td class="avg">28.5</td></tr>
+            <tr><td>Fast-WAM <span class="cite">[Yuan et al. 2026]</span></td><td class="avg">5.9</td><td>0</td><td>0</td><td>0</td><td>0</td><td>7</td><td class="avg">1.4</td><td>20</td><td>26</td><td>0</td><td>0</td><td class="avg">11.5</td></tr>
+            <tr><td>LingBot-VA <span class="cite">[Li et al. 2026]</span></td><td class="avg">78.2</td><td>13</td><td class="best">100</td><td class="best">100</td><td>99</td><td>88</td><td class="avg">80.0</td><td>41</td><td class="best">100</td><td>79</td><td>84</td><td class="avg">76.0</td></tr>
+            <tr><td>MemoryWAM <span class="cite">[Yang et al. 2026]</span></td><td class="avg">83.0</td><td>27</td><td class="best">100</td><td class="best">100</td><td class="best">100</td><td>94</td><td class="avg">84.2</td><td>41</td><td class="best">100</td><td>98</td><td>87</td><td class="avg">81.5</td></tr>
+            <tr><td>WLA-0 <span class="cite">[Yang et al. 2026]</span></td><td class="avg">—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td class="avg">—</td><td>45</td><td>23</td><td>84</td><td>74</td><td class="avg">56.5</td></tr>
+            <tr class="ours"><td>BridgeVLA <span class="cite">(ours, base)</span></td><td class="avg">18.9</td><td>75</td><td>0</td><td>1</td><td>11</td><td>8</td><td class="avg">19.0</td><td>72</td><td>0</td><td>3</td><td>0</td><td class="avg">18.8</td></tr>
+            <tr class="ours"><td>BridgeVLA++ <span class="cite">(ours)</span></td><td class="avg best">96.0</td><td class="best">81</td><td class="best">100</td><td class="best">100</td><td>99</td><td class="best">96</td><td class="avg best">95.2</td><td class="best">96</td><td class="best">100</td><td class="best">99</td><td class="best">93</td><td class="avg best">97.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        <b>Table 5 — RMBench.</b> Success rate (%) over 100 episodes per task on the nine dual-arm
+        tasks, grouped by memory complexity. Baseline numbers are quoted from their sources; “—”
+        denotes tasks a source does not evaluate. Best per task in bold.
+      </p>
+    </div>
+
+    <p class="lede reveal" style="margin-top:1.1rem">
+      <em>Battery Try</em> is the sharpest illustration: a trial-and-error sorting task where the policy
+      must remember which attempts already failed. BridgeVLA++ reaches <b>96%</b> against 45% for the
+      strongest baseline.
+    </p>
+
+    <div class="media-grid cols-3 reveal" style="margin-top:1rem">
+      <div class="media-card">
+        <span class="task-chip">RMBench · short-term</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/observe_and_pick_up/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Observe &amp; Pick Up</b> — 81%</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RMBench · short-term</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/rearrange_blocks/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Rearrange Blocks</b> — 100%</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RMBench · short-term</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/put_back_block/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Put Back Block</b> — 100%</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RMBench · short-term</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/swap_blocks/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Swap Blocks</b> — 99%</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RMBench · short-term</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/swap_t/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Swap T</b> — 96%</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RMBench · long-term</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/battery_try/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Battery Try</b> — 96% <span style="color:#8a93b3">(best baseline 45%)</span></p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RMBench · long-term</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/blocks_ranking_try/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Blocks Ranking Try</b> — 100%</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RMBench · long-term</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/cover_blocks/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Cover Blocks</b> — 99%</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RMBench · long-term</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/press_button/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Press Button</b> — 93%</p>
+      </div>
+    </div>
+
+    <!-- ------------------------------------------------------ MemoryBench -->
+    <h3 class="subhead reveal">MemoryBench — single-arm memory validation</h3>
+    <p class="lede reveal">
+      The memory generalizes beyond bimanual coordination: on the three single-arm MemoryBench
+      scenarios BridgeVLA++ reaches <b>99.7 ± 0.3%</b> (Table 4 above), against 94.3% for SAM2Act+ and
+      11.3% for the memory-free base model.
+    </p>
+
+    <div class="media-grid cols-3 reveal" style="margin-top:1rem">
+      <div class="media-card">
+        <span class="task-chip">MemoryBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/memorybench/reopen_drawer/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Reopen Drawer</b> — 100.0%</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">MemoryBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/memorybench/put_block_back/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Put Block Back</b> — 99.8%</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">MemoryBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/memorybench/rearrange_block/trial_1.mp4" type="video/mp4"></video>
+        </div>
+        <p class="media-caption"><b>Rearrange Block</b> — 99.2%</p>
+      </div>
+    </div>
+
+    <!-- --------------------------------------------------- benchmark suites -->
+    <h3 class="subhead reveal">The benchmark suites</h3>
+    <div class="carousel reveal" id="bench-gallery" style="margin-top:.8rem">
+      <div class="frame">
+        <div class="slide is-active">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/rlbench_tasks.jpg" alt="Grid of the 18 RLBench tasks.">
+            <figcaption class="figcap"><b>RLBench</b> — the 18 evaluated tasks.</figcaption>
+          </figure>
+        </div>
+        <div class="slide">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/colosseum_perturbations.jpg" alt="Visualization of the COLOSSEUM perturbation axes.">
+            <figcaption class="figcap"><b>COLOSSEUM</b> — the 12 perturbation axes.</figcaption>
+          </figure>
+        </div>
+        <div class="slide">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/gembench_tasks.jpg" alt="Grid of the GemBench task suite.">
+            <figcaption class="figcap"><b>GemBench</b> — the four generalization levels.</figcaption>
+          </figure>
+        </div>
+        <div class="slide">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/rmbench_tasks.jpg" alt="Grid of the nine dual-arm RMBench tasks.">
+            <figcaption class="figcap"><b>RMBench</b> — the nine dual-arm memory tasks.</figcaption>
+          </figure>
+        </div>
+        <div class="slide">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/memorybench_tasks.jpg" alt="Grid of the three MemoryBench tasks.">
+            <figcaption class="figcap"><b>MemoryBench</b> — the three single-arm memory tasks.</figcaption>
+          </figure>
+        </div>
+      </div>
+      <button class="carousel-btn carousel-prev" type="button" aria-label="Previous">&#10094;</button>
+      <button class="carousel-btn carousel-next" type="button" aria-label="Next">&#10095;</button>
+      <div class="dots"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- REAL ROBOT                                                               -->
+<!-- ======================================================================== -->
+<section class="banner" id="real-robot">
+  <div class="wrap">
+    <p class="eyebrow">Two embodiments, ten demonstrations per language instruction</p>
+    <h2 class="gradient-text">Real-Robot Experiments</h2>
+    <p>A 7-DoF Franka Research 3 for general manipulation, and a held-out 6-DoF DOBOT CR5A for memory.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1.4rem">
+  <div class="wrap-wide">
+
+    <figure class="figure reveal">
+      <img src="static/images/paper/real_setup.jpg" alt="Real robot setup: Franka Research 3 and DOBOT CR5A, each observed by a static ZED 2i stereo camera, with the basic, generalization and memory evaluation settings.">
+      <figcaption class="figcap">
+        <b>Figure 5 — Real-robot evaluation setup.</b> Left: the general-manipulation platform — a 7-DoF
+        Franka Research 3 with a parallel-jaw gripper, observed by a single static ZED 2i stereo camera
+        that provides the colored point cloud. Right: the memory platform — a 6-DoF DOBOT CR5A arm with
+        the same camera configuration. Bottom: the evaluation settings — the Franka suite covers one
+        basic and six generalization settings (Background, Lighting, Distractor, Combination, Height,
+        Category); the DOBOT suite covers the memory-dependent setting.
+      </figcaption>
+    </figure>
+
+    <!-- ------------------------------------------------- Franka: base model -->
+    <h3 class="subhead reveal">Franka Research 3 — general manipulation with 10 demos</h3>
+    <p class="lede reveal">
+      13 tasks spanning 3–9 keyframes each, from simple pick-and-place to long-horizon drawer
+      manipulation, trained from 10 kinesthetic demonstrations per task and evaluated over 10 trials
+      per task per method. BridgeVLA completes <b>96.9%</b> of trials and never falls below 9/10 on any
+      task. The cleanest evidence for the alignment argument is π<sub>0</sub>: it shares the same
+      PaliGemma backbone and differs only in the action interface — and it reaches 3.8%.
+    </p>
+
+    <div class="table-card reveal" style="margin-top:1rem">
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr>
+              <th rowspan="2">Method</th>
+              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+              <th>Soda Can</th><th>Giraffe</th><th>Red Block</th><th>Press</th><th>RedBull</th>
+              <th>RedBull</th><th>Coke</th><th>Orange Block</th><th>Red Block</th>
+              <th>Yellow Block</th><th>Zebra</th><th>Zebra</th><th>Wolf</th>
+            </tr>
+            <tr>
+              <th>Bottom Shelf</th><th>Lower Drawer</th><th>Blue Plate</th><th>Sanitizer</th>
+              <th>Top Shelf</th><th>Bottom Shelf</th><th>Top Shelf</th><th>Green Plate</th>
+              <th>Purple Plate</th><th>Green Plate</th><th>Upper Drawer</th><th>Lower Drawer</th>
+              <th>Upper Drawer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>SpatialVLA (50 demos) <span class="cite">[Qu et al. 2025]</span></td><td class="avg">28.5</td><td>1/10</td><td>1/10</td><td>5/10</td><td>6/10</td><td>3/10</td><td>1/10</td><td>2/10</td><td>6/10</td><td>3/10</td><td>5/10</td><td>2/10</td><td>0/10</td><td>2/10</td></tr>
+            <tr><td>SpatialVLA (10 demos) <span class="cite">[Qu et al. 2025]</span></td><td class="avg">3.1</td><td>0/10</td><td>0/10</td><td>0/10</td><td>2/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>1/10</td><td>1/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>0/10</td></tr>
+            <tr><td>π<sub>0</sub> <span class="cite">[Black et al. 2024]</span></td><td class="avg">3.8</td><td>0/10</td><td>0/10</td><td>2/10</td><td>1/10</td><td>0/10</td><td>1/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>1/10</td><td>0/10</td><td>0/10</td><td>0/10</td></tr>
+            <tr><td>ACT <span class="cite">[Zhao et al. 2023]</span></td><td class="avg">22.3</td><td>2/10</td><td>2/10</td><td>3/10</td><td>2/10</td><td>3/10</td><td>1/10</td><td>2/10</td><td>2/10</td><td>3/10</td><td>4/10</td><td>1/10</td><td>2/10</td><td>1/10</td></tr>
+            <tr><td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td><td class="avg">90.0</td><td>10/10</td><td>8/10</td><td>8/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>9/10</td><td>7/10</td><td>8/10</td><td>9/10</td></tr>
+            <tr class="ours"><td>BridgeVLA <span class="cite">(ours, 10 demos)</span></td><td class="avg best">96.9</td><td>9/10</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>9/10</td></tr>
+            <tr class="ablation"><td>BridgeVLA <span class="cite">(ours, 3 demos)</span></td><td class="avg">95.4</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>7/10</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        <b>Table 6 — Real Franka results, basic setting.</b> Success counts over 10 trials per task.
+        All methods use 10 demonstrations per task except SpatialVLA&nbsp;(50) and the
+        3-demonstration reference row. ACT is trained single-task, as it is not language-conditioned;
+        test scenes are photographed and manually aligned across methods.
+      </p>
+    </div>
+
+    <div class="callout reveal" style="margin-top:1rem">
+      <span aria-hidden="true" style="font-size:1.3rem">📉</span>
+      <div>
+        <b>Data efficiency.</b> Cutting training data from 10 to <b>3 demonstrations per task</b> costs
+        1.5 points — 96.9% → <b>95.4%</b>. Over the same 13 tasks, π<sub>0</sub> reaches 3.8% and
+        SpatialVLA 3.1% at 10 demonstrations (28.5% at 50).
+      </div>
+    </div>
+
+    <div class="media-grid cols-3 reveal" style="margin-top:1.2rem">
+      <div class="media-card">
+        <span class="task-chip">Franka · basic</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/redbull_top_shelf/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>“Put the RedBull can in the top shelf”</b></p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">Franka · basic</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/coke_top_shelf/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>“Put the coke can in the top shelf”</b></p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">Franka · basic</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/red_block_blue_plate/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>“Place the red block in the blue plate”</b></p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">Franka · basic</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/press_sanitizer/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>“Press sanitizer”</b></p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">Franka · basic</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/zebra_upper_drawer/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>“Put the zebra in the upper drawer”</b></p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">Franka · basic</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/giraffe_lower_drawer/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>“Put the giraffe in the lower drawer”</b></p>
+      </div>
+    </div>
+
+    <!-- ---------------------------------------------- Franka generalization -->
+    <h3 class="subhead reveal">Generalization to unseen conditions and instructions</h3>
+    <p class="lede reveal">
+      Six generalization settings. Four probe robustness to visual disturbance — <em>Distractor</em>,
+      <em>Lighting</em>, <em>Background</em>, <em>Height</em> — and two probe instruction-level
+      generalization: <em>Combination</em> (object–skill pairings each seen in training, never
+      demonstrated together) and <em>Category</em> (object categories absent from the robot data).
+      BridgeVLA beats RVT-2, the strongest baseline of this suite, in <b>all seven settings, by 32% on
+      average</b>, with the widest margins under Lighting and Combination.
+    </p>
+
+    <figure class="figure reveal" style="margin-top:1rem">
+      <img src="static/images/paper/real_results.png" alt="Bar chart of average success rate over the 13 Franka tasks in the basic setting and six generalization settings, comparing RVT-2, BridgeVLA without pre-training and BridgeVLA.">
+      <figcaption class="figcap">
+        <b>Figure 6 — Real-robot generalization.</b> Average success rate over the 13 Franka tasks in
+        the basic setting and the six generalization settings. The <em>w/o Pre-train</em> bars ablate
+        the 2D-heatmap pre-training: without it the policy cannot generalize in either
+        language-related setting and does not even match RVT-2, while the full model is best in both.
+      </figcaption>
+    </figure>
+
+    <div class="media-grid cols-3 reveal" style="margin-top:1.2rem">
+      <div class="media-card">
+        <span class="task-chip">Generalization</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/distractor/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>Distractor</b> — unseen clutter in the workspace</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">Generalization</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/lighting/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>Lighting</b> — the widest margin over RVT-2</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">Generalization</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/background/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>Background</b> — unseen table covering</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">Generalization</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/height/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>Height</b> — objects raised off the table plane</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">Generalization</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/combination/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>Combination</b> — object–skill pairings never demonstrated together</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">Generalization</span>
+        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/category/trial_1.mp4" type="video/mp4"></video></div>
+        <p class="media-caption"><b>Category</b> — object categories unseen in the robot data</p>
+      </div>
+    </div>
+
+    <div class="carousel reveal" id="real-settings" style="margin-top:1.4rem">
+      <div class="frame">
+        <div class="slide is-active">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/real_perturbation_settings.jpg" alt="The distractor, lighting, background and height settings.">
+            <figcaption class="figcap"><b>Visual-disturbance settings</b> — Distractor, Lighting, Background and Height.</figcaption>
+          </figure>
+        </div>
+        <div class="slide">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/combination_within.jpg" alt="The combination setting, part I.">
+            <figcaption class="figcap"><b>Combination setting (I)</b> — unseen object–skill pairings.</figcaption>
+          </figure>
+        </div>
+        <div class="slide">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/combination_across.jpg" alt="The combination setting, part II.">
+            <figcaption class="figcap"><b>Combination setting (II)</b> — unseen object–skill pairings.</figcaption>
+          </figure>
+        </div>
+        <div class="slide">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/category_setting.jpg" alt="The category setting.">
+            <figcaption class="figcap"><b>Category setting</b> — object categories unseen in the robot data.</figcaption>
+          </figure>
+        </div>
+        <div class="slide">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/real_rollouts_1.jpg" alt="Real robot rollouts, part I.">
+            <figcaption class="figcap"><b>Real-robot rollouts (I)</b> — keyframe sequences on the Franka task suite.</figcaption>
+          </figure>
+        </div>
+        <div class="slide">
+          <figure class="figure" style="border:none;box-shadow:none;padding:0">
+            <img src="static/images/paper/real_rollouts_2.jpg" alt="Real robot rollouts, part II.">
+            <figcaption class="figcap"><b>Real-robot rollouts (II)</b> — keyframe sequences on the Franka task suite.</figcaption>
+          </figure>
+        </div>
+      </div>
+      <button class="carousel-btn carousel-prev" type="button" aria-label="Previous">&#10094;</button>
+      <button class="carousel-btn carousel-next" type="button" aria-label="Next">&#10095;</button>
+      <div class="dots"></div>
+    </div>
+
+    <!-- --------------------------------------------- DOBOT: memory on new HW -->
+    <h3 class="subhead reveal">DOBOT CR5A — memory on a held-out embodiment</h3>
+    <p class="lede reveal">
+      The Franka suite is near-saturated, which proves those tasks are solvable from the current frame
+      alone. So the memory is tested on a second, held-out embodiment with three tasks built so that
+      the current observation <em>underdetermines</em> the next action — plus two ordinary
+      pick-and-place families that check the memory costs nothing on tasks that never needed it.
+      All methods train on the same 70 demonstrations (10 per language instruction).
+    </p>
+
+    <div class="idea-grid reveal" style="margin-top:1.1rem">
+      <div class="idea">
+        <div class="num">①</div>
+        <h4>Press Button — <em>counting</em></h4>
+        <p>
+          Press the blue button exactly <em>N</em> times (given in words, “twice” / “three times”),
+          then the yellow button once. A press leaves no visible trace, so every post-press frame is
+          identical up to nuisance variation: the running count exists only in the policy's history.
+          Neither baseline solves a single trial in any setting.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">②</div>
+        <h4>Cover Blocks — <em>occlusion</em></h4>
+        <p>
+          Cover all three blocks, then uncover only the block of the instructed color. Covering erases
+          the color evidence from the scene, so the second phase is solvable only from the
+          colour-to-location bindings formed before the covers went on.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">③</div>
+        <h4>Swap Eggplant — <em>rearrangement</em></h4>
+        <p>
+          Two look-alike eggplants must end up each on the other's initial plate, using a third plate
+          as a buffer that must be empty again at the end. Intermediate configurations recur across
+          phases, so the correct next placement depends on which eggplant has already moved.
+        </p>
+      </div>
+    </div>
+
+    <div class="stack reveal" style="margin-top:1.3rem">
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Method</th><th rowspan="2">Mem.</th>
+                <th colspan="3" style="border-left:1px solid rgba(95,104,184,.25)">Memory-dependent</th>
+                <th colspan="2" style="border-left:1px solid rgba(95,104,184,.25)">Memory-free</th>
+              </tr>
+              <tr>
+                <th style="border-left:1px solid rgba(95,104,184,.25)">Cover Blocks</th>
+                <th>Press Button</th><th>Swap Eggplant</th>
+                <th style="border-left:1px solid rgba(95,104,184,.25)">Put in Drawer</th>
+                <th>Put on Shelf</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td><span class="yes">✓</span></td><td>20.0%</td><td>0.0%</td><td>70.0%</td><td>60.0%</td><td>0.0%</td></tr>
+              <tr class="ours"><td>BridgeVLA <span class="cite">(base)</span></td><td><span class="no">✗</span></td><td>0.0%</td><td>0.0%</td><td>60.0%</td><td>100.0%</td><td>90.0%</td></tr>
+              <tr class="ours"><td>BridgeVLA++</td><td><span class="yes">✓</span></td><td class="best">100.0%</td><td class="best">100.0%</td><td class="best">80.0%</td><td class="best">100.0%</td><td class="best">100.0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 7 — DOBOT, basic setting.</b> Ten trials per language instruction. <em>Put in
+          Drawer</em> and <em>Put on Shelf</em> are each evaluated with two instructions (upper and
+          lower target) and reported as their average.
+        </p>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Method</th><th rowspan="2">Mem.</th><th rowspan="2">Basic</th>
+                <th colspan="5" style="border-left:1px solid rgba(95,104,184,.25)">Visual disturbance</th>
+              </tr>
+              <tr>
+                <th style="border-left:1px solid rgba(95,104,184,.25)">Distractor</th>
+                <th>Background</th><th>Height</th><th>Lighting</th><th class="avg"><em>Avg.</em></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="group-head"><td colspan="8">Memory-dependent tasks</td></tr>
+              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td><span class="yes">✓</span></td><td>30.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>3.3%</td><td class="avg">0.8%</td></tr>
+              <tr class="ours"><td>BridgeVLA <span class="cite">(base)</span></td><td><span class="no">✗</span></td><td>20.0%</td><td>20.0%</td><td>23.3%</td><td>6.7%</td><td>13.3%</td><td class="avg">15.8%</td></tr>
+              <tr class="ours"><td>BridgeVLA++</td><td><span class="yes">✓</span></td><td class="best">93.3%</td><td class="best">73.3%</td><td class="best">86.7%</td><td class="best">76.7%</td><td class="best">76.7%</td><td class="avg best">78.3%</td></tr>
+              <tr class="group-head"><td colspan="8">Memory-free tasks</td></tr>
+              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td><span class="yes">✓</span></td><td>30.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>7.5%</td><td class="avg">1.9%</td></tr>
+              <tr class="ours"><td>BridgeVLA <span class="cite">(base)</span></td><td><span class="no">✗</span></td><td>95.0%</td><td>57.5%</td><td>72.5%</td><td>67.5%</td><td>67.5%</td><td class="avg">66.3%</td></tr>
+              <tr class="ours"><td>BridgeVLA++</td><td><span class="yes">✓</span></td><td class="best">100.0%</td><td class="best">70.0%</td><td class="best">100.0%</td><td class="best">82.5%</td><td class="best">75.0%</td><td class="avg best">81.9%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 8 — DOBOT, all settings.</b> Each entry is the unweighted mean over the three
+          memory-dependent or two memory-free tasks; <em>Avg.</em> averages the four disturbance
+          settings. The memory advantage survives every disturbance, and on tasks that never needed
+          memory BridgeVLA++ is no weaker than the base model in any setting.
+        </p>
+      </div>
+    </div>
+
+    <h4 class="subhead-sm reveal">Browse every rollout</h4>
+    <p class="lede reveal" style="margin-top:-.35rem">
+      All seven language instructions across all five evaluation settings, as recorded on the DOBOT
+      platform. Pick a task, then a setting — the panel shows that exact rollout together with the
+      success count behind it.
+    </p>
+
+    <script type="application/json" id="dobot-demo-data">
+{
+  "settings": [
+    {
+      "id": "basic",
+      "label": "Basic",
+      "short": "Basic",
+      "note": "Same environment as training; only the object layout changes."
+    },
+    {
+      "id": "distractor",
+      "label": "Distractor",
+      "short": "Distr.",
+      "note": "Objects never seen during training are added to the workspace."
+    },
+    {
+      "id": "background",
+      "label": "Background",
+      "short": "Backgr.",
+      "note": "The table covering is swapped for one absent from the training data."
+    },
+    {
+      "id": "height",
+      "label": "Height",
+      "short": "Height",
+      "note": "Target objects are raised off the table plane the demonstrations were collected on."
+    },
+    {
+      "id": "lighting",
+      "label": "Lighting",
+      "short": "Light.",
+      "note": "Room lights off, leaving only coloured fill light — the colour evidence the memory tasks hinge on is largely erased."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "cover_blocks",
+      "group": "memory",
+      "label": "Cover Blocks",
+      "family": "Occlusion",
+      "instruction": "Put lids on the blocks, then uncover the blue block",
+      "why": "Covering erases the colour evidence from the scene, so the second phase is solvable only from the colour-to-location bindings formed before the lids went on.",
+      "scores": {
+        "basic": [
+          10,
+          0,
+          2
+        ],
+        "distractor": [
+          6,
+          0,
+          0
+        ],
+        "background": [
+          10,
+          0,
+          0
+        ],
+        "height": [
+          8,
+          0,
+          0
+        ],
+        "lighting": [
+          8,
+          0,
+          0
+        ]
+      },
+      "keyframes": [
+        0,
+        4,
+        7,
+        10,
+        13
+      ]
+    },
+    {
+      "id": "press_button",
+      "group": "memory",
+      "label": "Press Button",
+      "family": "Counting",
+      "instruction": "Press the blue button three times, then press the yellow button",
+      "why": "A press leaves no visible trace, so every post-press frame is identical up to nuisance variation: the running count exists only in the policy's history.",
+      "scores": {
+        "basic": [
+          10,
+          0,
+          0
+        ],
+        "distractor": [
+          8,
+          0,
+          0
+        ],
+        "background": [
+          8,
+          0,
+          0
+        ],
+        "height": [
+          8,
+          0,
+          0
+        ],
+        "lighting": [
+          9,
+          0,
+          0
+        ]
+      },
+      "keyframes": [
+        0,
+        2,
+        3,
+        8,
+        8
+      ]
+    },
+    {
+      "id": "swap_eggplant",
+      "group": "memory",
+      "label": "Swap Eggplant",
+      "family": "Rearrangement",
+      "instruction": "Swap the two eggplants on the plate",
+      "why": "The two objects look alike and intermediate configurations recur across phases, so the correct next placement depends on which eggplant has already moved.",
+      "scores": {
+        "basic": [
+          8,
+          6,
+          7
+        ],
+        "distractor": [
+          8,
+          6,
+          0
+        ],
+        "background": [
+          8,
+          7,
+          0
+        ],
+        "height": [
+          7,
+          2,
+          0
+        ],
+        "lighting": [
+          6,
+          4,
+          1
+        ]
+      },
+      "keyframes": [
+        0,
+        2,
+        7,
+        8,
+        11
+      ]
+    },
+    {
+      "id": "drawer_upper",
+      "group": "free",
+      "label": "Put in Drawer",
+      "sub": "upper",
+      "instruction": "Put the watermelon in the upper drawer",
+      "why": "Solvable from the current frame alone — here to check that adding memory costs nothing on tasks that never needed it.",
+      "scores": {
+        "basic": [
+          10,
+          10,
+          7
+        ],
+        "distractor": [
+          3,
+          3,
+          0
+        ],
+        "background": [
+          10,
+          6,
+          0
+        ],
+        "height": [
+          8,
+          8,
+          0
+        ],
+        "lighting": [
+          4,
+          5,
+          2
+        ]
+      },
+      "keyframes": [
+        0,
+        3,
+        6,
+        9,
+        9
+      ]
+    },
+    {
+      "id": "drawer_lower",
+      "group": "free",
+      "label": "Put in Drawer",
+      "sub": "lower",
+      "instruction": "Put the watermelon in the lower drawer",
+      "why": "Solvable from the current frame alone — here to check that adding memory costs nothing on tasks that never needed it.",
+      "scores": {
+        "basic": [
+          10,
+          10,
+          5
+        ],
+        "distractor": [
+          5,
+          2,
+          0
+        ],
+        "background": [
+          10,
+          6,
+          0
+        ],
+        "height": [
+          7,
+          2,
+          0
+        ],
+        "lighting": [
+          6,
+          4,
+          1
+        ]
+      },
+      "keyframes": [
+        0,
+        3,
+        6,
+        9,
+        9
+      ]
+    },
+    {
+      "id": "shelf_upper",
+      "group": "free",
+      "label": "Put on Shelf",
+      "sub": "upper",
+      "instruction": "Put the soda water in the top shelf",
+      "why": "Solvable from the current frame alone — here to check that adding memory costs nothing on tasks that never needed it.",
+      "scores": {
+        "basic": [
+          10,
+          10,
+          0
+        ],
+        "distractor": [
+          10,
+          9,
+          0
+        ],
+        "background": [
+          10,
+          10,
+          0
+        ],
+        "height": [
+          10,
+          10,
+          0
+        ],
+        "lighting": [
+          10,
+          10,
+          0
+        ]
+      },
+      "keyframes": [
+        0,
+        3,
+        5,
+        7,
+        7
+      ]
+    },
+    {
+      "id": "shelf_lower",
+      "group": "free",
+      "label": "Put on Shelf",
+      "sub": "lower",
+      "instruction": "Put the red bull in the bottom shelf",
+      "why": "Solvable from the current frame alone — here to check that adding memory costs nothing on tasks that never needed it.",
+      "scores": {
+        "basic": [
+          10,
+          8,
+          0
+        ],
+        "distractor": [
+          10,
+          9,
+          0
+        ],
+        "background": [
+          10,
+          7,
+          0
+        ],
+        "height": [
+          8,
+          7,
+          0
+        ],
+        "lighting": [
+          10,
+          8,
+          0
+        ]
+      },
+      "keyframes": [
+        0,
+        3,
+        5,
+        7,
+        7
+      ]
+    }
+  ],
+  "methods": [
+    "BridgeVLA++",
+    "BridgeVLA (base)",
+    "SAM2Act+"
+  ],
+  "alts": {}
+}
+    </script>
+
+    <div class="demo-explorer reveal" id="dobot-explorer"
+         data-video-root="static/videos/real/dobot"
+         data-poster-root="static/images/dobot_posters"
+         data-keyframe-root="static/images/dobot_keyframes">
+
+      <div class="picker-group">
+        <span class="picker-label"><span class="dot-mem" aria-hidden="true"></span>Memory-dependent tasks</span>
+        <div class="chip-row" data-task-group="memory" role="group" aria-label="Memory-dependent tasks"></div>
+      </div>
+      <div class="picker-group">
+        <span class="picker-label"><span class="dot-free" aria-hidden="true"></span>Memory-free control tasks</span>
+        <div class="chip-row" data-task-group="free" role="group" aria-label="Memory-free tasks"></div>
+      </div>
+      <div class="picker-group">
+        <span class="picker-label">Evaluation setting</span>
+        <div class="setting-tabs" data-setting-row role="group" aria-label="Evaluation setting"></div>
+      </div>
+
+      <div class="demo-stage">
+        <div class="demo-video">
+          <span class="demo-badge" data-demo-badge>Basic</span>
+          <video data-demo-video muted loop playsinline controls preload="none"
+                 aria-label="Selected real-robot rollout"></video>
+          <div class="demo-unavailable">
+            <strong>No recording for this combination</strong>
+            <span data-demo-missing-note></span>
+          </div>
+        </div>
+
+        <div class="demo-info">
+          <span class="demo-family" data-demo-family></span>
+          <p class="demo-instruction" data-demo-instruction></p>
+          <p class="demo-setting-note" data-demo-note></p>
+          <div class="score-block">
+            <h5>Success over 10 trials — this task, this setting</h5>
+            <div data-demo-scores></div>
+          </div>
+
+          <div class="setting-overview">
+            <h5>BridgeVLA++ across all settings</h5>
+            <div class="overview-bars" data-demo-overview></div>
+          </div>
+
+          <div class="keyframe-block">
+            <h5>Keyframe rollout <span style="text-transform:none;letter-spacing:0;font-weight:500">(basic setting)</span></h5>
+            <div class="keyframe-strip" data-demo-keyframes></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- ABLATIONS                                                                -->
+<!-- ======================================================================== -->
+<section class="banner" id="ablations">
+  <div class="wrap">
+    <p class="eyebrow">What actually matters</p>
+    <h2 class="gradient-text">Ablation Studies</h2>
+    <p>Which design decisions carry the performance — and which memory does what.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1.4rem">
+  <div class="wrap-wide">
+
+    <h3 class="subhead reveal">Base-model design ablations (RLBench)</h3>
+    <div class="table-card reveal" style="margin-top:.8rem">
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr>
+              <th rowspan="2">Variant</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+              <th rowspan="2" class="avg">Avg. Rank ↓</th>
+              <th>Insert</th><th>Place</th><th>Put in</th><th>Screw</th><th>Sort</th>
+              <th>Stack</th><th>Stack</th>
+            </tr>
+            <tr>
+              <th>Peg</th><th>Cups</th><th>Cupboard</th><th>Bulb</th><th>Shape</th>
+              <th>Blocks</th><th>Cups</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="ours"><td>BridgeVLA <span class="cite">(full base)</span></td><td class="avg best">90.5</td><td class="avg best">4.75</td><td>91.2</td><td>58.4</td><td>91.2</td><td>93.6</td><td>55.2</td><td>84.8</td><td>88.8</td></tr>
+            <tr class="ablation"><td>├ w/ discretized rotation</td><td class="avg">88.2</td><td class="avg">4.86</td><td>88.0</td><td>58.4</td><td>73.6</td><td>87.2</td><td>60.8</td><td>76.8</td><td>81.6</td></tr>
+            <tr class="ablation"><td>├ w/o heatmap decoding</td><td class="avg">31.4</td><td class="avg">12.78</td><td>0.0</td><td>1.3</td><td>5.3</td><td>2.7</td><td>4.0</td><td>0.0</td><td>0.0</td></tr>
+            <tr class="ablation"><td>└ w/ 3D position input</td><td class="avg">56.2</td><td class="avg">10.14</td><td>26.7</td><td>14.7</td><td>10.7</td><td>16.0</td><td>21.3</td><td>17.3</td><td>4.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        <b>Table 9 — Base-model ablations.</b> A representative subset of the 18 RLBench columns; the
+        averages and ranks are over all 18 tasks. <em>w/o heatmap decoding</em> and <em>w/ 3D position
+        input</em> use three seeds, the others five.
+      </p>
+    </div>
+
+    <div class="idea-grid reveal" style="margin-top:1.1rem">
+      <div class="idea">
+        <div class="num">A</div>
+        <h4>Predict heatmaps, not coordinates <span style="color:#b34a4a">−59.1</span></h4>
+        <p>
+          Swapping convex upsampling for a parameter-matched Transformer decoder that regresses target
+          positions under an MSE loss collapses RLBench from <b>90.5% to 31.4%</b>, and the ablated
+          model is markedly harder to optimize (batch 192 vs 64, careful LR tuning). The heatmap gives
+          denser supervision, injects a 3D→2D spatial prior, and shares the spatial structure of the
+          input images.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">B</div>
+        <h4>Do <em>not</em> feed 3D positions to the VLM <span style="color:#b34a4a">−34.3</span></h4>
+        <p>
+          Fusing per-pixel 3D positions into the image features through a 3D convolutional module
+          injects richer spatial cues — and drops success from <b>90.5% to 56.2%</b>, because the image
+          features shift away from the distribution the VLM was pre-trained on. For a pre-trained VLM,
+          input alignment outweighs explicit 3D input.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">C</div>
+        <h4>2D-heatmap pre-training carries language generalization</h4>
+        <p>
+          Without pre-training, the policy fails to generalize in both language-related real-world
+          settings (Combination, Category) and cannot even match RVT-2, while the full model is best in
+          both (Figure 6). Fine-tuning on a handful of robot trajectories cannot instil grounding of
+          language semantics in the heatmap space.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">D</div>
+        <h4>Continuous 6D rotation beats discretization <span style="color:#b34a4a">−2.3</span></h4>
+        <p>
+          Replacing the continuous 6D rotation head with the discretized per-axis Euler classification
+          of the conference version costs <b>90.5% → 88.2%</b>, concentrated in tasks demanding precise
+          end-effector orientations. The 6D form also avoids the gimbal lock of discretized Euler
+          angles in near-vertical gripper poses.
+        </p>
+      </div>
+    </div>
+
+    <h3 class="subhead reveal">Memory ablations</h3>
+    <p class="lede reveal">
+      The two memories are not redundant: each one is load-bearing on exactly the benchmark whose
+      difficulty it targets.
+    </p>
+
+    <div class="stack reveal" style="margin-top:1rem">
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Variant</th><th rowspan="2" class="avg">RLBench Avg. ↑</th>
+                <th>Insert</th><th>Place</th><th>Sort</th><th>Stack</th><th>Place</th>
+              </tr>
+              <tr><th>Peg</th><th>Cups</th><th>Shape</th><th>Cups</th><th>Wine</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ours"><td>BridgeVLA++ <span class="cite">(full)</span></td><td class="avg best">93.7</td><td class="best">99.2</td><td class="best">76.8</td><td>72.0</td><td class="best">98.4</td><td class="best">95.2</td></tr>
+              <tr class="ablation"><td>├ w/o spatial memory 𝒮</td><td class="avg">92.0</td><td>95.2</td><td>74.4</td><td>60.8</td><td>92.8</td><td>78.4</td></tr>
+              <tr class="ablation"><td>└ w/o temporal memory 𝒯</td><td class="avg">91.9</td><td>82.4</td><td>57.6</td><td class="best">73.6</td><td>93.6</td><td>90.4</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 10 — Memory ablations on RLBench.</b> Removing 𝒮 costs most exactly in the
+          occlusion-heavy precision tasks it targets (<em>sort shape</em> 72.0 → 60.8), and removing 𝒯
+          costs most where a stable global reference helps (<em>place cups</em> 76.8 → 57.6) — even
+          though RLBench tasks are not intrinsically memory-dependent.
+        </p>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Variant</th>
+                <th class="avg" rowspan="2">Overall Avg. ↑</th>
+                <th style="border-left:1px solid rgba(95,104,184,.25)"><em>M</em>(1)</th>
+                <th><em>M</em>(<em>n</em>)</th>
+                <th>Rearrange</th><th>Cover</th><th>Press</th>
+              </tr>
+              <tr>
+                <th style="border-left:1px solid rgba(95,104,184,.25)"><em>Avg.</em></th>
+                <th><em>Avg.</em></th><th>Blocks</th><th>Blocks</th><th>Button</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="ours"><td>BridgeVLA++ <span class="cite">(full)</span></td><td class="avg best">96.0</td><td class="avg">95.2</td><td class="avg best">97.0</td><td class="best">100</td><td class="best">99</td><td class="best">93</td></tr>
+              <tr class="ablation"><td>w/o 𝒮 (spatial memory)</td><td class="avg">95.4</td><td class="avg best">96.2</td><td class="avg">94.5</td><td class="best">100</td><td>91</td><td>92</td></tr>
+              <tr class="ablation"><td>w/o 𝒯 (temporal memory)</td><td class="avg">21.3</td><td class="avg">27.0</td><td class="avg">14.3</td><td>11</td><td>5</td><td>0</td></tr>
+              <tr class="ablation"><td>Base (no memory)</td><td class="avg">18.9</td><td class="avg">19.0</td><td class="avg">18.8</td><td>0</td><td>3</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 11 — Memory ablations on RMBench.</b> The 2×2 memory factorial. Removing 𝒯 collapses
+          the benchmark from 96.0% to 21.3%, essentially back to the memory-free base (18.9%); removing
+          𝒮 is nearly harmless here, because RMBench stresses temporal sequencing rather than
+          geometric alignment.
+        </p>
+      </div>
+    </div>
+
+    <figure class="figure reveal" style="margin-top:1.4rem">
+      <img src="static/images/paper/pred_heatmap.jpg" alt="Predicted heatmaps on pre-training samples after action fine-tuning.">
+      <figcaption class="figcap">
+        <b>Figure 7 — Object grounding survives fine-tuning.</b> Fed samples from the pre-training
+        dataset <em>after</em> action fine-tuning, the model still predicts accurate heatmaps. The
+        residual weakness in the Category setting is therefore not catastrophic forgetting but a domain
+        mismatch: pre-training images are mostly third-person views, unlike orthographic robot renders,
+        and their supervision is object localization, whereas manipulation targets keypoints that need
+        not lie on an object.
+      </figcaption>
+    </figure>
+
+  </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- EFFICIENCY                                                               -->
+<!-- ======================================================================== -->
+<section class="banner" id="efficiency">
+  <div class="wrap">
+    <p class="eyebrow">What the memory costs</p>
+    <h2 class="gradient-text">Overhead &amp; Efficiency</h2>
+    <p>The memory is designed to be additive: cached tokens, one extra forward, no interface change.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1.4rem">
+  <div class="wrap">
+    <div class="stats reveal">
+      <div class="stat">
+        <div class="value">+9.2%</div>
+        <div class="label">Parameters</div>
+        <div class="note">269.77M added on a 2.92B backbone: 3 × 83.95M injection blocks + 17.91M sub-goal gate</div>
+      </div>
+      <div class="stat">
+        <div class="value">+7.8%</div>
+        <div class="label">Inference latency</div>
+        <div class="note">0.51 s → 0.55 s per prediction step on a single RTX 4090, averaged over 100 trials</div>
+      </div>
+      <div class="stat">
+        <div class="value">3.0 MiB</div>
+        <div class="label">Per cached keyframe</div>
+        <div class="note">One bf16 coarse-stage token grid; a full RMBench memory (K = 12 + anchor) is 39 MiB</div>
+      </div>
+      <div class="stat">
+        <div class="value">2 → 3</div>
+        <div class="label">Backbone forwards / step</div>
+        <div class="note">The extra one is the re-encoded fine-stage geometric reference; dual-arm goes 3 → 5</div>
+      </div>
+      <div class="stat">
+        <div class="value">≈ 2 h</div>
+        <div class="label">2D-heatmap pre-training</div>
+        <div class="note">8 × A100, 3,800 steps — reused by every downstream benchmark</div>
+      </div>
+      <div class="stat">
+        <div class="value">3 demos</div>
+        <div class="label">Real-world data floor</div>
+        <div class="note">95.4% on the 13 Franka tasks from three demonstrations per task</div>
+      </div>
+    </div>
+
+    <div class="callout reveal" style="margin-top:1.3rem">
+      <span aria-hidden="true" style="font-size:1.3rem">🧠</span>
+      <div>
+        Temporal entries are stored <b>already encoded</b>, so the number of backbone forwards per step
+        does <em>not</em> grow with the history length <em>K</em> — only the cache size does. The
+        injection block's cross-attention grows linearly in <em>K</em>, which is negligible next to a
+        backbone forward.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- BIBTEX                                                                   -->
+<!-- ======================================================================== -->
+<section class="banner" id="bibtex">
+  <div class="wrap">
+    <p class="eyebrow">Cite us</p>
+    <h2 class="gradient-text">BibTeX</h2>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1.2rem">
+  <div class="wrap">
+    <div class="todo reveal" style="margin-bottom:1rem">
+      <b>Placeholder.</b> Update the entry below with the final author list, venue and identifier once
+      the journal version is public.
+    </div>
+
+    <pre class="bibtex reveal" id="bib-plus"><code>@article{bridgevlaplus2026,
+  title   = {BridgeVLA++: A Data-Efficient, Generalizable, and Memory-Augmented
+             Vision-Language-Action Framework for 3D Manipulation},
+  author  = {TODO: Author One and Author Two and Author Three and others},
+  journal = {TODO: IEEE Transactions on Pattern Analysis and Machine Intelligence},
+  year    = {TODO},
+  note    = {Extension of the NeurIPS 2025 conference paper BridgeVLA}
+}</code></pre>
+    <button class="copy-btn" type="button" data-copy-target="#bib-plus">
+      <span>Copy BridgeVLA++ BibTeX</span>
+    </button>
+
+    <p class="lede reveal" style="margin-top:1.8rem">If you build on the conference version:</p>
+    <pre class="bibtex reveal" id="bib-base"><code>@misc{li2025bridgevla,
+  title         = {BridgeVLA: Input-Output Alignment for Efficient 3D Manipulation
+                   Learning with Vision-Language Models},
+  author        = {Peiyan Li and Yixiang Chen and Hongtao Wu and Xiao Ma and Xiangnan Wu
+                   and Yan Huang and Liang Wang and Tao Kong and Tieniu Tan},
+  year          = {2025},
+  eprint        = {2506.07961},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.RO},
+  url           = {https://arxiv.org/abs/2506.07961}
+}</code></pre>
+    <button class="copy-btn" type="button" data-copy-target="#bib-base">
+      <span>Copy BridgeVLA BibTeX</span>
+    </button>
+  </div>
+</section>
+</main>
+
+<footer class="page-footer">
+  <div class="wrap">
+    <p>
+      Website template adapted, with permission, from the
+      <a href="https://bridgevla.github.io/" target="_blank" rel="noopener">BridgeVLA</a> and MV-VDP
+      project pages.
+    </p>
+    <p style="opacity:.8">
+      <!-- TODO(author): acknowledgements, funding, contact e-mail. -->
+      Acknowledgements, funding and contact information: <em>to be added</em>.
+    </p>
+  </div>
+</footer>
+
+<script src="static/js/bridgevla_plus.js" defer></script>
+</body>
+</html>

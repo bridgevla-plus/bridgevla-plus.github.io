@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BridgeVLA++ — Welcome</title>
+<link rel="icon" href="static/images/bridgevla_plus_logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Noto+Sans:wght@400;600&display=swap" rel="stylesheet">
+<!-- Optional splash screen, kept from the original template but rebranded.
+     It is NOT the site entry point: index.html is. Link here only if you want
+     the click-through intro back. -->
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; overflow: hidden; }
+  body {
+    display: grid; place-items: center; cursor: pointer; text-align: center;
+    color: #fff;
+    font-family: 'Noto Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background:
+      radial-gradient(circle at 18% 20%, rgba(92,168,255,.26), transparent 34%),
+      radial-gradient(circle at 82% 16%, rgba(150,120,255,.24), transparent 32%),
+      radial-gradient(circle at 50% 90%, rgba(48,120,220,.22), transparent 42%),
+      linear-gradient(135deg,#101830 0%,#1a2851 34%,#293f70 66%,#3c5088 100%);
+  }
+  .stage { padding: 2rem; animation: rise 1s cubic-bezier(.2,.7,.3,1) both; }
+  .mark { width: 108px; height: 108px; filter: drop-shadow(0 14px 30px rgba(0,0,0,.38)); }
+  .logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: clamp(3rem, 12vw, 9rem);
+    letter-spacing: .01em;
+    margin: .4rem 0 .2rem;
+    text-shadow: 0 4px 26px rgba(255,255,255,.16);
+  }
+  .subtitle {
+    font-size: clamp(.95rem, 2vw, 1.5rem);
+    font-weight: 600;
+    opacity: .94;
+    max-width: 40ch;
+    margin: 0 auto 2.6rem;
+    line-height: 1.5;
+  }
+  .cta {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1rem, 2.4vw, 1.7rem);
+    opacity: .92;
+    animation: pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+  @keyframes pulse { 0%,100% { opacity: .68; } 50% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <img class="mark" src="static/images/bridgevla_plus_logo.svg" alt="">
+    <div class="logo">BridgeVLA++</div>
+    <p class="subtitle">A Data-Efficient, Generalizable, and Memory-Augmented Vision-Language-Action Framework for 3D Manipulation</p>
+    <div class="cta">Click anywhere to continue</div>
+  </div>
+  <script>
+    var go = function () { window.location.href = 'index.html'; };
+    document.addEventListener('click', go);
+    document.addEventListener('keydown', go);
+  </script>
+</body>
+</html>
