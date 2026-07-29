@@ -96,8 +96,6 @@
     var playObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         var v = entry.target;
-        // Slides that are hidden inside an inactive carousel panel stay paused.
-        if (v.closest('.slide') && !v.closest('.slide').classList.contains('is-active')) return;
         if (entry.isIntersecting) {
           var p = v.play();
           if (p && typeof p.catch === 'function') p.catch(function () { /* autoplay blocked */ });
@@ -109,58 +107,70 @@
     videos.forEach(function (v) { playObserver.observe(v); });
   }
 
-  /* -------------------------------------------------------------- carousels */
+  /* ---------------------------------------------------------- tab switchers */
+  /* Benchmark tabs (simulation) and platform tabs (real robot): buttons with
+     [data-tab] drive same-explorer panels with [data-panel]. Panels other
+     than the first start with the `hidden` attribute in the markup, so a
+     script failure leaves the default panel visible rather than nothing. */
 
-  document.querySelectorAll('.carousel').forEach(function (carousel) {
-    var slides = Array.prototype.slice.call(carousel.querySelectorAll('.slide'));
-    if (slides.length < 2) {
-      var solo = carousel.querySelector('.carousel-prev');
-      var soloNext = carousel.querySelector('.carousel-next');
-      var soloDots = carousel.querySelector('.dots');
-      if (solo) solo.style.display = 'none';
-      if (soloNext) soloNext.style.display = 'none';
-      if (soloDots) soloDots.style.display = 'none';
-      return;
-    }
+  document.querySelectorAll('.bench-explorer, .platform-explorer').forEach(function (box) {
+    var tabs = Array.prototype.slice.call(box.querySelectorAll('[role="tablist"] [data-tab]'));
+    var panels = Array.prototype.slice.call(box.children).filter(function (el) {
+      return el.hasAttribute('data-panel');
+    });
+    if (!tabs.length || !panels.length) return;
 
-    var dotWrap = carousel.querySelector('.dots');
-    var dots = [];
-    if (dotWrap) {
-      dotWrap.innerHTML = '';
-      slides.forEach(function (_, i) {
-        var d = document.createElement('button');
-        d.type = 'button';
-        d.className = 'dot' + (i === 0 ? ' is-active' : '');
-        d.setAttribute('aria-label', 'Go to item ' + (i + 1));
-        d.addEventListener('click', function () { show(i); });
-        dotWrap.appendChild(d);
-        dots.push(d);
+    function activate(id, focusTab) {
+      tabs.forEach(function (t) {
+        var on = t.getAttribute('data-tab') === id;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        if (on && focusTab) t.focus();
       });
+      panels.forEach(function (p) {
+        var show = p.getAttribute('data-panel') === id;
+        p.hidden = !show;
+        if (show) {
+          // While hidden, these elements could never intersect the reveal
+          // observer — show them all at once; the panel plays one fade.
+          Array.prototype.forEach.call(p.querySelectorAll('.reveal'), function (el) {
+            el.classList.add('is-in');
+          });
+        } else {
+          Array.prototype.forEach.call(p.querySelectorAll('video'), function (v) { v.pause(); });
+        }
+      });
+      // Tables inside a hidden panel measured 0 wide at load — remeasure.
+      measureTables();
     }
 
-    var current = 0;
-    function show(n) {
-      var prevVideo = slides[current].querySelector('video');
-      if (prevVideo) prevVideo.pause();
-      slides[current].classList.remove('is-active');
-      if (dots[current]) dots[current].classList.remove('is-active');
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function () { activate(t.getAttribute('data-tab'), false); });
+      t.addEventListener('keydown', function (e) {
+        var d = e.key === 'ArrowRight' ? 1 : (e.key === 'ArrowLeft' ? -1 : 0);
+        if (!d) return;
+        e.preventDefault();
+        var n = tabs[(i + d + tabs.length) % tabs.length];
+        activate(n.getAttribute('data-tab'), true);
+      });
+    });
+  });
 
-      current = ((n % slides.length) + slides.length) % slides.length;
+  /* ------------------------------------------------------ figure tab picker */
+  /* Chip-picked figures in a fixed-height viewport — uniform height no
+     matter each figure's aspect ratio (replaces the centred-arrow carousel,
+     whose buttons jumped around as slide heights changed). */
 
-      slides[current].classList.add('is-active');
-      if (dots[current]) dots[current].classList.add('is-active');
-      var v = slides[current].querySelector('video');
-      if (v) {
-        v.currentTime = 0;
-        var p = v.play();
-        if (p && typeof p.catch === 'function') p.catch(function () {});
-      }
-    }
-
-    var prev = carousel.querySelector('.carousel-prev');
-    var next = carousel.querySelector('.carousel-next');
-    if (prev) prev.addEventListener('click', function (e) { e.stopPropagation(); show(current - 1); });
-    if (next) next.addEventListener('click', function (e) { e.stopPropagation(); show(current + 1); });
+  document.querySelectorAll('.fig-tabs').forEach(function (box) {
+    var btns = Array.prototype.slice.call(box.querySelectorAll('[data-fig]'));
+    var figs = Array.prototype.slice.call(box.querySelectorAll('.fig-tab-stage > figure'));
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var i = parseInt(b.getAttribute('data-fig'), 10);
+        btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        figs.forEach(function (f, j) { f.classList.toggle('is-active', j === i); });
+      });
+    });
   });
 
   /* --------------------------------------------------------- demo explorer */
@@ -381,6 +391,136 @@
     render();
 
     // Pause when scrolled away; resume when back in view.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (root.classList.contains('is-unavailable')) return;
+          if (e.isIntersecting) {
+            var p = video.play();
+            if (p && typeof p.catch === 'function') p.catch(function () {});
+          } else {
+            video.pause();
+          }
+        });
+      }, { threshold: 0.2 }).observe(root.querySelector('.demo-video'));
+    }
+  })();
+
+  /* --------------------------------------------------------- Franka explorer */
+  /* Same stage pattern as the DOBOT explorer, but a flat picker: 13 basic
+     tasks + 6 generalization settings, one clip each. The clips are not
+     recorded yet — a load error swaps in the "coming soon" overlay showing
+     the exact path, so dropping a file in activates it with no HTML change. */
+
+  (function initFrankaExplorer() {
+    var root = document.getElementById('franka-explorer');
+    var dataEl = document.getElementById('franka-demo-data');
+    if (!root || !dataEl) return;
+
+    var data;
+    try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
+    if (!data || !data.items || !data.groups) return;
+
+    var VIDEO_ROOT = root.getAttribute('data-video-root');
+    var POSTER_ROOT = root.getAttribute('data-poster-root');
+
+    var video = root.querySelector('[data-fr-video]');
+    var badge = root.querySelector('[data-fr-badge]');
+    var family = root.querySelector('[data-fr-family]');
+    var instruction = root.querySelector('[data-fr-instruction]');
+    var note = root.querySelector('[data-fr-note]');
+    var scores = root.querySelector('[data-fr-scores]');
+    var scoreBlock = root.querySelector('[data-fr-scoreblock]');
+    var missingNote = root.querySelector('[data-fr-missing-note]');
+
+    var buttons = {};
+    var state = { item: data.items[0].id };
+
+    function itemById(id) {
+      for (var i = 0; i < data.items.length; i++) if (data.items[i].id === id) return data.items[i];
+      return null;
+    }
+    function groupById(id) {
+      for (var i = 0; i < data.groups.length; i++) if (data.groups[i].id === id) return data.groups[i];
+      return null;
+    }
+
+    data.groups.forEach(function (g) {
+      var row = root.querySelector('[data-fr-group="' + g.id + '"]');
+      if (!row) return;
+      data.items.filter(function (t) { return t.group === g.id; }).forEach(function (t) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'picker-chip';
+        b.setAttribute('aria-pressed', 'false');
+        b.innerHTML = t.sub
+          ? t.label + ' <span class="chip-sub">· ' + t.sub + '</span>'
+          : t.label;
+        b.addEventListener('click', function () {
+          state.item = t.id;
+          render();
+        });
+        row.appendChild(b);
+        buttons[t.id] = b;
+      });
+    });
+
+    function render() {
+      var item = itemById(state.item);
+      if (!item) return;
+      var group = groupById(item.group);
+
+      Object.keys(buttons).forEach(function (id) {
+        buttons[id].setAttribute('aria-pressed', id === state.item ? 'true' : 'false');
+      });
+
+      var src = VIDEO_ROOT + '/' + item.group + '/' + item.id + '.mp4';
+      if (missingNote) missingNote.textContent = src;
+      if (video.getAttribute('src') !== src) {
+        // Only a real source change clears the overlay — the error listener
+        // re-adds it if the new clip is missing too. Re-clicking the active
+        // chip must not hide the overlay over a video that never loaded.
+        root.classList.remove('is-unavailable');
+        video.setAttribute('poster', POSTER_ROOT + '/' + item.group + '__' + item.id + '.jpg');
+        video.setAttribute('src', src);
+        video.load();
+        var p = video.play();
+        if (p && typeof p.catch === 'function') p.catch(function () { /* autoplay blocked */ });
+      }
+
+      badge.textContent = group ? group.label : '';
+      family.textContent = group ? group.label : '';
+      family.classList.toggle('is-free', item.group !== 'basic');
+      instruction.textContent = item.instruction
+        ? '“' + item.instruction + '”'
+        : item.label + ' setting';
+      var noteText = item.note || (group && group.note) || '';
+      if (!item.scores) {
+        noteText += ' Aggregate success over the 13 tasks is charted in Figure 4 above — BridgeVLA leads RVT-2 in every setting.';
+      }
+      note.textContent = noteText;
+
+      if (scoreBlock) scoreBlock.hidden = !item.scores;
+      scores.innerHTML = '';
+      (item.scores ? data.methods : []).forEach(function (m, i) {
+        var n = item.scores[i];
+        if (typeof n !== 'number') return;
+        var div = document.createElement('div');
+        div.className = 'score-row' + (i === 0 ? ' is-ours' : '');
+        div.innerHTML =
+          '<span class="name">' + m + '</span>' +
+          '<span class="bar"><i style="width:' + (n * 10) + '%"></i></span>' +
+          '<span class="val">' + n + ' / 10</span>';
+        scores.appendChild(div);
+      });
+    }
+
+    video.addEventListener('error', function () {
+      root.classList.add('is-unavailable');
+    });
+
+    render();
+
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {

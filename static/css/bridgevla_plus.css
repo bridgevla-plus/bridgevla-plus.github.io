@@ -511,10 +511,6 @@ table.data .std { color: #8a93b3; font-size: .84em; font-weight: 500; }
   .media-grid.cols-3,
   .media-grid.cols-4 { grid-template-columns: 1fr; }
 }
-/* A narrow, centred block for tall portrait figures that would otherwise
-   dominate a full-width row. */
-.figure-narrow { max-width: 620px; margin-inline: auto; }
-
 /* Wide data tables get their own full-width row — side by side they clip
    columns that carry the headline numbers. */
 .stack { display: grid; gap: 1.25rem; }
@@ -667,10 +663,17 @@ table.data .std { color: #8a93b3; font-size: .84em; font-weight: 500; }
   margin-top: 1.2rem;
   align-items: start;
 }
+/* The Franka clips are ordinary landscape recordings, unlike the rotated
+   4:5 DOBOT ones — wider video column, 16:9 frame. Declared before the
+   960px collapse so the single-column override still wins on small screens. */
+.demo-stage--wide { grid-template-columns: minmax(0, 640px) minmax(260px, 1fr); }
 @media (max-width: 960px) { .demo-stage { grid-template-columns: 1fr; } }
 
 .demo-video {
   position: relative;
+  /* width:100% matters: auto margins disable grid stretch, and a <video> in
+     error state has a 300×150 intrinsic size the frame would shrink to. */
+  width: 100%;
   aspect-ratio: 4 / 5;
   max-width: 540px;
   margin-inline: auto;
@@ -680,6 +683,8 @@ table.data .std { color: #8a93b3; font-size: .84em; font-weight: 500; }
   box-shadow: 0 14px 32px rgba(30, 38, 82, .18);
 }
 .demo-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* After .demo-video so the wide variant's frame wins at equal specificity. */
+.demo-video--wide { aspect-ratio: 16 / 9; max-width: 640px; }
 .demo-video .demo-badge {
   position: absolute; top: .6rem; left: .6rem; z-index: 2;
   padding: .2rem .62rem; border-radius: 999px;
@@ -700,6 +705,18 @@ table.data .std { color: #8a93b3; font-size: .84em; font-weight: 500; }
   color: var(--ink-soft); font-size: .9rem;
 }
 .demo-explorer.is-unavailable .demo-unavailable { display: flex; }
+/* Long file paths in the coming-soon overlay: wrap anywhere, chip styling. */
+.demo-unavailable .demo-path {
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  color: var(--ink-faint);
+  background: rgba(255, 255, 255, .72);
+  border: 1px solid var(--accent-line);
+  border-radius: 6px;
+  padding: .12rem .45rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
 .demo-explorer.is-unavailable .demo-video video,
 .demo-explorer.is-unavailable .demo-video .demo-badge { visibility: hidden; }
 
@@ -737,7 +754,7 @@ table.data .std { color: #8a93b3; font-size: .84em; font-weight: 500; }
 }
 .score-row {
   display: grid;
-  grid-template-columns: minmax(0, 8.5rem) 1fr auto;
+  grid-template-columns: minmax(0, 10rem) 1fr auto;
   align-items: center;
   gap: .55rem;
   padding: .22rem 0;
@@ -827,48 +844,129 @@ table.data .std { color: #8a93b3; font-size: .84em; font-weight: 500; }
   font-variant-numeric: tabular-nums;
 }
 
-/* --------------------------------------------------------------- carousels */
+/* ------------------------------------------------------- tabbed switchers */
+/* Benchmark tabs (simulation) and platform tabs (real robot). Panels are
+   plain wrappers toggled with the `hidden` attribute; the fadeUp animation
+   restarts each time a panel is shown because its display flips. */
 
-.carousel { position: relative; padding: 0 58px; }
-.carousel .frame {
+[hidden] { display: none !important; }
+
+.bench-tabs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: .55rem;
+  margin-top: 1.2rem;
+}
+@media (max-width: 1080px) { .bench-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 640px)  { .bench-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.bench-tab, .platform-tab {
+  font: inherit;
+  text-align: left;
+  display: flex; flex-direction: column; gap: .12rem;
+  border: 1px solid var(--accent-line);
+  border-radius: 14px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease, background .2s ease,
+              border-color .2s ease;
+}
+.bench-tab { padding: .68rem .85rem .6rem; }
+.bench-tab[aria-selected="false"]:hover,
+.platform-tab[aria-selected="false"]:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 112, 190, .34);
+  box-shadow: var(--shadow-sm);
+}
+.bench-tab[aria-selected="true"], .platform-tab[aria-selected="true"] {
+  background: linear-gradient(135deg, #4f60cb, #8155c9);
+  border-color: transparent;
+  box-shadow: 0 12px 26px rgba(79, 96, 203, .3);
+}
+.bench-tab .bt-top { display: flex; align-items: baseline; justify-content: space-between; gap: .5rem; }
+.bench-tab .bt-name {
+  font-family: var(--font-display); font-weight: 700; font-size: .93rem;
+  color: var(--heading); white-space: nowrap;
+}
+.bench-tab .bt-val {
+  font-family: var(--font-display); font-weight: 700; font-size: 1.04rem;
+  color: var(--accent); font-variant-numeric: tabular-nums;
+}
+.bench-tab .bt-sub { font-size: .7rem; line-height: 1.35; color: var(--ink-faint); }
+.bench-tab[aria-selected="true"] .bt-name,
+.bench-tab[aria-selected="true"] .bt-val { color: #fff; }
+.bench-tab[aria-selected="true"] .bt-sub { color: rgba(255, 255, 255, .78); }
+
+.platform-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .6rem;
+  margin-top: 1.5rem;
+}
+@media (max-width: 640px) { .platform-tabs { grid-template-columns: 1fr; } }
+.platform-tab { padding: .85rem 1.15rem .78rem; border-radius: 16px; }
+.platform-tab .pt-name { font-family: var(--font-display); font-weight: 700; font-size: 1.04rem; color: var(--heading); }
+.platform-tab .pt-sub { font-size: .77rem; line-height: 1.4; color: var(--ink-faint); }
+.platform-tab[aria-selected="true"] .pt-name { color: #fff; }
+.platform-tab[aria-selected="true"] .pt-sub { color: rgba(255, 255, 255, .78); }
+
+.bench-panel, .platform-panel { margin-top: 1.25rem; }
+.bench-panel:not([hidden]), .platform-panel:not([hidden]) { animation: fadeUp .38s ease; }
+/* Panel h3s sit right under the tabs — trim the default 2.6rem gap. */
+.platform-panel > .subhead:first-child { margin-top: .4rem; }
+
+/* Two-column panel head: description + facts left, suite figure right. */
+.bench-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 500px);
+  gap: 1.2rem;
+  align-items: start;
+}
+@media (max-width: 980px) { .bench-head { grid-template-columns: 1fr; } }
+.bench-head .lede { margin-top: 0; }
+.bench-facts { list-style: none; margin: 1rem 0 0; padding: 0; display: grid; gap: .5rem; }
+.bench-facts li {
+  position: relative;
+  padding: .55rem .85rem .55rem 2.05rem;
+  background: var(--surface);
+  border: 1px solid var(--accent-line);
+  border-radius: var(--radius-sm);
+  font-size: .9rem; line-height: 1.55; color: var(--ink-soft);
+}
+.bench-facts li::before {
+  content: '▸';
+  position: absolute; left: .85rem;
+  color: var(--accent); font-weight: 700;
+}
+.bench-facts b { color: var(--heading); }
+
+/* The COLOSSEUM suite figure is a very tall strip — pre-split into two
+   equal-height halves shown side by side (they stack on small screens). */
+.bench-fig-pair .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .7rem; }
+@media (max-width: 700px) { .bench-fig-pair .pair { grid-template-columns: 1fr; } }
+.bench-fig-pair .pair img { display: block; width: 100%; height: auto; border-radius: var(--radius-sm); }
+
+/* ------------------------------------------------------ figure tab gallery */
+/* Chip-picked figures in a fixed-height viewport: uniform height regardless
+   of each figure's aspect ratio (replaces the old centred-arrow carousels). */
+
+.fig-tabs {
+  margin-top: 1.2rem;
   background: var(--surface);
   border: 1px solid var(--accent-line);
   border-radius: var(--radius);
   box-shadow: var(--shadow-sm);
-  padding: .7rem .7rem .2rem;
+  padding: 1rem 1.1rem 1.05rem;
 }
-.carousel .slide { display: none; }
-.carousel .slide.is-active { display: block; animation: fadeUp .4s ease; }
-.carousel-btn {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  width: 46px; height: 46px;
-  display: grid; place-items: center;
-  border-radius: 999px; cursor: pointer;
-  background: rgba(255, 255, 255, .85);
-  color: var(--accent);
-  border: 1px solid var(--accent-line);
-  font-size: 20px; font-weight: 700; line-height: 1;
-  box-shadow: 0 12px 26px rgba(45, 53, 116, .16);
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  transition: transform .22s ease, box-shadow .22s ease, background .22s ease;
-}
-.carousel-btn:hover { background: #fff; transform: translateY(-50%) scale(1.08); }
-.carousel-btn:active { transform: translateY(-50%) scale(.95); }
-.carousel-prev { left: 0; }
-.carousel-next { right: 0; }
-.dots { text-align: center; padding: .7rem 0 .1rem; }
-.dots .dot {
-  display: inline-block; width: 9px; height: 9px; border-radius: 50%;
-  background: rgba(112, 126, 184, .3); margin: 0 5px; cursor: pointer;
-  border: none; padding: 0;
-  transition: background .22s ease, transform .22s ease, box-shadow .22s ease;
-}
-.dots .dot:hover { transform: scale(1.2); background: rgba(86, 102, 213, .45); }
-.dots .dot.is-active { background: var(--accent); transform: scale(1.2); box-shadow: 0 0 0 5px rgba(86, 102, 213, .12); }
-
-@media (max-width: 620px) {
-  .carousel { padding: 0 44px; }
-  .carousel-btn { width: 38px; height: 38px; font-size: 17px; }
+.fig-tab-row { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .9rem; }
+.fig-tab-stage figure { margin: 0; display: none; }
+.fig-tab-stage figure.is-active { display: block; animation: fadeUp .35s ease; }
+.fig-tab-stage img {
+  display: block; width: 100%;
+  height: min(60vh, 540px);
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
 }
 
 /* --------------------------------------------------------------- key ideas */

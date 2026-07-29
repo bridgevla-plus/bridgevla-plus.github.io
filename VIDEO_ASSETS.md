@@ -7,11 +7,15 @@
 | 分区 | 状态 | 数量 |
 | --- | --- | --- |
 | 真机 · DOBOT CR5A（7 任务 × 5 设置） | ✅ 已就位 | 35（全满） |
-| 真机 · Franka 基础任务 | ⬜ 待补 | 6 |
-| 真机 · Franka 泛化设置 | ⬜ 待补 | 6 |
+| 真机 · Franka 基础任务（选择式浏览器） | ⬜ 待补 | 13 |
+| 真机 · Franka 泛化设置（选择式浏览器） | ⬜ 待补 | 6 |
 | 仿真 · RLBench | ⬜ 待补 | 4 |
 | 仿真 · RMBench | ⬜ 待补 | 9 |
 | 仿真 · MemoryBench | ⬜ 待补 | 3 |
+
+仿真视频分别位于「Simulation」的对应基准面板里（RMBench / RLBench / MemoryBench
+选项卡）；Franka 视频由真机区的 **Franka 浏览器**（`#franka-explorer`）驱动，
+选中即显示对应占位卡和期望路径。面板处于隐藏状态不影响占位检测。
 
 编码建议：
 
@@ -137,30 +141,46 @@ bash tools/build_dobot_demos.sh
 | `static/videos/sim/memorybench/put_block_back/trial_1.mp4` | Put Block Back — 99.8% |
 | `static/videos/sim/memorybench/rearrange_block/trial_1.mp4` | Rearrange Block — 99.2% |
 
-### 真机 · Franka 基础设置（6）
+### 真机 · Franka（19，由 `#franka-explorer` 驱动）
 
-| 路径 | 指令 |
+真机区的 Franka 面板是和 DOBOT 同款的**选择式浏览器**：13 个基础任务 chip +
+6 个泛化设置 chip，选中即在台上播放对应 rollout（目前全部显示
+"Video coming soon" 占位卡 + 期望路径）。**把文件放到对应路径即生效，不改 HTML。**
+
+数据（成绩、指令、说明）在 `index.html` 的
+`<script type="application/json" id="franka-demo-data">` 里；路径按
+`static/videos/real/franka/<group>/<id>.mp4` 推导。竖版不需要——Franka 相机正装，
+直接 16:9 横版即可（台面框是 16:9）。可选封面：
+`static/images/franka_posters/<group>__<id>.jpg`。
+
+**基础任务（`basic/`，13 个）**
+
+| 文件名（`static/videos/real/franka/basic/…`） | 指令 |
 | --- | --- |
-| `static/videos/real/franka_basic/redbull_top_shelf/trial_1.mp4` | "Put the RedBull can in the top shelf" |
-| `static/videos/real/franka_basic/coke_top_shelf/trial_1.mp4` | "Put the coke can in the top shelf" |
-| `static/videos/real/franka_basic/red_block_blue_plate/trial_1.mp4` | "Place the red block in the blue plate" |
-| `static/videos/real/franka_basic/press_sanitizer/trial_1.mp4` | "Press sanitizer" |
-| `static/videos/real/franka_basic/zebra_upper_drawer/trial_1.mp4` | "Put the zebra in the upper drawer" |
-| `static/videos/real/franka_basic/giraffe_lower_drawer/trial_1.mp4` | "Put the giraffe in the lower drawer" |
+| `redbull_top_shelf.mp4` | "Put the RedBull can in the top shelf" |
+| `soda_bottom_shelf.mp4` | "Put the soda can in the bottom shelf" |
+| `redbull_bottom_shelf.mp4` | "Put the RedBull can in the bottom shelf" |
+| `coke_top_shelf.mp4` | "Put the coke can in the top shelf" |
+| `red_block_blue_plate.mp4` | "Place the red block in the blue plate" |
+| `orange_block_green_plate.mp4` | "Place the orange block in the green plate" |
+| `red_block_purple_plate.mp4` | "Place the red block in the purple plate" |
+| `yellow_block_green_plate.mp4` | "Place the yellow block in the green plate" |
+| `press_sanitizer.mp4` | "Press sanitizer" |
+| `zebra_upper_drawer.mp4` | "Put the zebra in the upper drawer" |
+| `zebra_lower_drawer.mp4` | "Put the zebra in the lower drawer" |
+| `giraffe_lower_drawer.mp4` | "Put the giraffe in the lower drawer" |
+| `wolf_upper_drawer.mp4` | "Put the wolf in the upper drawer" |
 
-### 真机 · Franka 泛化设置（6）
+**泛化设置（`generalization/`，6 个）**
 
-| 路径 | 设置 |
+| 文件名（`static/videos/real/franka/generalization/…`） | 设置 |
 | --- | --- |
-| `static/videos/real/franka_generalization/distractor/trial_1.mp4` | Distractor |
-| `static/videos/real/franka_generalization/lighting/trial_1.mp4` | Lighting |
-| `static/videos/real/franka_generalization/background/trial_1.mp4` | Background |
-| `static/videos/real/franka_generalization/height/trial_1.mp4` | Height |
-| `static/videos/real/franka_generalization/combination/trial_1.mp4` | Combination（未一起演示过的物体–技能组合） |
-| `static/videos/real/franka_generalization/category/trial_1.mp4` | Category（机器人数据中未出现的物体类别） |
-
-> Franka 那 12 个如果也按"任务 × 设置"组织，可以直接复用 DOBOT 的 demo 浏览器组件：
-> 复制 `#dobot-explorer` 那一段，换一份 JSON 数据和三个 `data-*-root` 路径即可。
+| `distractor.mp4` | Distractor（相似干扰物） |
+| `lighting.mp4` | Lighting（关灯） |
+| `background.mp4` | Background（换桌布） |
+| `height.mp4` | Height（垫高目标物） |
+| `combination.mp4` | Combination（未一起演示过的物体–技能组合） |
+| `category.mp4` | Category（机器人数据中未出现的物体类别） |
 
 ---
 
@@ -179,6 +199,6 @@ bash tools/build_dobot_demos.sh
 </div>
 ```
 
-要做成轮播就照 `#bench-gallery` 的结构：`.carousel` 外壳 + `.frame` +
-每项一个 `.slide`（第一个带 `is-active`）+ 两个 `.carousel-btn` +
-一个空的 `<div class="dots"></div>`（圆点由脚本生成）。
+要做「多张图选一张看」的展示就照 `#franka-gallery` 的结构（`.fig-tabs`）：
+一行 `.picker-chip` 按钮（`data-fig="0..n"`）+ `.fig-tab-stage` 里每项一个
+`<figure>`（第一个带 `is-active`），视口高度固定、图片按比例收进去。

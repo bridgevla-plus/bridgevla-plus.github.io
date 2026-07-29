@@ -351,26 +351,6 @@
       </figcaption>
     </figure>
 
-    <figure class="figure reveal" style="margin-top:1.4rem">
-      <img src="static/images/paper/spatial_memory.jpg" alt="Left: current zoomed observation occluded by the gripper. Right: the stored initial point cloud re-rendered under the same zoom, revealing the target geometry.">
-      <figcaption class="figcap">
-        <b>Figure 3 — Occlusion-robust fine localization.</b> The current zoomed observation (left)
-        is partially occluded by the gripper and the manipulated object. The stored point cloud
-        <em>P</em><sub>0</sub> is re-rendered (right) with the same waypoint and zoom, producing a
-        spatially aligned reference of the same local region. Fine-stage tokens attend to this
-        reference for complementary geometric evidence.
-      </figcaption>
-    </figure>
-
-    <figure class="figure figure-narrow reveal" style="margin-top:1.4rem">
-      <img src="static/images/paper/pretrain_dataset.jpg" alt="Examples of ground-truth heatmaps built from object detection annotations used for 2D-heatmap pre-training.">
-      <figcaption class="figcap">
-        <b>Figure 4 — Pre-training targets.</b> Ground-truth heatmaps constructed from the object
-        bounding boxes of the RoboPoint detection split: per-object truncated Gaussians, averaged and
-        normalized when a prompt names several objects.
-      </figcaption>
-    </figure>
-
     <div class="callout reveal" style="margin-top:1.4rem">
       <span aria-hidden="true" style="font-size:1.3rem">💡</span>
       <div>
@@ -398,289 +378,48 @@
 <section class="section" style="padding-top:1.4rem">
   <div class="wrap-wide">
 
-    <!-- ------------------------------------------------------------ RLBench -->
-    <h3 class="subhead reveal">RLBench — general 3D manipulation</h3>
+<!-- --------------------------------------------------- benchmark switcher -->
     <p class="lede reveal">
-      18 multi-task RLBench tasks, 100 demonstrations per task, mean success rate over five evaluation
-      runs of 25 episodes. BridgeVLA reaches <b>90.5%</b>, already 3.7 points above the previous state
-      of the art; its remaining failures concentrate in occlusion-heavy tasks — exactly what the
-      spatio-temporal memory addresses, lifting BridgeVLA++ to <b>93.7%</b> with
-      <em>sort shape</em> +16.8 and <em>place cups</em> +18.4.
+      One recipe, five suites. <b>RMBench</b> and <b>MemoryBench</b> are the memory-dependent ones —
+      the tasks BridgeVLA++ was built for; <b>RLBench</b>, <b>COLOSSEUM</b> and <b>GemBench</b> check
+      that the base capabilities survive the memory extension: general manipulation, robustness to
+      unseen perturbations, and systematic generalization. Pick a suite — every number mirrors the
+      paper's tables.
     </p>
 
-    <div class="table-card reveal" style="margin-top:1rem">
-      <div class="table-scroll">
-        <table class="data">
-          <thead>
-            <tr>
-              <th rowspan="2">Method</th>
-              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
-              <th rowspan="2" class="avg">Avg. Rank ↓</th>
-              <th>Close</th><th>Drag</th><th>Insert</th><th>Meat off</th><th>Open</th>
-              <th>Place</th><th>Place</th><th>Push</th><th>Put in</th><th>Put in</th>
-              <th>Put in</th><th>Screw</th><th>Slide</th><th>Sort</th><th>Stack</th>
-              <th>Stack</th><th>Sweep to</th><th>Turn</th>
-            </tr>
-            <tr>
-              <th>Jar</th><th>Stick</th><th>Peg</th><th>Grill</th><th>Drawer</th>
-              <th>Cups</th><th>Wine</th><th>Buttons</th><th>Cupboard</th><th>Drawer</th>
-              <th>Safe</th><th>Bulb</th><th>Block</th><th>Shape</th><th>Blocks</th>
-              <th>Cups</th><th>Dustpan</th><th>Tap</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>PerAct <span class="cite">[Shridhar et al. 2023]</span></td>
-              <td class="avg">49.4</td><td class="avg">11.33</td>
-              <td>55.2</td><td>89.6</td><td>5.6</td><td>70.4</td><td>88.0</td><td>2.4</td><td>44.8</td><td>92.8</td>
-              <td>28.0</td><td>51.2</td><td>84.0</td><td>17.6</td><td>74.0</td><td>16.8</td><td>26.4</td><td>2.4</td><td>52.0</td><td>88.0</td>
-            </tr>
-            <tr>
-              <td>Act3D <span class="cite">[Gervet et al. 2023]</span></td>
-              <td class="avg">65.0</td><td class="avg">9.17</td>
-              <td>92.0</td><td>92.0</td><td>27.0</td><td>94.0</td><td>93.0</td><td>3.0</td><td>80.0</td><td>99.0</td>
-              <td>51.0</td><td>90.0</td><td>95.0</td><td>47.0</td><td>93.0</td><td>8.0</td><td>12.0</td><td>9.0</td><td>92.0</td><td>94.0</td>
-            </tr>
-            <tr>
-              <td>RVT <span class="cite">[Goyal et al. 2023]</span></td>
-              <td class="avg">62.9</td><td class="avg">9.08</td>
-              <td>52.0</td><td>99.2</td><td>11.2</td><td>88.0</td><td>71.2</td><td>4.0</td><td>91.0</td><td>100.0</td>
-              <td>49.6</td><td>88.0</td><td>91.2</td><td>48.0</td><td>81.6</td><td>36.0</td><td>28.8</td><td>26.4</td><td>72.0</td><td>93.6</td>
-            </tr>
-            <tr>
-              <td>3D Diffuser Actor <span class="cite">[Ke et al. 2024]</span></td>
-              <td class="avg">81.3</td><td class="avg">6.19</td>
-              <td>96.0</td><td>100.0</td><td>65.6</td><td>96.8</td><td>89.6</td><td>24.0</td><td>93.6</td><td>98.4</td>
-              <td>85.6</td><td>96.0</td><td>97.6</td><td>82.4</td><td>97.6</td><td>44.0</td><td>68.3</td><td>47.2</td><td>84.0</td><td>99.2</td>
-            </tr>
-            <tr>
-              <td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td>
-              <td class="avg">81.4</td><td class="avg">5.97</td>
-              <td>100.0</td><td>99.0</td><td>40.0</td><td>99.0</td><td>74.0</td><td>38.0</td><td>95.0</td><td>100.0</td>
-              <td>66.0</td><td>96.0</td><td>96.0</td><td>88.0</td><td>92.0</td><td>35.0</td><td>80.0</td><td>69.0</td><td>100.0</td><td>99.0</td>
-            </tr>
-            <tr>
-              <td>SAM2Act <span class="cite">[Fang et al. 2025]</span></td>
-              <td class="avg">86.8</td><td class="avg">5.47</td>
-              <td>99.0</td><td>99.0</td><td>84.0</td><td>98.0</td><td>83.0</td><td>47.0</td><td>93.0</td><td>100.0</td>
-              <td>75.0</td><td>99.0</td><td>98.0</td><td>89.0</td><td>86.0</td><td>64.0</td><td>76.0</td><td>78.0</td><td>99.0</td><td>96.0</td>
-            </tr>
-            <tr class="ours">
-              <td>BridgeVLA <span class="cite">(ours, base)</span></td>
-              <td class="avg">90.5</td><td class="avg">4.75</td>
-              <td>100.0</td><td>97.6</td><td>91.2</td><td>100.0</td><td>99.2</td><td>58.4</td><td>89.6</td><td>100.0</td>
-              <td>91.2</td><td>96.0</td><td>95.2</td><td>93.6</td><td>95.2</td><td>55.2</td><td>84.8</td><td>88.8</td><td>100.0</td><td>92.8</td>
-            </tr>
-            <tr class="ours">
-              <td>BridgeVLA++ <span class="cite">(ours)</span></td>
-              <td class="avg best">93.7</td><td class="avg best">3.64</td>
-              <td>100.0</td><td>98.4</td><td>99.2</td><td>100.0</td><td>99.2</td><td>76.8</td><td>95.2</td><td>100.0</td>
-              <td>92.0</td><td>99.2</td><td>92.8</td><td>95.2</td><td>96.0</td><td>72.0</td><td>85.6</td><td>98.4</td><td>97.6</td><td>89.6</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="table-note">
-        <b>Table 1 — RLBench.</b> Success rate (%) on the 18 standard tasks with average success rate
-        and average rank (lower is better). Our rows report the mean over five seeds of 25 episodes;
-        per-seed standard deviations are given in the paper. Best average in bold. Design and memory
-        ablations of the same table are collected in the <a href="#ablations">Ablations</a> section.
-      </p>
-    </div>
-
-    <div class="media-grid cols-4 reveal" style="margin-top:1.2rem">
-      <div class="media-card">
-        <span class="task-chip">RLBench</span>
-        <div class="media-slot">
-          <video muted loop playsinline controls preload="metadata">
-            <source src="static/videos/sim/rlbench/sort_shape/trial_1.mp4" type="video/mp4">
-          </video>
-        </div>
-        <p class="media-caption"><b>Sort Shape</b> — occlusion-heavy precision insertion (55.2% → 72.0%)</p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">RLBench</span>
-        <div class="media-slot">
-          <video muted loop playsinline controls preload="metadata">
-            <source src="static/videos/sim/rlbench/place_cups/trial_1.mp4" type="video/mp4">
-          </video>
-        </div>
-        <p class="media-caption"><b>Place Cups</b> — long-horizon placement (58.4% → 76.8%)</p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">RLBench</span>
-        <div class="media-slot">
-          <video muted loop playsinline controls preload="metadata">
-            <source src="static/videos/sim/rlbench/stack_cups/trial_1.mp4" type="video/mp4">
-          </video>
-        </div>
-        <p class="media-caption"><b>Stack Cups</b> — fine-grained localization (98.4%)</p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">RLBench</span>
-        <div class="media-slot">
-          <video muted loop playsinline controls preload="metadata">
-            <source src="static/videos/sim/rlbench/insert_peg/trial_1.mp4" type="video/mp4">
-          </video>
-        </div>
-        <p class="media-caption"><b>Insert Peg</b> — high-precision insertion (99.2%)</p>
-      </div>
-    </div>
-
-    <!-- --------------------------------------------------------- COLOSSEUM -->
-    <h3 class="subhead reveal">COLOSSEUM — robustness to unseen perturbations</h3>
-    <p class="lede reveal">
-      All models are trained on unperturbed RLBench data for the 20 COLOSSEUM tasks and evaluated under
-      12 perturbation axes never seen in training, plus the original RLBench variation and a combined
-      all-perturbations setting. BridgeVLA reaches <b>64.0%</b>, over 7 points above RVT-2, and the
-      memory extension keeps that robustness (<b>65.2%</b>) — with its largest single gain exactly in
-      the hardest <em>all perturbations</em> setting (18.7% → 38.9%).
-    </p>
-
-    <div class="table-card reveal" style="margin-top:1rem">
-      <div class="table-scroll">
-        <table class="data">
-          <thead>
-            <tr>
-              <th rowspan="2">Method</th>
-              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
-              <th rowspan="2" class="avg">Avg. Rank ↓</th>
-              <th>All</th><th>MO</th><th>RO</th><th>MO</th><th>RO</th><th>MO</th><th>RO</th>
-              <th>Light</th><th>Table</th><th>Table</th><th rowspan="2">Distractor</th>
-              <th>Background</th><th rowspan="2">RLBench</th><th>Camera</th>
-            </tr>
-            <tr>
-              <th>Perturb.</th><th>Color</th><th>Color</th><th>Texture</th><th>Texture</th>
-              <th>Size</th><th>Size</th><th>Color</th><th>Color</th><th>Texture</th>
-              <th>Texture</th><th>Pose</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>R3M-MLP <span class="cite">[Nair et al. 2022]</span></td>
-              <td class="avg">0.8</td><td class="avg">6.71</td>
-              <td>0.6</td><td>0.4</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1.8</td><td>0.0</td>
-              <td>1.0</td><td>1.4</td><td>0.2</td><td>1.6</td><td>1.2</td><td>2.0</td><td>0.8</td>
-            </tr>
-            <tr>
-              <td>MVP-MLP <span class="cite">[Xiao et al. 2022]</span></td>
-              <td class="avg">1.6</td><td class="avg">6.00</td>
-              <td>0.8</td><td>1.2</td><td>0.0</td><td>0.4</td><td>0.0</td><td>4.44</td><td>0.0</td>
-              <td>1.6</td><td>1.6</td><td>1.0</td><td>3.8</td><td>2.2</td><td>2.0</td><td>2.6</td>
-            </tr>
-            <tr>
-              <td>PerAct <span class="cite">[Shridhar et al. 2023]</span></td>
-              <td class="avg">27.9</td><td class="avg">4.71</td>
-              <td>7.2</td><td>24.0</td><td>29.2</td><td>28.8</td><td>17.71</td><td>35.6</td><td>29.3</td>
-              <td>29.1</td><td>30.4</td><td>23.2</td><td>27.1</td><td>33.5</td><td>39.4</td><td>36.3</td>
-            </tr>
-            <tr>
-              <td>RVT <span class="cite">[Goyal et al. 2023]</span></td>
-              <td class="avg">35.4</td><td class="avg">4.29</td>
-              <td>6.4</td><td>26.0</td><td>31.3</td><td>44.8</td><td>41.1</td><td>35.3</td><td>40.5</td>
-              <td>34.0</td><td>30.0</td><td>45.2</td><td>18.8</td><td>46.4</td><td>53.4</td><td>42.2</td>
-            </tr>
-            <tr>
-              <td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td>
-              <td class="avg">56.7</td><td class="avg">2.86</td>
-              <td>15.6</td><td>53.0</td><td>54.6</td><td>59.7</td><td>56.7</td><td>60.9</td><td>53.4</td>
-              <td>58.0</td><td>62.6</td><td>56.6</td><td>60.8</td><td>68.7</td><td>68.8</td><td>64.4</td>
-            </tr>
-            <tr class="ours">
-              <td>BridgeVLA <span class="cite">(ours, base)</span></td>
-              <td class="avg">64.0</td><td class="avg best">1.50</td>
-              <td>18.7</td><td>60.5</td><td>63.8</td><td>63.5</td><td>68.4</td><td>69.3</td><td>61.7</td>
-              <td>69.7</td><td>75.7</td><td>71.3</td><td>51.8</td><td>74.8</td><td>73.1</td><td>73.8</td>
-            </tr>
-            <tr class="ours">
-              <td>BridgeVLA++ <span class="cite">(ours)</span></td>
-              <td class="avg best">65.2</td><td class="avg">1.64</td>
-              <td>38.9</td><td>68.7</td><td>62.7</td><td>65.7</td><td>65.5</td><td>71.5</td><td>62.0</td>
-              <td>68.2</td><td>71.5</td><td>69.2</td><td>61.6</td><td>69.5</td><td>68.5</td><td>68.7</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="table-note">
-        <b>Table 2 — COLOSSEUM.</b> Success rate (%) across the 14 evaluation settings. MO and RO
-        denote perturbations of the manipulated object and the receptacle object. Baseline numbers for
-        R3M-MLP, MVP-MLP, PerAct and RVT are quoted from the benchmark; RVT-2 and our models were
-        trained and evaluated by us (mean over three test repetitions; variances in the paper).
-      </p>
-    </div>
-
-    <!-- ---------------------------------------------------------- GemBench -->
-    <h3 class="subhead reveal">GemBench — hierarchical systematic generalization</h3>
-    <p class="lede reveal">
-      Trained on 16 tasks (31 variations) and evaluated on 44 held-out tasks (92 variations) across four
-      generalization levels. BridgeVLA sets a state-of-the-art <b>50.0%</b> average, and BridgeVLA++
-      raises it to <b>51.1%</b> — notably turning the long-horizon L4 level from 0.0% to 8.2%, where the
-      episodic memory finally gives the policy something to sequence over.
-    </p>
-
-    <div class="stack reveal" style="margin-top:1rem">
-      <div class="table-card">
-        <div class="table-scroll">
-          <table class="data">
-            <thead>
-              <tr>
-                <th rowspan="2">Method</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
-                <th>L1</th><th>L2</th><th>L3</th><th>L4</th>
-              </tr>
-              <tr><th>Placement</th><th>Rigid</th><th>Articulated</th><th>Long-Horizon</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Hiveformer <span class="cite">[Guhur et al. 2023]</span></td><td class="avg">30.4</td><td>60.3</td><td>26.1</td><td>35.1</td><td>0.0</td></tr>
-              <tr><td>PolarNet <span class="cite">[Chen et al. 2023]</span></td><td class="avg">38.4</td><td>77.7</td><td>37.1</td><td>38.5</td><td>0.1</td></tr>
-              <tr><td>3D Diffuser Actor <span class="cite">[Ke et al. 2024]</span></td><td class="avg">43.1</td><td>91.9</td><td>43.4</td><td>37.0</td><td>0.0</td></tr>
-              <tr><td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td><td class="avg">44.0</td><td>89.1</td><td>51.0</td><td>36.0</td><td>0.0</td></tr>
-              <tr><td>3D-LOTUS <span class="cite">[Garcia et al. 2024]</span></td><td class="avg">45.7</td><td class="best">94.3</td><td>49.9</td><td>38.1</td><td>0.3</td></tr>
-              <tr><td>3D-LOTUS++ <span class="cite">[Garcia et al. 2024]</span></td><td class="avg">48.0</td><td>68.7</td><td>64.5</td><td>41.5</td><td class="best">17.4</td></tr>
-              <tr class="ours"><td>BridgeVLA <span class="cite">(ours, base)</span></td><td class="avg">50.0</td><td>91.1</td><td>65.0</td><td class="best">43.8</td><td>0.0</td></tr>
-              <tr class="ours"><td>BridgeVLA++ <span class="cite">(ours)</span></td><td class="avg best">51.1</td><td>88.6</td><td class="best">68.9</td><td>38.5</td><td>8.2</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="table-note">
-          <b>Table 3 — GemBench.</b> Success rate (%) over 20 trials per task variation, five random
-          seeds; per-level standard deviations are given in the paper. Baselines are quoted from the
-          GemBench benchmark [Garcia et al. 2024], except the 3D Diffuser Actor average, recomputed
-          as the mean of its four levels (its source prints 44.0). Our rows were trained and
-          evaluated on keyframes only, without demo augmentation.
-        </p>
+    <div class="bench-explorer" id="bench-explorer">
+      <div class="bench-tabs reveal" role="tablist" aria-label="Benchmark">
+        <button class="bench-tab" type="button" role="tab" id="bench-tab-rmbench"
+                aria-selected="true" aria-controls="bench-panel-rmbench" data-tab="rmbench">
+          <span class="bt-top"><span class="bt-name">RMBench</span><span class="bt-val">96.0%</span></span>
+          <span class="bt-sub">Bimanual memory · 9 tasks</span>
+        </button>
+        <button class="bench-tab" type="button" role="tab" id="bench-tab-rlbench" tabindex="-1"
+                aria-selected="false" aria-controls="bench-panel-rlbench" data-tab="rlbench">
+          <span class="bt-top"><span class="bt-name">RLBench</span><span class="bt-val">93.7%</span></span>
+          <span class="bt-sub">General manipulation · 18 tasks</span>
+        </button>
+        <button class="bench-tab" type="button" role="tab" id="bench-tab-colosseum" tabindex="-1"
+                aria-selected="false" aria-controls="bench-panel-colosseum" data-tab="colosseum">
+          <span class="bt-top"><span class="bt-name">COLOSSEUM</span><span class="bt-val">65.2%</span></span>
+          <span class="bt-sub">Unseen perturbations · 14 settings</span>
+        </button>
+        <button class="bench-tab" type="button" role="tab" id="bench-tab-gembench" tabindex="-1"
+                aria-selected="false" aria-controls="bench-panel-gembench" data-tab="gembench">
+          <span class="bt-top"><span class="bt-name">GemBench</span><span class="bt-val">51.1%</span></span>
+          <span class="bt-sub">Systematic generalization · 4 levels</span>
+        </button>
+        <button class="bench-tab" type="button" role="tab" id="bench-tab-memorybench" tabindex="-1"
+                aria-selected="false" aria-controls="bench-panel-memorybench" data-tab="memorybench">
+          <span class="bt-top"><span class="bt-name">MemoryBench</span><span class="bt-val">99.7%</span></span>
+          <span class="bt-sub">Single-arm memory · 3 tasks</span>
+        </button>
       </div>
 
-      <div class="table-card">
-        <div class="table-scroll">
-          <table class="data">
-            <thead>
-              <tr>
-                <th rowspan="2">Method</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
-                <th>Reopen</th><th>Put Block</th><th>Rearrange</th>
-              </tr>
-              <tr><th>Drawer</th><th>Back</th><th>Block</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td><td class="avg">54.0 <span class="std">±5.3</span></td><td>60.0 <span class="std">±0.0</span></td><td>50.0 <span class="std">±2.3</span></td><td>52.0 <span class="std">±3.3</span></td></tr>
-              <tr><td>SAM2Act <span class="cite">[Fang et al. 2025]</span></td><td class="avg">55.0 <span class="std">±24.3</span></td><td>48.0 <span class="std">±0.0</span></td><td>35.0 <span class="std">±3.8</span></td><td>82.0 <span class="std">±2.3</span></td></tr>
-              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td class="avg">94.3 <span class="std">±9.0</span></td><td>84.0 <span class="std">±0.0</span></td><td class="best">100.0 <span class="std">±0.0</span></td><td class="best">99.0 <span class="std">±2.0</span></td></tr>
-              <tr class="ours"><td>BridgeVLA <span class="cite">(ours, base)</span></td><td class="avg">11.3 <span class="std">±0.8</span></td><td>29.6 <span class="std">±4.3</span></td><td>2.8 <span class="std">±1.8</span></td><td>1.6 <span class="std">±2.6</span></td></tr>
-              <tr class="ours"><td>BridgeVLA++ <span class="cite">(ours)</span></td><td class="avg best">99.7 <span class="std">±0.3</span></td><td class="best">100.0 <span class="std">±0.0</span></td><td>99.8 <span class="std">±0.4</span></td><td>99.2 <span class="std">±1.1</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="table-note">
-          <b>Table 4 — MemoryBench.</b> Single-arm memory-dependent suite. Baselines are quoted from
-          [Fang et al. 2025] as mean±std over four evaluation runs; in the Avg. column the deviation
-          is the spread across the three tasks. Our rows are mean±std over five evaluation seeds.
-          The memory-free base policy collapses to 11.3%, confirming that these tasks genuinely
-          require episodic memory.
-        </p>
-      </div>
-    </div>
+      <!-- ----------------------------------------------------------- RMBench -->
+      <div class="bench-panel" id="bench-panel-rmbench" role="tabpanel"
+           aria-labelledby="bench-tab-rmbench" data-panel="rmbench">
 
-    <!-- ----------------------------------------------------------- RMBench -->
-    <h3 class="subhead reveal">RMBench — memory-dependent bimanual manipulation</h3>
     <p class="lede reveal">
       Nine dual-arm tasks that cannot be solved from the current frame alone, split into short-term
       <em>M</em>(1) and long-term <em>M</em>(<em>n</em>) horizons; 50 demonstrations per task, 100
@@ -688,6 +427,13 @@
       BridgeVLA++ reaches a near-perfect <b>96.0%</b>, ranking best or tied-best on eight of the nine
       tasks, while the memory-free base collapses to 18.9%.
     </p>
+
+        <figure class="figure reveal" style="margin-top:1rem">
+          <img src="static/images/paper/rmbench_tasks.jpg" loading="lazy"
+               alt="Grid of the nine dual-arm RMBench tasks.">
+          <figcaption class="figcap"><b>The RMBench suite</b> — the nine dual-arm memory tasks,
+            three example variants each.</figcaption>
+        </figure>
 
     <div class="table-card reveal" style="margin-top:1rem">
       <div class="table-scroll">
@@ -724,7 +470,7 @@
         </table>
       </div>
       <p class="table-note">
-        <b>Table 5 — RMBench.</b> Success rate (%) over 100 episodes per task on the nine dual-arm
+        <b>Table 1 — RMBench.</b> Success rate (%) over 100 episodes per task on the nine dual-arm
         tasks, grouped by memory complexity. Baseline numbers are quoted from their sources; “—”
         denotes tasks a source does not evaluate. Best per task in bold.
       </p>
@@ -801,14 +547,353 @@
         <p class="media-caption"><b>Press Button</b> — 93%</p>
       </div>
     </div>
+      </div>
 
-    <!-- ------------------------------------------------------ MemoryBench -->
-    <h3 class="subhead reveal">MemoryBench — single-arm memory validation</h3>
+      <!-- ----------------------------------------------------------- RLBench -->
+      <div class="bench-panel" id="bench-panel-rlbench" role="tabpanel"
+           aria-labelledby="bench-tab-rlbench" data-panel="rlbench" hidden>
+
+        <div class="bench-head">
+          <div>
     <p class="lede reveal">
-      The memory generalizes beyond bimanual coordination: on the three single-arm MemoryBench
-      scenarios BridgeVLA++ reaches <b>99.7 ± 0.3%</b> (Table 4 above), against 94.3% for SAM2Act+ and
-      11.3% for the memory-free base model.
+      18 multi-task RLBench tasks, 100 demonstrations per task, mean success rate over five evaluation
+      runs of 25 episodes. BridgeVLA reaches <b>90.5%</b>, already 3.7 points above the previous state
+      of the art; its remaining failures concentrate in occlusion-heavy tasks — exactly what the
+      spatio-temporal memory addresses, lifting BridgeVLA++ to <b>93.7%</b> with
+      <em>sort shape</em> +16.8 and <em>place cups</em> +18.4.
     </p>
+            <ul class="bench-facts reveal">
+              <li><b>Protocol</b> — 100 demonstrations per task; mean over five evaluation runs of 25 episodes.</li>
+              <li><b>93.7%</b> — +6.9 points over SAM2Act (86.8%), the previous state of the art.</li>
+              <li><b>Where the memory helps</b> — occlusion-heavy precision tasks: <em>Sort Shape</em> +16.8, <em>Place Cups</em> +18.4.</li>
+            </ul>
+          </div>
+          <figure class="figure reveal">
+            <img src="static/images/paper/rlbench_tasks.jpg" loading="lazy"
+                 alt="Grid of the 18 RLBench tasks.">
+            <figcaption class="figcap"><b>The RLBench suite</b> — the 18 evaluated tasks.</figcaption>
+          </figure>
+        </div>
+
+    <div class="table-card reveal" style="margin-top:1rem">
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr>
+              <th rowspan="2">Method</th>
+              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+              <th rowspan="2" class="avg">Avg. Rank ↓</th>
+              <th>Close</th><th>Drag</th><th>Insert</th><th>Meat off</th><th>Open</th>
+              <th>Place</th><th>Place</th><th>Push</th><th>Put in</th><th>Put in</th>
+              <th>Put in</th><th>Screw</th><th>Slide</th><th>Sort</th><th>Stack</th>
+              <th>Stack</th><th>Sweep to</th><th>Turn</th>
+            </tr>
+            <tr>
+              <th>Jar</th><th>Stick</th><th>Peg</th><th>Grill</th><th>Drawer</th>
+              <th>Cups</th><th>Wine</th><th>Buttons</th><th>Cupboard</th><th>Drawer</th>
+              <th>Safe</th><th>Bulb</th><th>Block</th><th>Shape</th><th>Blocks</th>
+              <th>Cups</th><th>Dustpan</th><th>Tap</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PerAct <span class="cite">[Shridhar et al. 2023]</span></td>
+              <td class="avg">49.4</td><td class="avg">11.33</td>
+              <td>55.2</td><td>89.6</td><td>5.6</td><td>70.4</td><td>88.0</td><td>2.4</td><td>44.8</td><td>92.8</td>
+              <td>28.0</td><td>51.2</td><td>84.0</td><td>17.6</td><td>74.0</td><td>16.8</td><td>26.4</td><td>2.4</td><td>52.0</td><td>88.0</td>
+            </tr>
+            <tr>
+              <td>Act3D <span class="cite">[Gervet et al. 2023]</span></td>
+              <td class="avg">65.0</td><td class="avg">9.17</td>
+              <td>92.0</td><td>92.0</td><td>27.0</td><td>94.0</td><td>93.0</td><td>3.0</td><td>80.0</td><td>99.0</td>
+              <td>51.0</td><td>90.0</td><td>95.0</td><td>47.0</td><td>93.0</td><td>8.0</td><td>12.0</td><td>9.0</td><td>92.0</td><td>94.0</td>
+            </tr>
+            <tr>
+              <td>RVT <span class="cite">[Goyal et al. 2023]</span></td>
+              <td class="avg">62.9</td><td class="avg">9.08</td>
+              <td>52.0</td><td>99.2</td><td>11.2</td><td>88.0</td><td>71.2</td><td>4.0</td><td>91.0</td><td>100.0</td>
+              <td>49.6</td><td>88.0</td><td>91.2</td><td>48.0</td><td>81.6</td><td>36.0</td><td>28.8</td><td>26.4</td><td>72.0</td><td>93.6</td>
+            </tr>
+            <tr>
+              <td>3D Diffuser Actor <span class="cite">[Ke et al. 2024]</span></td>
+              <td class="avg">81.3</td><td class="avg">6.19</td>
+              <td>96.0</td><td>100.0</td><td>65.6</td><td>96.8</td><td>89.6</td><td>24.0</td><td>93.6</td><td>98.4</td>
+              <td>85.6</td><td>96.0</td><td>97.6</td><td>82.4</td><td>97.6</td><td>44.0</td><td>68.3</td><td>47.2</td><td>84.0</td><td>99.2</td>
+            </tr>
+            <tr>
+              <td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td>
+              <td class="avg">81.4</td><td class="avg">5.97</td>
+              <td>100.0</td><td>99.0</td><td>40.0</td><td>99.0</td><td>74.0</td><td>38.0</td><td>95.0</td><td>100.0</td>
+              <td>66.0</td><td>96.0</td><td>96.0</td><td>88.0</td><td>92.0</td><td>35.0</td><td>80.0</td><td>69.0</td><td>100.0</td><td>99.0</td>
+            </tr>
+            <tr>
+              <td>SAM2Act <span class="cite">[Fang et al. 2025]</span></td>
+              <td class="avg">86.8</td><td class="avg">5.47</td>
+              <td>99.0</td><td>99.0</td><td>84.0</td><td>98.0</td><td>83.0</td><td>47.0</td><td>93.0</td><td>100.0</td>
+              <td>75.0</td><td>99.0</td><td>98.0</td><td>89.0</td><td>86.0</td><td>64.0</td><td>76.0</td><td>78.0</td><td>99.0</td><td>96.0</td>
+            </tr>
+            <tr class="ours">
+              <td>BridgeVLA <span class="cite">(ours, base)</span></td>
+              <td class="avg">90.5</td><td class="avg">4.75</td>
+              <td>100.0</td><td>97.6</td><td>91.2</td><td>100.0</td><td>99.2</td><td>58.4</td><td>89.6</td><td>100.0</td>
+              <td>91.2</td><td>96.0</td><td>95.2</td><td>93.6</td><td>95.2</td><td>55.2</td><td>84.8</td><td>88.8</td><td>100.0</td><td>92.8</td>
+            </tr>
+            <tr class="ours">
+              <td>BridgeVLA++ <span class="cite">(ours)</span></td>
+              <td class="avg best">93.7</td><td class="avg best">3.64</td>
+              <td>100.0</td><td>98.4</td><td>99.2</td><td>100.0</td><td>99.2</td><td>76.8</td><td>95.2</td><td>100.0</td>
+              <td>92.0</td><td>99.2</td><td>92.8</td><td>95.2</td><td>96.0</td><td>72.0</td><td>85.6</td><td>98.4</td><td>97.6</td><td>89.6</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        <b>Table 2 — RLBench.</b> Success rate (%) on the 18 standard tasks with average success rate
+        and average rank (lower is better). Our rows report the mean over five seeds of 25 episodes;
+        per-seed standard deviations are given in the paper. Best average in bold. Design and memory
+        ablations of the same table are collected in the <a href="#ablations">Ablations</a> section.
+      </p>
+    </div>
+
+    <div class="media-grid cols-4 reveal" style="margin-top:1.2rem">
+      <div class="media-card">
+        <span class="task-chip">RLBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata">
+            <source src="static/videos/sim/rlbench/sort_shape/trial_1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>Sort Shape</b> — occlusion-heavy precision insertion (55.2% → 72.0%)</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RLBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata">
+            <source src="static/videos/sim/rlbench/place_cups/trial_1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>Place Cups</b> — long-horizon placement (58.4% → 76.8%)</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RLBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata">
+            <source src="static/videos/sim/rlbench/stack_cups/trial_1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>Stack Cups</b> — fine-grained localization (98.4%)</p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip">RLBench</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata">
+            <source src="static/videos/sim/rlbench/insert_peg/trial_1.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>Insert Peg</b> — high-precision insertion (99.2%)</p>
+      </div>
+    </div>
+      </div>
+
+      <!-- --------------------------------------------------------- COLOSSEUM -->
+      <div class="bench-panel" id="bench-panel-colosseum" role="tabpanel"
+           aria-labelledby="bench-tab-colosseum" data-panel="colosseum" hidden>
+
+    <p class="lede reveal">
+      All models are trained on unperturbed RLBench data for the 20 COLOSSEUM tasks and evaluated under
+      12 perturbation axes never seen in training, plus the original RLBench variation and a combined
+      all-perturbations setting. BridgeVLA reaches <b>64.0%</b>, over 7 points above RVT-2, and the
+      memory extension keeps that robustness (<b>65.2%</b>) — with its largest single gain exactly in
+      the hardest <em>all perturbations</em> setting (18.7% → 38.9%).
+    </p>
+
+        <figure class="figure reveal bench-fig-pair" style="margin-top:1rem">
+          <div class="pair">
+            <img src="static/images/paper/colosseum_perturbations_a.jpg" loading="lazy"
+                 alt="COLOSSEUM perturbation axes, first half.">
+            <img src="static/images/paper/colosseum_perturbations_b.jpg" loading="lazy"
+                 alt="COLOSSEUM perturbation axes, second half.">
+          </div>
+          <figcaption class="figcap"><b>The COLOSSEUM suite</b> — the perturbation axes, none of
+            which appear in the training data.</figcaption>
+        </figure>
+
+    <div class="table-card reveal" style="margin-top:1rem">
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr>
+              <th rowspan="2">Method</th>
+              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+              <th rowspan="2" class="avg">Avg. Rank ↓</th>
+              <th>All</th><th>MO</th><th>RO</th><th>MO</th><th>RO</th><th>MO</th><th>RO</th>
+              <th>Light</th><th>Table</th><th>Table</th><th rowspan="2">Distractor</th>
+              <th>Background</th><th rowspan="2">RLBench</th><th>Camera</th>
+            </tr>
+            <tr>
+              <th>Perturb.</th><th>Color</th><th>Color</th><th>Texture</th><th>Texture</th>
+              <th>Size</th><th>Size</th><th>Color</th><th>Color</th><th>Texture</th>
+              <th>Texture</th><th>Pose</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>R3M-MLP <span class="cite">[Nair et al. 2022]</span></td>
+              <td class="avg">0.8</td><td class="avg">6.71</td>
+              <td>0.6</td><td>0.4</td><td>0.0</td><td>0.0</td><td>0.0</td><td>1.8</td><td>0.0</td>
+              <td>1.0</td><td>1.4</td><td>0.2</td><td>1.6</td><td>1.2</td><td>2.0</td><td>0.8</td>
+            </tr>
+            <tr>
+              <td>MVP-MLP <span class="cite">[Xiao et al. 2022]</span></td>
+              <td class="avg">1.6</td><td class="avg">6.00</td>
+              <td>0.8</td><td>1.2</td><td>0.0</td><td>0.4</td><td>0.0</td><td>4.44</td><td>0.0</td>
+              <td>1.6</td><td>1.6</td><td>1.0</td><td>3.8</td><td>2.2</td><td>2.0</td><td>2.6</td>
+            </tr>
+            <tr>
+              <td>PerAct <span class="cite">[Shridhar et al. 2023]</span></td>
+              <td class="avg">27.9</td><td class="avg">4.71</td>
+              <td>7.2</td><td>24.0</td><td>29.2</td><td>28.8</td><td>17.71</td><td>35.6</td><td>29.3</td>
+              <td>29.1</td><td>30.4</td><td>23.2</td><td>27.1</td><td>33.5</td><td>39.4</td><td>36.3</td>
+            </tr>
+            <tr>
+              <td>RVT <span class="cite">[Goyal et al. 2023]</span></td>
+              <td class="avg">35.4</td><td class="avg">4.29</td>
+              <td>6.4</td><td>26.0</td><td>31.3</td><td>44.8</td><td>41.1</td><td>35.3</td><td>40.5</td>
+              <td>34.0</td><td>30.0</td><td>45.2</td><td>18.8</td><td>46.4</td><td>53.4</td><td>42.2</td>
+            </tr>
+            <tr>
+              <td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td>
+              <td class="avg">56.7</td><td class="avg">2.86</td>
+              <td>15.6</td><td>53.0</td><td>54.6</td><td>59.7</td><td>56.7</td><td>60.9</td><td>53.4</td>
+              <td>58.0</td><td>62.6</td><td>56.6</td><td>60.8</td><td>68.7</td><td>68.8</td><td>64.4</td>
+            </tr>
+            <tr class="ours">
+              <td>BridgeVLA <span class="cite">(ours, base)</span></td>
+              <td class="avg">64.0</td><td class="avg best">1.50</td>
+              <td>18.7</td><td>60.5</td><td>63.8</td><td>63.5</td><td>68.4</td><td>69.3</td><td>61.7</td>
+              <td>69.7</td><td>75.7</td><td>71.3</td><td>51.8</td><td>74.8</td><td>73.1</td><td>73.8</td>
+            </tr>
+            <tr class="ours">
+              <td>BridgeVLA++ <span class="cite">(ours)</span></td>
+              <td class="avg best">65.2</td><td class="avg">1.64</td>
+              <td>38.9</td><td>68.7</td><td>62.7</td><td>65.7</td><td>65.5</td><td>71.5</td><td>62.0</td>
+              <td>68.2</td><td>71.5</td><td>69.2</td><td>61.6</td><td>69.5</td><td>68.5</td><td>68.7</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        <b>Table 3 — COLOSSEUM.</b> Success rate (%) across the 14 evaluation settings. MO and RO
+        denote perturbations of the manipulated object and the receptacle object. Baseline numbers for
+        R3M-MLP, MVP-MLP, PerAct and RVT are quoted from the benchmark; RVT-2 and our models were
+        trained and evaluated by us (mean over three test repetitions; variances in the paper).
+      </p>
+    </div>
+      </div>
+
+      <!-- ---------------------------------------------------------- GemBench -->
+      <div class="bench-panel" id="bench-panel-gembench" role="tabpanel"
+           aria-labelledby="bench-tab-gembench" data-panel="gembench" hidden>
+
+        <div class="bench-head">
+          <div>
+    <p class="lede reveal">
+      Trained on 16 tasks (31 variations) and evaluated on 44 held-out tasks (92 variations) across four
+      generalization levels. BridgeVLA sets a state-of-the-art <b>50.0%</b> average, and BridgeVLA++
+      raises it to <b>51.1%</b> — notably turning the long-horizon L4 level from 0.0% to 8.2%, where the
+      episodic memory finally gives the policy something to sequence over.
+    </p>
+            <ul class="bench-facts reveal">
+              <li><b>L1 Novel placements</b> — 88.6%</li>
+              <li><b>L2 Novel rigid objects</b> — 68.9%, the best of all methods.</li>
+              <li><b>L3 Novel articulated objects</b> — 38.5% (base BridgeVLA: 43.8%, the best).</li>
+              <li><b>L4 Long-horizon</b> — 0.0% → 8.2%: the episodic memory finally gives the policy something to sequence over.</li>
+            </ul>
+          </div>
+          <figure class="figure reveal">
+            <img src="static/images/paper/gembench_tasks.jpg" loading="lazy"
+                 alt="Grid of the GemBench task suite.">
+            <figcaption class="figcap"><b>The GemBench suite</b> — the four generalization levels.</figcaption>
+          </figure>
+        </div>
+
+      <div class="table-card reveal" style="margin-top:1rem">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Method</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+                <th>L1</th><th>L2</th><th>L3</th><th>L4</th>
+              </tr>
+              <tr><th>Placement</th><th>Rigid</th><th>Articulated</th><th>Long-Horizon</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Hiveformer <span class="cite">[Guhur et al. 2023]</span></td><td class="avg">30.4</td><td>60.3</td><td>26.1</td><td>35.1</td><td>0.0</td></tr>
+              <tr><td>PolarNet <span class="cite">[Chen et al. 2023]</span></td><td class="avg">38.4</td><td>77.7</td><td>37.1</td><td>38.5</td><td>0.1</td></tr>
+              <tr><td>3D Diffuser Actor <span class="cite">[Ke et al. 2024]</span></td><td class="avg">43.1</td><td>91.9</td><td>43.4</td><td>37.0</td><td>0.0</td></tr>
+              <tr><td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td><td class="avg">44.0</td><td>89.1</td><td>51.0</td><td>36.0</td><td>0.0</td></tr>
+              <tr><td>3D-LOTUS <span class="cite">[Garcia et al. 2024]</span></td><td class="avg">45.7</td><td class="best">94.3</td><td>49.9</td><td>38.1</td><td>0.3</td></tr>
+              <tr><td>3D-LOTUS++ <span class="cite">[Garcia et al. 2024]</span></td><td class="avg">48.0</td><td>68.7</td><td>64.5</td><td>41.5</td><td class="best">17.4</td></tr>
+              <tr class="ours"><td>BridgeVLA <span class="cite">(ours, base)</span></td><td class="avg">50.0</td><td>91.1</td><td>65.0</td><td class="best">43.8</td><td>0.0</td></tr>
+              <tr class="ours"><td>BridgeVLA++ <span class="cite">(ours)</span></td><td class="avg best">51.1</td><td>88.6</td><td class="best">68.9</td><td>38.5</td><td>8.2</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 4 — GemBench.</b> Success rate (%) over 20 trials per task variation, five random
+          seeds; per-level standard deviations are given in the paper. Baselines are quoted from the
+          GemBench benchmark [Garcia et al. 2024], except the 3D Diffuser Actor average, recomputed
+          as the mean of its four levels (its source prints 44.0). Our rows were trained and
+          evaluated on keyframes only, without demo augmentation.
+        </p>
+      </div>
+      </div>
+
+      <!-- ------------------------------------------------------- MemoryBench -->
+      <div class="bench-panel" id="bench-panel-memorybench" role="tabpanel"
+           aria-labelledby="bench-tab-memorybench" data-panel="memorybench" hidden>
+
+        <p class="lede reveal">
+          The memory generalizes beyond bimanual coordination: on the three single-arm MemoryBench
+          scenarios BridgeVLA++ reaches <b>99.7 ± 0.3%</b>, against 94.3% for SAM2Act+ — while the
+          memory-free base model collapses to 11.3%, confirming that these tasks genuinely require
+          episodic memory.
+        </p>
+
+        <figure class="figure reveal" style="margin-top:1rem">
+          <img src="static/images/paper/memorybench_tasks.jpg" loading="lazy"
+               alt="Grid of the three MemoryBench tasks.">
+          <figcaption class="figcap"><b>The MemoryBench suite</b> — the three single-arm memory
+            tasks: Reopen Drawer, Put Block Back, Rearrange Block.</figcaption>
+        </figure>
+
+      <div class="table-card reveal" style="margin-top:1rem">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Method</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+                <th>Reopen</th><th>Put Block</th><th>Rearrange</th>
+              </tr>
+              <tr><th>Drawer</th><th>Back</th><th>Block</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td><td class="avg">54.0 <span class="std">±5.3</span></td><td>60.0 <span class="std">±0.0</span></td><td>50.0 <span class="std">±2.3</span></td><td>52.0 <span class="std">±3.3</span></td></tr>
+              <tr><td>SAM2Act <span class="cite">[Fang et al. 2025]</span></td><td class="avg">55.0 <span class="std">±24.3</span></td><td>48.0 <span class="std">±0.0</span></td><td>35.0 <span class="std">±3.8</span></td><td>82.0 <span class="std">±2.3</span></td></tr>
+              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td class="avg">94.3 <span class="std">±9.0</span></td><td>84.0 <span class="std">±0.0</span></td><td class="best">100.0 <span class="std">±0.0</span></td><td class="best">99.0 <span class="std">±2.0</span></td></tr>
+              <tr class="ours"><td>BridgeVLA <span class="cite">(ours, base)</span></td><td class="avg">11.3 <span class="std">±0.8</span></td><td>29.6 <span class="std">±4.3</span></td><td>2.8 <span class="std">±1.8</span></td><td>1.6 <span class="std">±2.6</span></td></tr>
+              <tr class="ours"><td>BridgeVLA++ <span class="cite">(ours)</span></td><td class="avg best">99.7 <span class="std">±0.3</span></td><td class="best">100.0 <span class="std">±0.0</span></td><td>99.8 <span class="std">±0.4</span></td><td>99.2 <span class="std">±1.1</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 5 — MemoryBench.</b> Single-arm memory-dependent suite. Baselines are quoted from
+          [Fang et al. 2025] as mean±std over four evaluation runs; in the Avg. column the deviation
+          is the spread across the three tasks. Our rows are mean±std over five evaluation seeds.
+          The memory-free base policy collapses to 11.3%, confirming that these tasks genuinely
+          require episodic memory.
+        </p>
+      </div>
 
     <div class="media-grid cols-3 reveal" style="margin-top:1rem">
       <div class="media-card">
@@ -833,45 +918,7 @@
         <p class="media-caption"><b>Rearrange Block</b> — 99.2%</p>
       </div>
     </div>
-
-    <!-- --------------------------------------------------- benchmark suites -->
-    <h3 class="subhead reveal">The benchmark suites</h3>
-    <div class="carousel reveal" id="bench-gallery" style="margin-top:.8rem">
-      <div class="frame">
-        <div class="slide is-active">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/rlbench_tasks.jpg" alt="Grid of the 18 RLBench tasks.">
-            <figcaption class="figcap"><b>RLBench</b> — the 18 evaluated tasks.</figcaption>
-          </figure>
-        </div>
-        <div class="slide">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/colosseum_perturbations.jpg" alt="Visualization of the COLOSSEUM perturbation axes.">
-            <figcaption class="figcap"><b>COLOSSEUM</b> — the 12 perturbation axes.</figcaption>
-          </figure>
-        </div>
-        <div class="slide">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/gembench_tasks.jpg" alt="Grid of the GemBench task suite.">
-            <figcaption class="figcap"><b>GemBench</b> — the four generalization levels.</figcaption>
-          </figure>
-        </div>
-        <div class="slide">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/rmbench_tasks.jpg" alt="Grid of the nine dual-arm RMBench tasks.">
-            <figcaption class="figcap"><b>RMBench</b> — the nine dual-arm memory tasks.</figcaption>
-          </figure>
-        </div>
-        <div class="slide">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/memorybench_tasks.jpg" alt="Grid of the three MemoryBench tasks.">
-            <figcaption class="figcap"><b>MemoryBench</b> — the three single-arm memory tasks.</figcaption>
-          </figure>
-        </div>
       </div>
-      <button class="carousel-btn carousel-prev" type="button" aria-label="Previous">&#10094;</button>
-      <button class="carousel-btn carousel-next" type="button" aria-label="Next">&#10095;</button>
-      <div class="dots"></div>
     </div>
 
   </div>
@@ -894,7 +941,7 @@
     <figure class="figure reveal">
       <img src="static/images/paper/real_setup.jpg" alt="Real robot setup: Franka Research 3 and DOBOT CR5A, each observed by a static ZED 2i stereo camera, with the basic, generalization and memory evaluation settings.">
       <figcaption class="figcap">
-        <b>Figure 5 — Real-robot evaluation setup.</b> Left: the general-manipulation platform — a 7-DoF
+        <b>Figure 3 — Real-robot evaluation setup.</b> Left: the general-manipulation platform — a 7-DoF
         Franka Research 3 with a parallel-jaw gripper, observed by a single static ZED 2i stereo camera
         that provides the colored point cloud. Right: the memory platform — a 6-DoF DOBOT CR5A arm with
         the same camera configuration. Bottom: the evaluation settings — the Franka suite covers one
@@ -903,195 +950,25 @@
       </figcaption>
     </figure>
 
-    <!-- ------------------------------------------------- Franka: base model -->
-    <h3 class="subhead reveal">Franka Research 3 — general manipulation with 10 demos</h3>
-    <p class="lede reveal">
-      13 tasks spanning 3–9 keyframes each, from simple pick-and-place to long-horizon drawer
-      manipulation, trained from 10 kinesthetic demonstrations per task and evaluated over 10 trials
-      per task per method. BridgeVLA completes <b>96.9%</b> of trials and never falls below 9/10 on any
-      task. The cleanest evidence for the alignment argument is π<sub>0</sub>: it shares the same
-      PaliGemma backbone and differs only in the action interface — and it reaches 3.8%.
-    </p>
+    <div class="platform-explorer" id="platform-explorer">
+      <div class="platform-tabs reveal" role="tablist" aria-label="Robot platform">
+        <button class="platform-tab" type="button" role="tab" id="platform-tab-dobot"
+                aria-selected="true" aria-controls="platform-panel-dobot" data-tab="dobot">
+          <span class="pt-name">DOBOT CR5A</span>
+          <span class="pt-sub">Memory on a held-out embodiment — all 35 rollout videos</span>
+        </button>
+        <button class="platform-tab" type="button" role="tab" id="platform-tab-franka" tabindex="-1"
+                aria-selected="false" aria-controls="platform-panel-franka" data-tab="franka">
+          <span class="pt-name">Franka Research 3</span>
+          <span class="pt-sub">General manipulation from 10 demos + six generalization settings</span>
+        </button>
+      </div>
 
-    <div class="table-card reveal" style="margin-top:1rem">
-      <div class="table-scroll">
-        <table class="data">
-          <thead>
-            <tr>
-              <th rowspan="2">Method</th>
-              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
-              <th>Soda Can</th><th>Giraffe</th><th>Red Block</th><th>Press</th><th>RedBull</th>
-              <th>RedBull</th><th>Coke</th><th>Orange Block</th><th>Red Block</th>
-              <th>Yellow Block</th><th>Zebra</th><th>Zebra</th><th>Wolf</th>
-            </tr>
-            <tr>
-              <th>Bottom Shelf</th><th>Lower Drawer</th><th>Blue Plate</th><th>Sanitizer</th>
-              <th>Top Shelf</th><th>Bottom Shelf</th><th>Top Shelf</th><th>Green Plate</th>
-              <th>Purple Plate</th><th>Green Plate</th><th>Upper Drawer</th><th>Lower Drawer</th>
-              <th>Upper Drawer</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>SpatialVLA (50 demos) <span class="cite">[Qu et al. 2025]</span></td><td class="avg">28.5</td><td>1/10</td><td>1/10</td><td>5/10</td><td>6/10</td><td>3/10</td><td>1/10</td><td>2/10</td><td>6/10</td><td>3/10</td><td>5/10</td><td>2/10</td><td>0/10</td><td>2/10</td></tr>
-            <tr><td>SpatialVLA (10 demos) <span class="cite">[Qu et al. 2025]</span></td><td class="avg">3.1</td><td>0/10</td><td>0/10</td><td>0/10</td><td>2/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>1/10</td><td>1/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>0/10</td></tr>
-            <tr><td>π<sub>0</sub> <span class="cite">[Black et al. 2024]</span></td><td class="avg">3.8</td><td>0/10</td><td>0/10</td><td>2/10</td><td>1/10</td><td>0/10</td><td>1/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>1/10</td><td>0/10</td><td>0/10</td><td>0/10</td></tr>
-            <tr><td>ACT <span class="cite">[Zhao et al. 2023]</span></td><td class="avg">22.3</td><td>2/10</td><td>2/10</td><td>3/10</td><td>2/10</td><td>3/10</td><td>1/10</td><td>2/10</td><td>2/10</td><td>3/10</td><td>4/10</td><td>1/10</td><td>2/10</td><td>1/10</td></tr>
-            <tr><td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td><td class="avg">90.0</td><td>10/10</td><td>8/10</td><td>8/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>9/10</td><td>7/10</td><td>8/10</td><td>9/10</td></tr>
-            <tr class="ours"><td>BridgeVLA <span class="cite">(ours, 10 demos)</span></td><td class="avg best">96.9</td><td>9/10</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>9/10</td></tr>
-            <tr class="ablation"><td>BridgeVLA <span class="cite">(ours, 3 demos)</span></td><td class="avg">95.4</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>7/10</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="table-note">
-        <b>Table 6 — Real Franka results, basic setting.</b> Success counts over 10 trials per task.
-        All methods use 10 demonstrations per task except SpatialVLA&nbsp;(50) and the
-        3-demonstration reference row. ACT is trained single-task, as it is not language-conditioned;
-        test scenes are photographed and manually aligned across methods.
-      </p>
-    </div>
+      <!-- --------------------------------------------- DOBOT: memory platform -->
+      <div class="platform-panel" id="platform-panel-dobot" role="tabpanel"
+           aria-labelledby="platform-tab-dobot" data-panel="dobot">
 
-    <div class="callout reveal" style="margin-top:1rem">
-      <span aria-hidden="true" style="font-size:1.3rem">📉</span>
-      <div>
-        <b>Data efficiency.</b> Cutting training data from 10 to <b>3 demonstrations per task</b> costs
-        1.5 points — 96.9% → <b>95.4%</b>. Over the same 13 tasks, π<sub>0</sub> reaches 3.8% and
-        SpatialVLA 3.1% at 10 demonstrations (28.5% at 50).
-      </div>
-    </div>
-
-    <div class="media-grid cols-3 reveal" style="margin-top:1.2rem">
-      <div class="media-card">
-        <span class="task-chip">Franka · basic</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/redbull_top_shelf/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>“Put the RedBull can in the top shelf”</b></p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">Franka · basic</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/coke_top_shelf/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>“Put the coke can in the top shelf”</b></p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">Franka · basic</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/red_block_blue_plate/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>“Place the red block in the blue plate”</b></p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">Franka · basic</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/press_sanitizer/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>“Press sanitizer”</b></p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">Franka · basic</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/zebra_upper_drawer/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>“Put the zebra in the upper drawer”</b></p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">Franka · basic</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_basic/giraffe_lower_drawer/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>“Put the giraffe in the lower drawer”</b></p>
-      </div>
-    </div>
-
-    <!-- ---------------------------------------------- Franka generalization -->
-    <h3 class="subhead reveal">Generalization to unseen conditions and instructions</h3>
-    <p class="lede reveal">
-      Six generalization settings. Four probe robustness to visual disturbance — <em>Distractor</em>,
-      <em>Lighting</em>, <em>Background</em>, <em>Height</em> — and two probe instruction-level
-      generalization: <em>Combination</em> (object–skill pairings each seen in training, never
-      demonstrated together) and <em>Category</em> (object categories absent from the robot data).
-      BridgeVLA beats RVT-2, the strongest baseline of this suite, in <b>all seven settings, by 32% on
-      average</b>, with the widest margins under Lighting and Combination.
-    </p>
-
-    <figure class="figure reveal" style="margin-top:1rem">
-      <img src="static/images/paper/real_results.png" alt="Bar chart of average success rate over the 13 Franka tasks in the basic setting and six generalization settings, comparing RVT-2, BridgeVLA without pre-training and BridgeVLA.">
-      <figcaption class="figcap">
-        <b>Figure 6 — Real-robot generalization.</b> Average success rate over the 13 Franka tasks in
-        the basic setting and the six generalization settings. The <em>w/o Pre-train</em> bars ablate
-        the 2D-heatmap pre-training: without it the policy cannot generalize in either
-        language-related setting and does not even match RVT-2, while the full model is best in both.
-      </figcaption>
-    </figure>
-
-    <div class="media-grid cols-3 reveal" style="margin-top:1.2rem">
-      <div class="media-card">
-        <span class="task-chip">Generalization</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/distractor/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>Distractor</b> — unseen clutter in the workspace</p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">Generalization</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/lighting/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>Lighting</b> — the widest margin over RVT-2</p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">Generalization</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/background/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>Background</b> — unseen table covering</p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">Generalization</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/height/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>Height</b> — objects raised off the table plane</p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">Generalization</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/combination/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>Combination</b> — object–skill pairings never demonstrated together</p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip">Generalization</span>
-        <div class="media-slot"><video muted loop playsinline controls preload="metadata"><source src="static/videos/real/franka_generalization/category/trial_1.mp4" type="video/mp4"></video></div>
-        <p class="media-caption"><b>Category</b> — object categories unseen in the robot data</p>
-      </div>
-    </div>
-
-    <div class="carousel reveal" id="real-settings" style="margin-top:1.4rem">
-      <div class="frame">
-        <div class="slide is-active">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/real_perturbation_settings.jpg" alt="The distractor, lighting, background and height settings.">
-            <figcaption class="figcap"><b>Visual-disturbance settings</b> — Distractor, Lighting, Background and Height.</figcaption>
-          </figure>
-        </div>
-        <div class="slide">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/combination_within.jpg" alt="The combination setting, part I.">
-            <figcaption class="figcap"><b>Combination setting (I)</b> — unseen object–skill pairings.</figcaption>
-          </figure>
-        </div>
-        <div class="slide">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/combination_across.jpg" alt="The combination setting, part II.">
-            <figcaption class="figcap"><b>Combination setting (II)</b> — unseen object–skill pairings.</figcaption>
-          </figure>
-        </div>
-        <div class="slide">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/category_setting.jpg" alt="The category setting.">
-            <figcaption class="figcap"><b>Category setting</b> — object categories unseen in the robot data.</figcaption>
-          </figure>
-        </div>
-        <div class="slide">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/real_rollouts_1.jpg" alt="Real robot rollouts, part I.">
-            <figcaption class="figcap"><b>Real-robot rollouts (I)</b> — keyframe sequences on the Franka task suite.</figcaption>
-          </figure>
-        </div>
-        <div class="slide">
-          <figure class="figure" style="border:none;box-shadow:none;padding:0">
-            <img src="static/images/paper/real_rollouts_2.jpg" alt="Real robot rollouts, part II.">
-            <figcaption class="figcap"><b>Real-robot rollouts (II)</b> — keyframe sequences on the Franka task suite.</figcaption>
-          </figure>
-        </div>
-      </div>
-      <button class="carousel-btn carousel-prev" type="button" aria-label="Previous">&#10094;</button>
-      <button class="carousel-btn carousel-next" type="button" aria-label="Next">&#10095;</button>
-      <div class="dots"></div>
-    </div>
-
-    <!-- --------------------------------------------- DOBOT: memory on new HW -->
-    <h3 class="subhead reveal">DOBOT CR5A — memory on a held-out embodiment</h3>
+    <h3 class="subhead reveal">Memory on a held-out embodiment</h3>
     <p class="lede reveal">
       The Franka suite is near-saturated, which proves those tasks are solvable from the current frame
       alone. So the memory is tested on a second, held-out embodiment with three tasks built so that
@@ -1156,7 +1033,7 @@
           </table>
         </div>
         <p class="table-note">
-          <b>Table 7 — DOBOT, basic setting.</b> Ten trials per language instruction. <em>Put in
+          <b>Table 6 — DOBOT, basic setting.</b> Ten trials per language instruction. <em>Put in
           Drawer</em> and <em>Put on Shelf</em> are each evaluated with two instructions (upper and
           lower target) and reported as their average.
         </p>
@@ -1188,7 +1065,7 @@
           </table>
         </div>
         <p class="table-note">
-          <b>Table 8 — DOBOT, all settings.</b> Each entry is the unweighted mean over the three
+          <b>Table 7 — DOBOT, all settings.</b> Each entry is the unweighted mean over the three
           memory-dependent or two memory-free tasks; <em>Avg.</em> averages the four disturbance
           settings. The memory advantage survives every disturbance, and on tasks that never needed
           memory BridgeVLA++ is no weaker than the base model in any setting.
@@ -1594,6 +1471,241 @@
 
     </div>
 
+      </div>
+
+      <!-- ------------------------------------------ Franka: general platform -->
+      <div class="platform-panel" id="platform-panel-franka" role="tabpanel"
+           aria-labelledby="platform-tab-franka" data-panel="franka" hidden>
+
+    <h3 class="subhead reveal">General manipulation with 10 demonstrations</h3>
+    <p class="lede reveal">
+      13 tasks spanning 3–9 keyframes each, from simple pick-and-place to long-horizon drawer
+      manipulation, trained from 10 kinesthetic demonstrations per task and evaluated over 10 trials
+      per task per method. BridgeVLA completes <b>96.9%</b> of trials and never falls below 9/10 on any
+      task. The cleanest evidence for the alignment argument is π<sub>0</sub>: it shares the same
+      PaliGemma backbone and differs only in the action interface — and it reaches 3.8%.
+    </p>
+
+    <div class="table-card reveal" style="margin-top:1rem">
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr>
+              <th rowspan="2">Method</th>
+              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+              <th>Soda Can</th><th>Giraffe</th><th>Red Block</th><th>Press</th><th>RedBull</th>
+              <th>RedBull</th><th>Coke</th><th>Orange Block</th><th>Red Block</th>
+              <th>Yellow Block</th><th>Zebra</th><th>Zebra</th><th>Wolf</th>
+            </tr>
+            <tr>
+              <th>Bottom Shelf</th><th>Lower Drawer</th><th>Blue Plate</th><th>Sanitizer</th>
+              <th>Top Shelf</th><th>Bottom Shelf</th><th>Top Shelf</th><th>Green Plate</th>
+              <th>Purple Plate</th><th>Green Plate</th><th>Upper Drawer</th><th>Lower Drawer</th>
+              <th>Upper Drawer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>SpatialVLA (50 demos) <span class="cite">[Qu et al. 2025]</span></td><td class="avg">28.5</td><td>1/10</td><td>1/10</td><td>5/10</td><td>6/10</td><td>3/10</td><td>1/10</td><td>2/10</td><td>6/10</td><td>3/10</td><td>5/10</td><td>2/10</td><td>0/10</td><td>2/10</td></tr>
+            <tr><td>SpatialVLA (10 demos) <span class="cite">[Qu et al. 2025]</span></td><td class="avg">3.1</td><td>0/10</td><td>0/10</td><td>0/10</td><td>2/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>1/10</td><td>1/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>0/10</td></tr>
+            <tr><td>π<sub>0</sub> <span class="cite">[Black et al. 2024]</span></td><td class="avg">3.8</td><td>0/10</td><td>0/10</td><td>2/10</td><td>1/10</td><td>0/10</td><td>1/10</td><td>0/10</td><td>0/10</td><td>0/10</td><td>1/10</td><td>0/10</td><td>0/10</td><td>0/10</td></tr>
+            <tr><td>ACT <span class="cite">[Zhao et al. 2023]</span></td><td class="avg">22.3</td><td>2/10</td><td>2/10</td><td>3/10</td><td>2/10</td><td>3/10</td><td>1/10</td><td>2/10</td><td>2/10</td><td>3/10</td><td>4/10</td><td>1/10</td><td>2/10</td><td>1/10</td></tr>
+            <tr><td>RVT-2 <span class="cite">[Goyal et al. 2024]</span></td><td class="avg">90.0</td><td>10/10</td><td>8/10</td><td>8/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>9/10</td><td>7/10</td><td>8/10</td><td>9/10</td></tr>
+            <tr class="ours"><td>BridgeVLA <span class="cite">(ours, 10 demos)</span></td><td class="avg best">96.9</td><td>9/10</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>9/10</td></tr>
+            <tr class="ablation"><td>BridgeVLA <span class="cite">(ours, 3 demos)</span></td><td class="avg">95.4</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>10/10</td><td>9/10</td><td>10/10</td><td>7/10</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        <b>Table 8 — Real Franka results, basic setting.</b> Success counts over 10 trials per task.
+        All methods use 10 demonstrations per task except SpatialVLA&nbsp;(50) and the
+        3-demonstration reference row. ACT is trained single-task, as it is not language-conditioned;
+        test scenes are photographed and manually aligned across methods.
+      </p>
+    </div>
+
+    <div class="callout reveal" style="margin-top:1rem">
+      <span aria-hidden="true" style="font-size:1.3rem">📉</span>
+      <div>
+        <b>Data efficiency.</b> Cutting training data from 10 to <b>3 demonstrations per task</b> costs
+        1.5 points — 96.9% → <b>95.4%</b>. Over the same 13 tasks, π<sub>0</sub> reaches 3.8% and
+        SpatialVLA 3.1% at 10 demonstrations (28.5% at 50).
+      </div>
+    </div>
+
+    <h4 class="subhead-sm reveal">Generalization to unseen conditions and instructions</h4>
+    <p class="lede reveal">
+      Six generalization settings. Four probe robustness to visual disturbance — <em>Distractor</em>,
+      <em>Lighting</em>, <em>Background</em>, <em>Height</em> — and two probe instruction-level
+      generalization: <em>Combination</em> (object–skill pairings each seen in training, never
+      demonstrated together) and <em>Category</em> (object categories absent from the robot data).
+      BridgeVLA beats RVT-2, the strongest baseline of this suite, in <b>all seven settings, by 32% on
+      average</b>, with the widest margins under Lighting and Combination.
+    </p>
+
+    <figure class="figure reveal" style="margin-top:1rem">
+      <img loading="lazy" src="static/images/paper/real_results.png" alt="Bar chart of average success rate over the 13 Franka tasks in the basic setting and six generalization settings, comparing RVT-2, BridgeVLA without pre-training and BridgeVLA.">
+      <figcaption class="figcap">
+        <b>Figure 4 — Real-robot generalization.</b> Average success rate over the 13 Franka tasks in
+        the basic setting and the six generalization settings. The <em>w/o Pre-train</em> bars ablate
+        the 2D-heatmap pre-training: without it the policy cannot generalize in either
+        language-related setting and does not even match RVT-2, while the full model is best in both.
+      </figcaption>
+    </figure>
+
+    <div class="fig-tabs reveal" id="franka-gallery">
+      <div class="fig-tab-row" role="group" aria-label="Setting illustrations">
+        <button class="picker-chip" type="button" aria-pressed="true" data-fig="0">Visual disturbances</button>
+        <button class="picker-chip" type="button" aria-pressed="false" data-fig="1">Combination (I)</button>
+        <button class="picker-chip" type="button" aria-pressed="false" data-fig="2">Combination (II)</button>
+        <button class="picker-chip" type="button" aria-pressed="false" data-fig="3">Category</button>
+        <button class="picker-chip" type="button" aria-pressed="false" data-fig="4">Rollouts (I)</button>
+        <button class="picker-chip" type="button" aria-pressed="false" data-fig="5">Rollouts (II)</button>
+      </div>
+      <div class="fig-tab-stage">
+        <figure class="is-active">
+          <img src="static/images/paper/real_perturbation_settings.jpg" loading="lazy"
+               alt="The distractor, lighting, background and height settings on the Franka platform.">
+          <figcaption class="figcap"><b>Visual-disturbance settings</b> — Distractor, Lighting,
+            Background and Height, none seen during training.</figcaption>
+        </figure>
+        <figure>
+          <img src="static/images/paper/combination_within.jpg" loading="lazy"
+               alt="The combination setting, part I: unseen object–skill pairings.">
+          <figcaption class="figcap"><b>Combination setting (I)</b> — objects and skills each seen in
+            training, paired in ways never demonstrated together.</figcaption>
+        </figure>
+        <figure>
+          <img src="static/images/paper/combination_across.jpg" loading="lazy"
+               alt="The combination setting, part II: unseen object–skill pairings.">
+          <figcaption class="figcap"><b>Combination setting (II)</b> — further unseen object–skill
+            pairings.</figcaption>
+        </figure>
+        <figure>
+          <img src="static/images/paper/category_setting.jpg" loading="lazy"
+               alt="The category setting: object categories unseen in the robot data.">
+          <figcaption class="figcap"><b>Category setting</b> — seven objects from categories absent
+            from the robot training data.</figcaption>
+        </figure>
+        <figure>
+          <img src="static/images/paper/real_rollouts_1.jpg" loading="lazy"
+               alt="Real robot rollouts on the Franka task suite, part I.">
+          <figcaption class="figcap"><b>Rollouts (I)</b> — keyframe sequences on the Franka task
+            suite.</figcaption>
+        </figure>
+        <figure>
+          <img src="static/images/paper/real_rollouts_2.jpg" loading="lazy"
+               alt="Real robot rollouts on the Franka task suite, part II.">
+          <figcaption class="figcap"><b>Rollouts (II)</b> — keyframe sequences on the Franka task
+            suite.</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <h4 class="subhead-sm reveal">Browse the rollouts</h4>
+    <p class="lede reveal" style="margin-top:-.35rem">
+      Thirteen basic-task instructions and six generalization settings. The clips are being
+      prepared — every selection already shows the paper's success counts and the exact file it
+      will play once the recording lands.
+    </p>
+
+    <script type="application/json" id="franka-demo-data">
+{
+  "methods": ["BridgeVLA (10 demos)", "BridgeVLA (3 demos)", "RVT-2"],
+  "groups": [
+    {
+      "id": "basic",
+      "label": "Basic task",
+      "note": "Trained from 10 kinesthetic demonstrations per task; success counted over 10 trials in the same environment as training."
+    },
+    {
+      "id": "generalization",
+      "label": "Generalization",
+      "note": ""
+    }
+  ],
+  "items": [
+    { "id": "redbull_top_shelf", "group": "basic", "label": "RedBull", "sub": "top shelf",
+      "instruction": "Put the RedBull can in the top shelf", "scores": [10, 9, 9] },
+    { "id": "soda_bottom_shelf", "group": "basic", "label": "Soda Can", "sub": "bottom shelf",
+      "instruction": "Put the soda can in the bottom shelf", "scores": [9, 9, 10] },
+    { "id": "redbull_bottom_shelf", "group": "basic", "label": "RedBull", "sub": "bottom shelf",
+      "instruction": "Put the RedBull can in the bottom shelf", "scores": [10, 10, 10] },
+    { "id": "coke_top_shelf", "group": "basic", "label": "Coke", "sub": "top shelf",
+      "instruction": "Put the coke can in the top shelf", "scores": [10, 10, 10] },
+    { "id": "red_block_blue_plate", "group": "basic", "label": "Red Block", "sub": "blue plate",
+      "instruction": "Place the red block in the blue plate", "scores": [10, 10, 8] },
+    { "id": "orange_block_green_plate", "group": "basic", "label": "Orange Block", "sub": "green plate",
+      "instruction": "Place the orange block in the green plate", "scores": [10, 10, 10] },
+    { "id": "red_block_purple_plate", "group": "basic", "label": "Red Block", "sub": "purple plate",
+      "instruction": "Place the red block in the purple plate", "scores": [10, 10, 9] },
+    { "id": "yellow_block_green_plate", "group": "basic", "label": "Yellow Block", "sub": "green plate",
+      "instruction": "Place the yellow block in the green plate", "scores": [10, 10, 9] },
+    { "id": "press_sanitizer", "group": "basic", "label": "Press Sanitizer",
+      "instruction": "Press sanitizer", "scores": [10, 10, 10] },
+    { "id": "zebra_upper_drawer", "group": "basic", "label": "Zebra", "sub": "upper drawer",
+      "instruction": "Put the zebra in the upper drawer", "scores": [9, 9, 7] },
+    { "id": "zebra_lower_drawer", "group": "basic", "label": "Zebra", "sub": "lower drawer",
+      "instruction": "Put the zebra in the lower drawer", "scores": [10, 10, 8] },
+    { "id": "giraffe_lower_drawer", "group": "basic", "label": "Giraffe", "sub": "lower drawer",
+      "instruction": "Put the giraffe in the lower drawer", "scores": [9, 10, 8] },
+    { "id": "wolf_upper_drawer", "group": "basic", "label": "Wolf", "sub": "upper drawer",
+      "instruction": "Put the wolf in the upper drawer", "scores": [9, 7, 9] },
+
+    { "id": "distractor", "group": "generalization", "label": "Distractor",
+      "note": "Distractor objects visually similar to at least one target object are added to the workspace." },
+    { "id": "lighting", "group": "generalization", "label": "Lighting",
+      "note": "Room lights off. The widest margin over RVT-2 of any setting." },
+    { "id": "background", "group": "generalization", "label": "Background",
+      "note": "The tablecloth is swapped, in three variants unseen in training." },
+    { "id": "height", "group": "generalization", "label": "Height",
+      "note": "Some target objects are raised onto a drawer or box, off the table plane the demonstrations were collected on." },
+    { "id": "combination", "group": "generalization", "label": "Combination",
+      "note": "Thirteen object–skill pairings, each seen in training but never demonstrated together. Together with Category, the setting where 2D-heatmap pre-training matters most." },
+    { "id": "category", "group": "generalization", "label": "Category",
+      "note": "Seven objects from categories entirely absent from the robot training data." }
+  ]
+}
+    </script>
+
+    <div class="demo-explorer reveal" id="franka-explorer"
+         data-video-root="static/videos/real/franka"
+         data-poster-root="static/images/franka_posters">
+
+      <div class="picker-group">
+        <span class="picker-label"><span class="dot-mem" aria-hidden="true"></span>Basic tasks</span>
+        <div class="chip-row" data-fr-group="basic" role="group" aria-label="Basic tasks"></div>
+      </div>
+      <div class="picker-group">
+        <span class="picker-label"><span class="dot-free" aria-hidden="true"></span>Generalization settings</span>
+        <div class="chip-row" data-fr-group="generalization" role="group" aria-label="Generalization settings"></div>
+      </div>
+
+      <div class="demo-stage demo-stage--wide">
+        <div class="demo-video demo-video--wide">
+          <span class="demo-badge" data-fr-badge>Basic</span>
+          <video data-fr-video muted loop playsinline controls preload="none"
+                 aria-label="Selected Franka rollout"></video>
+          <div class="demo-unavailable">
+            <strong>Video coming soon</strong>
+            <span class="demo-path" data-fr-missing-note></span>
+          </div>
+        </div>
+
+        <div class="demo-info">
+          <span class="demo-family" data-fr-family></span>
+          <p class="demo-instruction" data-fr-instruction></p>
+          <p class="demo-setting-note" data-fr-note></p>
+          <div class="score-block" data-fr-scoreblock>
+            <h5>Success over 10 trials — basic setting</h5>
+            <div data-fr-scores></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+      </div>
+    </div>
 
   </div>
 </section>
@@ -1671,7 +1783,7 @@
         <p>
           Without pre-training, the policy fails to generalize in both language-related real-world
           settings (Combination, Category) and cannot even match RVT-2, while the full model is best in
-          both (Figure 6). Fine-tuning on a handful of robot trajectories cannot instil grounding of
+          both (Figure 4). Fine-tuning on a handful of robot trajectories cannot instil grounding of
           language semantics in the heatmap space.
         </p>
       </div>
@@ -1751,18 +1863,6 @@
         </p>
       </div>
     </div>
-
-    <figure class="figure reveal" style="margin-top:1.4rem">
-      <img src="static/images/paper/pred_heatmap.jpg" alt="Predicted heatmaps on pre-training samples after action fine-tuning.">
-      <figcaption class="figcap">
-        <b>Figure 7 — Object grounding survives fine-tuning.</b> Fed samples from the pre-training
-        dataset <em>after</em> action fine-tuning, the model still predicts accurate heatmaps. The
-        residual weakness in the Category setting is therefore not catastrophic forgetting but a domain
-        mismatch: pre-training images are mostly third-person views, unlike orthographic robot renders,
-        and their supervision is object localization, whereas manipulation targets keypoints that need
-        not lie on an object.
-      </figcaption>
-    </figure>
 
   </div>
 </section>
