@@ -20,3 +20,6 @@ venv/
 # Logs / temp
 *.log
 .cache/
+
+# Claude Code (local session state, git worktrees)
+.claude/
