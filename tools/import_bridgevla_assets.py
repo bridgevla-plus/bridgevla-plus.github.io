@@ -2,16 +2,26 @@
 # -*- coding: utf-8 -*-
 """Import the reusable video assets from the BridgeVLA (NeurIPS 2025) project page.
 
-Only the **real-robot** material is imported.  The source page also ships
-RLBench, COLOSSEUM and GemBench rollouts, but those are base-model recordings
-and the simulation panels here show BridgeVLA++ rollouts pulled from our own
-eval logs by `build_sim_demos.py` — mixing the two would misattribute them, so
-they are deliberately left behind.  What comes across:
+The source page's RLBench rollouts are skipped: the RLBench panel here shows
+BridgeVLA++ rollouts pulled from our own eval logs by `build_sim_demos.py`,
+and the source page's clips are BridgeVLA (base model) recordings — mixing
+the two would misattribute a specific per-task number.
+
+COLOSSEUM and GemBench are different: those tables only ever report
+aggregate / per-level numbers (Table 3 is per perturbation axis, Table 4 is
+per generalization level), never a per-task success rate, so there is no
+specific number these illustrative clips could misattribute. They are
+imported here verbatim from the source page — a curated 9 tasks each, the
+same ones the source page itself surfaced — as representative task
+demonstrations rather than evidence for either model's numbers.
+
+What comes across:
 
   * the 18 Franka generalization rollouts (6 settings × 3), which back the
     numbers already in the Franka panel — those are BridgeVLA results in the
     journal extension too, so no attribution problem;
   * the 3 Category-setting failure cases;
+  * 9 COLOSSEUM and 9 GemBench task demonstrations (see below);
   * with `--with-overview` only, the narrated BridgeVLA explainer — it is not
     on the page at the moment.
 
@@ -33,6 +43,8 @@ HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRANKA_OUT = os.path.join(HERE, 'static/videos/real/franka')
 FRANKA_POSTERS = os.path.join(HERE, 'static/images/franka_posters')
 OVERVIEW_OUT = os.path.join(HERE, 'static/videos/overview')
+SIM_OUT = os.path.join(HERE, 'static/videos/sim')
+SIM_POSTERS = os.path.join(HERE, 'static/images/sim_posters')
 
 # --------------------------------------------------------------- real robot
 
@@ -67,6 +79,38 @@ FRANKA_FAILURE = {
     'bread_green_plate':  'real_reduce_size/failure/category_place_the_bread_in_the_green_plate_4_52_caption.mp4',
     'apple_top_shelf':    'real_reduce_size/failure/category_put_the_apple_in_the_top_shelf_2_54_caption.mp4',
     'peach_bottom_shelf': 'real_reduce_size/failure/category_put_the_peach_in_the_bottom_shelf_5_22_caption.mp4',
+}
+
+# --------------------------------------------------------------- simulation
+
+# The 9 COLOSSEUM task clips the source page itself surfaced (out of the 12
+# it shipped — 3 more are in the source tree but were left commented out on
+# the source page, and stay left out here too for the same reason).
+COLOSSEUM_DEMOS = {
+    'scoop_with_spatula': 'COLOSSEUM/variations/scoop_with_spatula_11_scoop_up_the_cube_and_lift_it_with_the_spatula_success_2.mp4',
+    'insert_square_peg':  'COLOSSEUM/variations/insert_onto_square_peg_put_the_ring_on_the_red_spoke_success_0.mp4',
+    'close_laptop_lid':   'COLOSSEUM/variations/close_laptop_lid_2_close_laptop_lid_success_9.mp4',
+    'move_hanger':        'COLOSSEUM/variations/move_hanger_move_hanger_onto_the_other_rackmove_the_hanger_from_one_rack_to_the_other_success_0.mp4',
+    'basketball_in_hoop': 'COLOSSEUM/variations/basketball_in_hoop_put_the_ball_in_the_hoop_success_0.mp4',
+    'reach_and_drag':     'COLOSSEUM/variations/reach_and_drag_10_use_the_stick_to_drag_the_cube_onto_the_red_target_success_13.mp4',
+    'straighten_rope':    'COLOSSEUM/variations/straighten_rope_straighten_rope_success_0.mp4',
+    'turn_oven_on':       'COLOSSEUM/variations/turn_oven_on_1_turn_on_the_oven_success_16.mp4',
+    'hockey':             'COLOSSEUM/variations/hockey_1_hit_the_ball_into_the_net_success_2.mp4',
+}
+
+# The 9 GemBench task clips the source page shipped (all of them — the source
+# tree also has `put_all_groceries_in_cupboard_sample.mp4`, which the source
+# page itself never referenced, so it stays out here too).
+GEMBENCH_DEMOS = {
+    'stack_blocks':          'gembench/stack_blocks_sample.mp4',
+    'stack_cups':            'gembench/stack_cups_sample.mp4',
+    'put_money_in_safe':     'gembench/put_money_in_safe_sample.mp4',
+    'close_laptop_lid':      'gembench/close_laptoplid_sample.mp4',
+    'close_microwave':       'gembench/close_microwave_sample.mp4',
+    'close_grill':           'gembench/close_grill_sample.mp4',
+    'push_button':           'gembench/push_button_sample.mp4',
+    'take_shoe_out_of_box':  'gembench/take_shoe_out_of_box_sample.mp4',
+    'toilet_seat_up':        'gembench/toilet_seat_up_sample.mp4',
 }
 
 # The narrated BridgeVLA explainer.  Currently **not** on the page and behind
@@ -153,6 +197,12 @@ def main() -> None:
         ('real/franka/failure', FRANKA_FAILURE,
          lambda s: os.path.join(FRANKA_OUT, 'failure', f'{s}.mp4'),
          lambda s: os.path.join(FRANKA_POSTERS, f'failure__{s}.jpg'), False, None),
+        ('sim/colosseum', COLOSSEUM_DEMOS,
+         lambda s: os.path.join(SIM_OUT, 'colosseum', s, 'trial_1.mp4'),
+         lambda s: os.path.join(SIM_POSTERS, f'colosseum__{s}.jpg'), False, None),
+        ('sim/gembench', GEMBENCH_DEMOS,
+         lambda s: os.path.join(SIM_OUT, 'gembench', s, 'trial_1.mp4'),
+         lambda s: os.path.join(SIM_POSTERS, f'gembench__{s}.jpg'), False, None),
     ]
     if args.with_overview:
         jobs.append(

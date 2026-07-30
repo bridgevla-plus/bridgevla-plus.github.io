@@ -1,162 +1,6 @@
 {
  "clips": [
   {
-   "bench": "rlbench",
-   "slug": "close_jar",
-   "task": "close_jar",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/close_jar/videos/episode_1_close_the_olive_jar_success_1.mp4",
-   "out": "static/videos/sim/rlbench/close_jar/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__close_jar.jpg",
-   "frames": 143,
-   "dur": 5.72,
-   "kind": "motion",
-   "instr": "close_the_olive_jar"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "drag_stick",
-   "task": "reach_and_drag",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/reach_and_drag/videos/episode_0_use_the_stick_to_drag_the_cube_onto_the_purple_target_success_0.mp4",
-   "out": "static/videos/sim/rlbench/drag_stick/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__drag_stick.jpg",
-   "frames": 154,
-   "dur": 6.16,
-   "kind": "motion",
-   "instr": "use_the_stick_to_drag_the_cube_onto_the_purple_target"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "meat_off_grill",
-   "task": "meat_off_grill",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/meat_off_grill/videos/episode_1_take_the_chicken_off_the_grill_success_1.mp4",
-   "out": "static/videos/sim/rlbench/meat_off_grill/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__meat_off_grill.jpg",
-   "frames": 144,
-   "dur": 5.76,
-   "kind": "motion",
-   "instr": "take_the_chicken_off_the_grill"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "open_drawer",
-   "task": "open_drawer",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/open_drawer/videos/episode_0_open_the_bottom_drawer_success_0.mp4",
-   "out": "static/videos/sim/rlbench/open_drawer/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__open_drawer.jpg",
-   "frames": 110,
-   "dur": 4.4,
-   "kind": "motion",
-   "instr": "open_the_bottom_drawer"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "place_cups",
-   "task": "place_cups",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_222517/visualize/place_cups/videos/episode_0_place_1_cup_on_the_cup_holder_success_0.mp4",
-   "out": "static/videos/sim/rlbench/place_cups/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__place_cups.jpg",
-   "frames": 646,
-   "dur": 25.84,
-   "kind": "motion",
-   "instr": "place_1_cup_on_the_cup_holder"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "place_wine",
-   "task": "place_wine_at_rack_location",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/place_wine_at_rack_location/videos/episode_2_stack_the_wine_bottle_to_the_right_of_the_rack_success_2.mp4",
-   "out": "static/videos/sim/rlbench/place_wine/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__place_wine.jpg",
-   "frames": 199,
-   "dur": 7.96,
-   "kind": "motion",
-   "instr": "stack_the_wine_bottle_to_the_right_of_the_rack"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "push_buttons",
-   "task": "push_buttons",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/push_buttons/videos/episode_0_push_the_maroon_button,_then_push_the_green_button,_then_push_the_gray_button_success_0.mp4",
-   "out": "static/videos/sim/rlbench/push_buttons/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__push_buttons.jpg",
-   "frames": 137,
-   "dur": 5.48,
-   "kind": "motion",
-   "instr": "push_the_maroon_button,_then_push_the_green_button,_then_push_the_gray_button"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "put_in_cupboard",
-   "task": "put_groceries_in_cupboard",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/put_groceries_in_cupboard/videos/episode_1_put_the_crackers_in_the_cupboard_success_1.mp4",
-   "out": "static/videos/sim/rlbench/put_in_cupboard/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__put_in_cupboard.jpg",
-   "frames": 248,
-   "dur": 9.92,
-   "kind": "motion",
-   "instr": "put_the_crackers_in_the_cupboard"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "put_in_drawer",
-   "task": "put_item_in_drawer",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/put_item_in_drawer/videos/episode_0_put_the_item_in_the_top_drawer_success_0.mp4",
-   "out": "static/videos/sim/rlbench/put_in_drawer/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__put_in_drawer.jpg",
-   "frames": 373,
-   "dur": 14.92,
-   "kind": "motion",
-   "instr": "put_the_item_in_the_top_drawer"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "put_in_safe",
-   "task": "put_money_in_safe",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/put_money_in_safe/videos/episode_1_put_the_money_away_in_the_safe_on_the_middle_shelf_success_1.mp4",
-   "out": "static/videos/sim/rlbench/put_in_safe/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__put_in_safe.jpg",
-   "frames": 185,
-   "dur": 7.4,
-   "kind": "motion",
-   "instr": "put_the_money_away_in_the_safe_on_the_middle_shelf"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "screw_bulb",
-   "task": "light_bulb_in",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/light_bulb_in/videos/episode_2_screw_in_the_azure_light_bulb_success_2.mp4",
-   "out": "static/videos/sim/rlbench/screw_bulb/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__screw_bulb.jpg",
-   "frames": 245,
-   "dur": 9.8,
-   "kind": "motion",
-   "instr": "screw_in_the_azure_light_bulb"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "slide_block",
-   "task": "slide_block_to_color_target",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/slide_block_to_color_target/videos/episode_1_slide_the_block_to_blue_target_success_1.mp4",
-   "out": "static/videos/sim/rlbench/slide_block/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__slide_block.jpg",
-   "frames": 164,
-   "dur": 6.56,
-   "kind": "motion",
-   "instr": "slide_the_block_to_blue_target"
-  },
-  {
-   "bench": "rlbench",
-   "slug": "sort_shape",
-   "task": "place_shape_in_shape_sorter",
-   "src": "train/7_3_rlbench_07_04_02_04/eval/eval_rlbench_sam_20260704_191310/visualize/place_shape_in_shape_sorter/videos/episode_0_put_the_moon_in_the_shape_sorter_success_0.mp4",
-   "out": "static/videos/sim/rlbench/sort_shape/trial_1.mp4",
-   "poster": "static/images/sim_posters/rlbench__sort_shape.jpg",
-   "frames": 174,
-   "dur": 6.96,
-   "kind": "motion",
-   "instr": "put_the_moon_in_the_shape_sorter"
-  },
-  {
    "bench": "rmbench",
    "slug": "observe_and_pick_up",
    "task": "observe_and_pickup",
@@ -227,39 +71,207 @@
    "dur": 9.13,
    "kind": "motion",
    "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "close_jar",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_close_the_black_jar_success_0.mp4",
+   "out": "static/videos/sim/rlbench/close_jar/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__close_jar.jpg",
+   "frames": 125,
+   "dur": 5.0,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "drag_stick",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_use_the_stick_to_drag_the_cube_onto_the_purple_target_success_0.mp4",
+   "out": "static/videos/sim/rlbench/drag_stick/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__drag_stick.jpg",
+   "frames": 167,
+   "dur": 6.68,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "insert_peg",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_put_the_ring_on_the_violet_spoke_success_0.mp4",
+   "out": "static/videos/sim/rlbench/insert_peg/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__insert_peg.jpg",
+   "frames": 159,
+   "dur": 6.36,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "meat_off_grill",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_take_the_steak_off_the_grill_success_0.mp4",
+   "out": "static/videos/sim/rlbench/meat_off_grill/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__meat_off_grill.jpg",
+   "frames": 97,
+   "dur": 3.88,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "open_drawer",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_1_open_the_top_drawer_success_1.mp4",
+   "out": "static/videos/sim/rlbench/open_drawer/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__open_drawer.jpg",
+   "frames": 103,
+   "dur": 4.12,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "place_cups",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_place_3_cups_on_the_cup_holder_success_0.mp4",
+   "out": "static/videos/sim/rlbench/place_cups/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__place_cups.jpg",
+   "frames": 680,
+   "dur": 27.2,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "place_wine",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_stack_the_wine_bottle_to_the_left_of_the_rack_success_0.mp4",
+   "out": "static/videos/sim/rlbench/place_wine/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__place_wine.jpg",
+   "frames": 194,
+   "dur": 7.76,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "push_buttons",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_push_the_maroon_button,_then_push_the_green_button,_then_push_the_gray_button_success_0.mp4",
+   "out": "static/videos/sim/rlbench/push_buttons/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__push_buttons.jpg",
+   "frames": 153,
+   "dur": 6.12,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "put_in_cupboard",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_put_the_soup_in_the_cupboard_success_0.mp4",
+   "out": "static/videos/sim/rlbench/put_in_cupboard/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__put_in_cupboard.jpg",
+   "frames": 213,
+   "dur": 8.52,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "put_in_drawer",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_1_put_the_item_in_the_bottom_drawer_success_1.mp4",
+   "out": "static/videos/sim/rlbench/put_in_drawer/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__put_in_drawer.jpg",
+   "frames": 403,
+   "dur": 16.12,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "put_in_safe",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_put_the_money_away_in_the_safe_on_the_bottom_shelf_success_0.mp4",
+   "out": "static/videos/sim/rlbench/put_in_safe/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__put_in_safe.jpg",
+   "frames": 174,
+   "dur": 6.96,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "screw_bulb",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_screw_in_the_magenta_light_bulb_success_0.mp4",
+   "out": "static/videos/sim/rlbench/screw_bulb/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__screw_bulb.jpg",
+   "frames": 240,
+   "dur": 9.6,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "slide_block",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_1_slide_the_block_to_blue_target_success_1.mp4",
+   "out": "static/videos/sim/rlbench/slide_block/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__slide_block.jpg",
+   "frames": 183,
+   "dur": 7.32,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "sort_shape",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_put_the_moon_in_the_shape_sorter_success_0.mp4",
+   "out": "static/videos/sim/rlbench/sort_shape/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__sort_shape.jpg",
+   "frames": 176,
+   "dur": 7.04,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "stack_blocks",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_stack_3_azure_blocks_success_0.mp4",
+   "out": "static/videos/sim/rlbench/stack_blocks/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__stack_blocks.jpg",
+   "frames": 427,
+   "dur": 17.08,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "stack_cups",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_stack_the_other_cups_on_top_of_the_blue_cup_success_0.mp4",
+   "out": "static/videos/sim/rlbench/stack_cups/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__stack_cups.jpg",
+   "frames": 221,
+   "dur": 8.84,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "sweep_to_dustpan",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_0_sweep_dirt_to_the_short_dustpan_success_0.mp4",
+   "out": "static/videos/sim/rlbench/sweep_to_dustpan/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__sweep_to_dustpan.jpg",
+   "frames": 130,
+   "dur": 5.2,
+   "kind": "motion",
+   "instr": ""
+  },
+  {
+   "bench": "rlbench",
+   "slug": "turn_tap",
+   "src": "train/7_10_rlbench_all_07_11_00_08/eval/model_130/20260729_234218/videos/episode_2_turn_right_tap_success_1.mp4",
+   "out": "static/videos/sim/rlbench/turn_tap/trial_1.mp4",
+   "poster": "static/images/sim_posters/rlbench__turn_tap.jpg",
+   "frames": 118,
+   "dur": 4.72,
+   "kind": "motion",
+   "instr": ""
   }
  ],
  "missing": [
-  [
-   "rlbench",
-   "insert_peg",
-   "insert_onto_square_peg",
-   "no successful clip saved"
-  ],
-  [
-   "rlbench",
-   "stack_blocks",
-   "stack_blocks",
-   "no successful clip saved"
-  ],
-  [
-   "rlbench",
-   "stack_cups",
-   "stack_cups",
-   "no successful clip saved"
-  ],
-  [
-   "rlbench",
-   "sweep_to_dustpan",
-   "sweep_to_dustpan_of_size",
-   "no successful clip saved"
-  ],
-  [
-   "rlbench",
-   "turn_tap",
-   "turn_tap",
-   "no successful clip saved"
-  ],
   [
    "rmbench",
    "rearrange_blocks",
