@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Pull one successful simulation rollout per task out of the training logs.
 
-The eval runs write videos in four different conventions, and success is
+The eval runs write videos in three different conventions, and success is
 recorded differently in each:
 
   RLBench   logs/train/<run>/eval/**/visualize/<task>/videos/
@@ -11,14 +11,6 @@ recorded differently in each:
             episode<i>.mp4  +  _result.txt                        -> `_result.txt` says it
   MemoryBench logs/train_memorybench/<run>/eval/memorybench_viz/<model>/<seed>/
             videos/<task>+<var>/<i>_SR<value>/global.mp4          -> dir name says it
-  COLOSSEUM logs/train_colosseum/<run>/eval/**/visualize/<task>_<perturbation>/videos/
-            <task>_<perturbation>_episode_<i>_<instruction>_(success|fail)_<n>.mp4
-            -> same NAMED convention as RLBench, just with a `_<perturbation index>`
-               suffix on the task folder that gets stripped back off
-  GemBench  logs/train_gembench/<run>/eval/gembench_viz/<model>/<seed>/<split>/
-            videos/<task>+<var>/<i>_SR<value>/global.mp4          -> dir name says it,
-            same convention as MemoryBench with an extra L1/L2/L3/L4 `<split>` layer
-            (`train` = L1 novel placements of the training tasks)
 
 Only *main-model* runs are eligible: any run whose name contains no_mem /
 no_spatial_mem / no_temporal_mem is an ablation and must never be presented as
@@ -78,49 +70,6 @@ MEMORYBENCH = {
     'reopen_drawer':   'reopen_drawer',
     'put_block_back':  'put_block_back',
     'rearrange_block': 'rearrange_block',
-}
-# page slug -> log task name (perturbation-index suffix is stripped during
-# collection, so this is just the bare COLOSSEUM task name).  `wipe_desk` has
-# no successful episode anywhere in the recorded viz sweep and is left out
-# rather than shown as a fabricated success.
-COLOSSEUM = {
-    'basketball_in_hoop':  'basketball_in_hoop',
-    'close_box':           'close_box',
-    'close_laptop_lid':    'close_laptop_lid',
-    'empty_dishwasher':    'empty_dishwasher',
-    'get_ice_from_fridge': 'get_ice_from_fridge',
-    'hockey':              'hockey',
-    'insert_square_peg':   'insert_onto_square_peg',
-    'meat_on_grill':       'meat_on_grill',
-    'move_hanger':         'move_hanger',
-    'open_drawer':         'open_drawer',
-    'place_wine':          'place_wine_at_rack_location',
-    'put_money_in_safe':   'put_money_in_safe',
-    'reach_and_drag':      'reach_and_drag',
-    'scoop_with_spatula':  'scoop_with_spatula',
-    'setup_chess':         'setup_chess',
-    'slide_block':         'slide_block_to_target',
-    'stack_cups':          'stack_cups',
-    'straighten_rope':     'straighten_rope',
-    'turn_oven_on':        'turn_oven_on',
-}
-# page slug -> `<split>/<task>` log key, `split` one of train/test_l2/test_l3/
-# test_l4 (the GemBench L1-L4 generalization levels).  Curated to span all
-# four levels rather than dumping all 60 tasks; every entry has at least one
-# recorded success.
-GEMBENCH = {
-    'push_button':           'train/push_button',
-    'pick_up_cup':           'train/pick_up_cup',
-    'stack_blocks':          'train/stack_blocks',
-    'put_money_in_safe':     'train/put_money_in_safe',
-    'pick_and_lift_cylinder':'test_l2/pick_and_lift_cylinder',
-    'light_bulb_in':         'test_l2/light_bulb_in',
-    'put_cube_in_safe':      'test_l2/put_cube_in_safe',
-    'open_drawer':           'test_l3/open_drawer2',
-    'close_fridge':          'test_l3/close_fridge2',
-    'close_grill':           'test_l3/close_grill',
-    'push_buttons_long':     'test_l4/push_buttons4',
-    'tower':                 'test_l4/tower4',
 }
 
 TARGET_SECONDS = 8.0          # stretch keyframe-only clips to about this long
@@ -200,39 +149,6 @@ def collect():
         m = re.fullmatch(r'(\d+)_SR([0-9.]+)', rel[-1])
         if m and float(m.group(2)) >= 1.0:
             add('memorybench', rel[-2].split('+')[0], os.path.join(dirpath, 'global.mp4'))
-
-    # ---- COLOSSEUM -------------------------------------------------------
-    # Same `visualize/<taskvar>/videos/` layout and NAMED filename convention
-    # as RLBench; `<taskvar>` is `<task>_<perturbation index>`, so the trailing
-    # `_<digits>` is stripped to recover the bare task name.
-    base = os.path.join(LOGS, 'train_colosseum')
-    for dirpath, _d, files in os.walk(base):
-        rel = os.path.relpath(dirpath, base).split(os.sep)
-        if is_ablation(rel[0]) or 'visualize' not in rel[:-1]:
-            continue
-        taskvar = rel[rel.index('visualize') + 1]
-        task = re.sub(r'_\d+$', '', taskvar)
-        for f in files:
-            m = NAMED.search(f)
-            if m and m.group(3) == 'success':
-                add('colosseum', task, os.path.join(dirpath, f), m.group(2))
-
-    # ---- GemBench --------------------------------------------------------
-    # Same `<task>+<var>/<i>_SR<value>/global.mp4` layout as MemoryBench, with
-    # an extra L1-L4 split folder (train/test_l2/test_l3/test_l4) in between;
-    # the task key carries that split so a level's task never gets confused
-    # with the same-named training task in another level.
-    base = os.path.join(LOGS, 'train_gembench')
-    for dirpath, _d, files in os.walk(base):
-        rel = os.path.relpath(dirpath, base).split(os.sep)
-        if is_ablation(rel[0]) or 'global.mp4' not in files or len(rel) < 2:
-            continue
-        m = re.fullmatch(r'(\d+)_SR([0-9.]+)', rel[-1])
-        if not (m and float(m.group(2)) >= 1.0):
-            continue
-        split = next((r for r in rel if r in ('train', 'test_l2', 'test_l3', 'test_l4')), 'train')
-        task = re.sub(r'_peract$', '', rel[-2].split('+')[0])
-        add('gembench', f'{split}/{task}', os.path.join(dirpath, 'global.mp4'))
     return found
 
 
@@ -291,8 +207,7 @@ def main():
     found = collect()
     manifest, missing = [], []
     for bench, mapping in (('rlbench', RLBENCH), ('rmbench', RMBENCH),
-                           ('memorybench', MEMORYBENCH), ('colosseum', COLOSSEUM),
-                           ('gembench', GEMBENCH)):
+                           ('memorybench', MEMORYBENCH)):
         print(f'\n=== {bench} ===')
         for slug, task in mapping.items():
             cands = found.get((bench, task), [])
