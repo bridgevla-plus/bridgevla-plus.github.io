@@ -347,7 +347,7 @@
     </div>
 
     <figure class="figure reveal" style="margin-top:1.8rem">
-      <img src="static/images/paper/architecture.png" alt="BridgeVLA and BridgeVLA++ architecture: 2D-heatmap pre-training, 3D-action fine-tuning, and the temporal and spatial memory injection blocks.">
+      <img src="static/images/paper/architecture.png" alt="BridgeVLA and BridgeVLA++ architecture: 2D-heatmap pre-training, 3D-action fine-tuning, and the temporal and spatial memory injection blocks. The temporal block runs cross- and self-attention over history keyframes and an anchor frame chosen by a keyframe selector; the spatial block attends to a local point-cloud projection of the initial scene.">
       <figcaption class="figcap">
         <b>Figure 2 — Architecture.</b> Top: the 2D-heatmap pre-training and 3D-action fine-tuning
         pipeline of BridgeVLA. Bottom: the spatio-temporal memory of BridgeVLA++. At the coarse stage
@@ -1215,142 +1215,29 @@
 <section class="section" style="padding-top:1.4rem">
   <div class="wrap-wide">
 
-    <figure class="figure reveal">
-      <img src="static/images/paper/real_setup.jpg" alt="Real robot setup: Franka Research 3 and DOBOT CR5A, each observed by a static ZED 2i stereo camera, two summary bar charts, and the basic, generalization and memory evaluation settings.">
-      <figcaption class="figcap">
-        <b>Figure 3 — Real-robot evaluation setup.</b> Top left: the general-manipulation platform — a
-        7-DoF Franka Research 3 with a parallel-jaw gripper, observed by a single static ZED 2i stereo
-        camera that provides the colored point cloud. Top right: the memory platform — a 6-DoF DOBOT
-        CR5A arm with the same camera configuration. Top centre: the average gain of our models over the
-        strongest prior method in each task group — RVT-2 across the seven Franka settings, and SAM2Act+
-        in the DOBOT basic setting. Bottom: the evaluation settings — the Franka suite covers one basic
-        and six generalization settings (Background, Lighting, Distractor, Combination, Height,
-        Category); the DOBOT suite covers the memory-dependent setting.
-      </figcaption>
-    </figure>
+    <!-- ------------------------------------------------ rollout video module -->
+    <div class="platform-explorer" id="rollout-videos">
+      <h3 class="subhead reveal">Rollout videos</h3>
+      <p class="lede reveal">
+        Every real-robot recording, up front. These two buttons switch the videos only — the
+        written analysis further down the page has its own DOBOT / Franka switch.
+      </p>
 
-    <div class="platform-explorer" id="platform-explorer">
-      <div class="platform-tabs reveal" role="tablist" aria-label="Robot platform">
-        <button class="platform-tab" type="button" role="tab" id="platform-tab-dobot"
-                aria-selected="true" aria-controls="platform-panel-dobot" data-tab="dobot">
+      <div class="platform-tabs reveal" role="tablist" aria-label="Rollout videos — robot platform">
+        <button class="platform-tab" type="button" role="tab" id="video-tab-dobot"
+                aria-selected="true" aria-controls="video-panel-dobot" data-tab="dobot">
           <span class="pt-name">DOBOT CR5A</span>
-          <span class="pt-sub">Memory on a held-out embodiment — all 35 rollout videos</span>
+          <span class="pt-sub">All 35 memory rollouts — 7 instructions × 5 settings</span>
         </button>
-        <button class="platform-tab" type="button" role="tab" id="platform-tab-franka" tabindex="-1"
-                aria-selected="false" aria-controls="platform-panel-franka" data-tab="franka">
+        <button class="platform-tab" type="button" role="tab" id="video-tab-franka" tabindex="-1"
+                aria-selected="false" aria-controls="video-panel-franka" data-tab="franka">
           <span class="pt-name">Franka Research 3</span>
-          <span class="pt-sub">General manipulation from 10 demos + six generalization settings</span>
+          <span class="pt-sub">Six generalization settings × 3 rollouts, plus the failure cases</span>
         </button>
       </div>
 
-      <!-- --------------------------------------------- DOBOT: memory platform -->
-      <div class="platform-panel" id="platform-panel-dobot" role="tabpanel"
-           aria-labelledby="platform-tab-dobot" data-panel="dobot">
-
-    <h3 class="subhead reveal">Memory on a held-out embodiment</h3>
-    <p class="lede reveal">
-      The Franka suite is near-saturated, which proves those tasks are solvable from the current frame
-      alone. So the memory is tested on a second, held-out embodiment with three tasks built so that
-      the current observation <em>underdetermines</em> the next action — plus two ordinary
-      pick-and-place families that check the memory costs nothing on tasks that never needed it.
-      All methods train on the same 70 demonstrations (10 per language instruction).
-    </p>
-
-    <div class="idea-grid reveal" style="margin-top:1.1rem">
-      <div class="idea">
-        <div class="num">①</div>
-        <h4>Press Button — <em>counting</em></h4>
-        <p>
-          Press the blue button exactly <em>N</em> times (given in words, “twice” / “three times”),
-          then the yellow button once. A press leaves no visible trace, so every post-press frame is
-          identical up to nuisance variation: the running count exists only in the policy's history.
-          Neither baseline solves a single trial in any setting.
-        </p>
-      </div>
-      <div class="idea">
-        <div class="num">②</div>
-        <h4>Cover Blocks — <em>occlusion</em></h4>
-        <p>
-          Cover all three blocks, then uncover only the block of the instructed color. Covering erases
-          the color evidence from the scene, so the second phase is solvable only from the
-          colour-to-location bindings formed before the covers went on.
-        </p>
-      </div>
-      <div class="idea">
-        <div class="num">③</div>
-        <h4>Swap Eggplant — <em>rearrangement</em></h4>
-        <p>
-          Two look-alike eggplants must end up each on the other's initial plate, using a third plate
-          as a buffer that must be empty again at the end. Intermediate configurations recur across
-          phases, so the correct next placement depends on which eggplant has already moved.
-        </p>
-      </div>
-    </div>
-
-    <div class="stack reveal" style="margin-top:1.3rem">
-      <div class="table-card">
-        <div class="table-scroll">
-          <table class="data">
-            <thead>
-              <tr>
-                <th rowspan="2">Method</th><th rowspan="2">Mem.</th>
-                <th colspan="3" style="border-left:1px solid rgba(95,104,184,.25)">Memory-dependent</th>
-                <th colspan="2" style="border-left:1px solid rgba(95,104,184,.25)">Memory-free</th>
-              </tr>
-              <tr>
-                <th style="border-left:1px solid rgba(95,104,184,.25)">Cover Blocks</th>
-                <th>Press Button</th><th>Swap Eggplant</th>
-                <th style="border-left:1px solid rgba(95,104,184,.25)">Put in Drawer</th>
-                <th>Put on Shelf</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td><span class="yes">✓</span></td><td>20.0%</td><td>0.0%</td><td>70.0%</td><td>60.0%</td><td>20.0%</td></tr>
-              <tr class="ours"><td>BridgeVLA <span class="cite">(base)</span></td><td><span class="no">✗</span></td><td>0.0%</td><td>0.0%</td><td>60.0%</td><td>100.0%</td><td>90.0%</td></tr>
-              <tr class="ours"><td>BridgeVLA++</td><td><span class="yes">✓</span></td><td class="best">100.0%</td><td class="best">100.0%</td><td class="best">80.0%</td><td class="best">100.0%</td><td class="best">100.0%</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="table-note">
-          <b>Table 6 — DOBOT, basic setting.</b> Ten trials per language instruction. <em>Put in
-          Drawer</em> and <em>Put on Shelf</em> are each evaluated with two instructions (upper and
-          lower target) and reported as their average.
-        </p>
-      </div>
-
-      <div class="table-card">
-        <div class="table-scroll">
-          <table class="data">
-            <thead>
-              <tr>
-                <th rowspan="2">Method</th><th rowspan="2">Mem.</th><th rowspan="2">Basic</th>
-                <th colspan="5" style="border-left:1px solid rgba(95,104,184,.25)">Visual disturbance</th>
-              </tr>
-              <tr>
-                <th style="border-left:1px solid rgba(95,104,184,.25)">Distractor</th>
-                <th>Background</th><th>Height</th><th>Lighting</th><th class="avg"><em>Avg.</em></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="group-head"><td colspan="8">Memory-dependent tasks</td></tr>
-              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td><span class="yes">✓</span></td><td>30.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>3.3%</td><td class="avg">0.8%</td></tr>
-              <tr class="ours"><td>BridgeVLA <span class="cite">(base)</span></td><td><span class="no">✗</span></td><td>20.0%</td><td>20.0%</td><td>23.3%</td><td>6.7%</td><td>13.3%</td><td class="avg">15.8%</td></tr>
-              <tr class="ours"><td>BridgeVLA++</td><td><span class="yes">✓</span></td><td class="best">93.3%</td><td class="best">73.3%</td><td class="best">86.7%</td><td class="best">76.7%</td><td class="best">76.7%</td><td class="avg best">78.3%</td></tr>
-              <tr class="group-head"><td colspan="8">Memory-free tasks</td></tr>
-              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td><span class="yes">✓</span></td><td>40.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>7.5%</td><td class="avg">1.9%</td></tr>
-              <tr class="ours"><td>BridgeVLA <span class="cite">(base)</span></td><td><span class="no">✗</span></td><td>95.0%</td><td>57.5%</td><td>72.5%</td><td>67.5%</td><td>67.5%</td><td class="avg">66.3%</td></tr>
-              <tr class="ours"><td>BridgeVLA++</td><td><span class="yes">✓</span></td><td class="best">100.0%</td><td class="best">70.0%</td><td class="best">100.0%</td><td class="best">82.5%</td><td class="best">75.0%</td><td class="avg best">81.9%</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="table-note">
-          <b>Table 7 — DOBOT, all settings.</b> Each entry is the unweighted mean over the three
-          memory-dependent or two memory-free tasks; <em>Avg.</em> averages the four disturbance
-          settings. The memory advantage survives every disturbance, and on tasks that never needed
-          memory BridgeVLA++ is no weaker than the base model in any setting.
-        </p>
-      </div>
-    </div>
+      <div class="platform-panel" id="video-panel-dobot" role="tabpanel"
+           aria-labelledby="video-tab-dobot" data-panel="dobot">
 
     <h4 class="subhead-sm reveal">Browse every rollout</h4>
     <p class="lede reveal" style="margin-top:-.35rem">
@@ -1749,6 +1636,359 @@
       </div>
 
     </div>
+      </div>
+
+      <div class="platform-panel" id="video-panel-franka" role="tabpanel"
+           aria-labelledby="video-tab-franka" data-panel="franka" hidden>
+
+    <h4 class="subhead-sm reveal">Browse the generalization rollouts</h4>
+    <p class="lede reveal" style="margin-top:-.35rem">
+      Six generalization settings, each recorded on three different tasks — switch with the
+      <em>Rollout</em> buttons over the video. All real-Franka clips play at <b>6×</b> real
+      time, as the badge in the corner marks.
+    </p>
+
+    <script type="application/json" id="franka-demo-data">
+{
+  "groups": [
+    {
+      "id": "generalization",
+      "label": "Generalization",
+      "note": ""
+    }
+  ],
+  "items": [
+    {
+      "id": "distractor",
+      "group": "generalization",
+      "label": "Distractor",
+      "note": "Distractor objects visually similar to at least one target object are added to the workspace.",
+      "clips": [
+        {
+          "id": "distractor",
+          "instruction": "Place the orange block in the green plate"
+        },
+        {
+          "id": "distractor_2",
+          "instruction": "Put the giraffe in the lower drawer"
+        },
+        {
+          "id": "distractor_3",
+          "instruction": "Press sanitizer"
+        }
+      ]
+    },
+    {
+      "id": "lighting",
+      "group": "generalization",
+      "label": "Lighting",
+      "note": "Room lights off. The widest margin over RVT-2 of any setting.",
+      "clips": [
+        {
+          "id": "lighting",
+          "instruction": "Put the RedBull can in the top shelf"
+        },
+        {
+          "id": "lighting_2",
+          "instruction": "Press sanitizer"
+        },
+        {
+          "id": "lighting_3",
+          "instruction": "Put the giraffe in the lower drawer"
+        }
+      ]
+    },
+    {
+      "id": "background",
+      "group": "generalization",
+      "label": "Background",
+      "note": "The tablecloth is swapped, in three variants unseen in training.",
+      "clips": [
+        {
+          "id": "background",
+          "instruction": "Place the red block in the blue plate"
+        },
+        {
+          "id": "background_2",
+          "instruction": "Put the RedBull can in the top shelf"
+        },
+        {
+          "id": "background_3",
+          "instruction": "Put the zebra in the upper drawer"
+        }
+      ]
+    },
+    {
+      "id": "height",
+      "group": "generalization",
+      "label": "Height",
+      "note": "Some target objects are raised onto a drawer or box, off the table plane the demonstrations were collected on.",
+      "clips": [
+        {
+          "id": "height",
+          "instruction": "Place the red block in the blue plate"
+        },
+        {
+          "id": "height_2",
+          "instruction": "Press sanitizer"
+        },
+        {
+          "id": "height_3",
+          "instruction": "Put the soda can in the bottom shelf"
+        }
+      ]
+    },
+    {
+      "id": "combination",
+      "group": "generalization",
+      "label": "Combination",
+      "note": "Thirteen object–skill pairings, each seen in training but never demonstrated together. Together with Category, the setting where 2D-heatmap pre-training matters most.",
+      "clips": [
+        {
+          "id": "combination",
+          "instruction": "Put the orange block in the lower drawer"
+        },
+        {
+          "id": "combination_2",
+          "instruction": "Put the RedBull can in the green plate"
+        },
+        {
+          "id": "combination_3",
+          "instruction": "Place the yellow block in the purple plate"
+        }
+      ]
+    },
+    {
+      "id": "category",
+      "group": "generalization",
+      "label": "Category",
+      "note": "Seven objects from categories entirely absent from the robot training data.",
+      "clips": [
+        {
+          "id": "category",
+          "instruction": "Put the peach in the bottom shelf"
+        },
+        {
+          "id": "category_2",
+          "instruction": "Place the bottle in the blue plate"
+        },
+        {
+          "id": "category_3",
+          "instruction": "Put the panda in the lower drawer"
+        }
+      ]
+    }
+  ]
+}
+    </script>
+
+    <div class="demo-explorer reveal" id="franka-explorer"
+         data-video-root="static/videos/real/franka"
+         data-poster-root="static/images/franka_posters">
+
+      <div class="picker-group">
+        <span class="picker-label"><span class="dot-free" aria-hidden="true"></span>Generalization settings</span>
+        <div class="chip-row" data-fr-group="generalization" role="group" aria-label="Generalization settings"></div>
+      </div>
+
+      <div class="demo-stage demo-stage--wide">
+        <div class="demo-video demo-video--wide">
+          <span class="demo-badge" data-fr-badge>Generalization</span>
+          <video data-fr-video muted loop playsinline controls preload="none"
+                 aria-label="Selected Franka rollout"></video>
+          <div class="demo-unavailable">
+            <strong>Video coming soon</strong>
+            <span class="demo-path" data-fr-missing-note></span>
+          </div>
+        </div>
+
+        <div class="demo-info">
+          <span class="demo-family" data-fr-family></span>
+          <p class="demo-instruction" data-fr-instruction></p>
+          <p class="demo-setting-note" data-fr-note></p>
+        </div>
+      </div>
+
+    </div>
+
+    <h4 class="subhead-sm reveal">Where it still fails</h4>
+    <p class="lede reveal" style="margin-top:-.35rem">
+      <em>Category</em> is the one setting whose absolute success rate stays low, and all three
+      failures below come from it. They are not a collapse of the pre-trained grounding — the model
+      still predicts accurate heatmaps on pre-training samples after fine-tuning. Two gaps are more
+      likely: the pre-training images are third-person photographs rather than orthographic
+      projections of a point cloud, and pre-training only ever asks for object localization, while
+      manipulation needs keypoints that sit on no object at all.
+    </p>
+
+    <div class="media-grid cols-3 reveal" style="margin-top:1rem">
+      <div class="media-card">
+        <span class="task-chip is-fail">Failure · category</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata" poster="static/images/franka_posters/failure__bread_green_plate.jpg">
+            <source src="static/videos/real/franka/failure/bread_green_plate.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>“Place the bread in the green plate”</b></p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip is-fail">Failure · category</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata" poster="static/images/franka_posters/failure__apple_top_shelf.jpg">
+            <source src="static/videos/real/franka/failure/apple_top_shelf.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>“Put the apple in the top shelf”</b></p>
+      </div>
+      <div class="media-card">
+        <span class="task-chip is-fail">Failure · category</span>
+        <div class="media-slot">
+          <video muted loop playsinline controls preload="metadata" poster="static/images/franka_posters/failure__peach_bottom_shelf.jpg">
+            <source src="static/videos/real/franka/failure/peach_bottom_shelf.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="media-caption"><b>“Put the peach in the bottom shelf”</b></p>
+      </div>
+    </div>
+      </div>
+    </div>
+
+    <figure class="figure reveal">
+      <img src="static/images/paper/real_setup.jpg" alt="Real robot setup: Franka Research 3 and DOBOT CR5A, each observed by a static ZED 2i stereo camera, two summary bar charts, and the basic, generalization and memory evaluation settings.">
+      <figcaption class="figcap">
+        <b>Figure 3 — Real-robot evaluation setup.</b> Top left: the general-manipulation platform — a
+        7-DoF Franka Research 3 with a parallel-jaw gripper, observed by a single static ZED 2i stereo
+        camera that provides the colored point cloud. Top right: the memory platform — a 6-DoF DOBOT
+        CR5A arm with the same camera configuration. Top centre: the average gain of our models over the
+        strongest prior method in each task group — RVT-2 across the seven Franka settings, and SAM2Act+
+        in the DOBOT basic setting. Bottom: the evaluation settings — the Franka suite covers one basic
+        and six generalization settings (Background, Lighting, Distractor, Combination, Height,
+        Category); the DOBOT suite covers the memory-dependent setting.
+      </figcaption>
+    </figure>
+
+    <div class="platform-explorer" id="platform-explorer">
+      <div class="platform-tabs reveal" role="tablist" aria-label="Robot platform — narrative">
+        <button class="platform-tab" type="button" role="tab" id="platform-tab-dobot"
+                aria-selected="true" aria-controls="platform-panel-dobot" data-tab="dobot">
+          <span class="pt-name">DOBOT CR5A</span>
+          <span class="pt-sub">Memory on a held-out embodiment — tasks, tables and analysis</span>
+        </button>
+        <button class="platform-tab" type="button" role="tab" id="platform-tab-franka" tabindex="-1"
+                aria-selected="false" aria-controls="platform-panel-franka" data-tab="franka">
+          <span class="pt-name">Franka Research 3</span>
+          <span class="pt-sub">General manipulation from 10 demos — tables, figures and settings</span>
+        </button>
+      </div>
+
+      <!-- --------------------------------------------- DOBOT: memory platform -->
+      <div class="platform-panel" id="platform-panel-dobot" role="tabpanel"
+           aria-labelledby="platform-tab-dobot" data-panel="dobot">
+
+    <h3 class="subhead reveal">Memory on a held-out embodiment</h3>
+    <p class="lede reveal">
+      The Franka suite is near-saturated, which proves those tasks are solvable from the current frame
+      alone. So the memory is tested on a second, held-out embodiment with three tasks built so that
+      the current observation <em>underdetermines</em> the next action — plus two ordinary
+      pick-and-place families that check the memory costs nothing on tasks that never needed it.
+      All methods train on the same 70 demonstrations (10 per language instruction).
+    </p>
+
+    <div class="idea-grid reveal" style="margin-top:1.1rem">
+      <div class="idea">
+        <div class="num">①</div>
+        <h4>Press Button — <em>counting</em></h4>
+        <p>
+          Press the blue button exactly <em>N</em> times (given in words, “twice” / “three times”),
+          then the yellow button once. A press leaves no visible trace, so every post-press frame is
+          identical up to nuisance variation: the running count exists only in the policy's history.
+          Neither baseline solves a single trial in any setting.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">②</div>
+        <h4>Cover Blocks — <em>occlusion</em></h4>
+        <p>
+          Cover all three blocks, then uncover only the block of the instructed color. Covering erases
+          the color evidence from the scene, so the second phase is solvable only from the
+          colour-to-location bindings formed before the covers went on.
+        </p>
+      </div>
+      <div class="idea">
+        <div class="num">③</div>
+        <h4>Swap Eggplant — <em>rearrangement</em></h4>
+        <p>
+          Two look-alike eggplants must end up each on the other's initial plate, using a third plate
+          as a buffer that must be empty again at the end. Intermediate configurations recur across
+          phases, so the correct next placement depends on which eggplant has already moved.
+        </p>
+      </div>
+    </div>
+
+    <div class="stack reveal" style="margin-top:1.3rem">
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Method</th><th rowspan="2">Mem.</th>
+                <th colspan="3" style="border-left:1px solid rgba(95,104,184,.25)">Memory-dependent</th>
+                <th colspan="2" style="border-left:1px solid rgba(95,104,184,.25)">Memory-free</th>
+              </tr>
+              <tr>
+                <th style="border-left:1px solid rgba(95,104,184,.25)">Cover Blocks</th>
+                <th>Press Button</th><th>Swap Eggplant</th>
+                <th style="border-left:1px solid rgba(95,104,184,.25)">Put in Drawer</th>
+                <th>Put on Shelf</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td><span class="yes">✓</span></td><td>20.0%</td><td>0.0%</td><td>70.0%</td><td>60.0%</td><td>20.0%</td></tr>
+              <tr class="ours"><td>BridgeVLA <span class="cite">(base)</span></td><td><span class="no">✗</span></td><td>0.0%</td><td>0.0%</td><td>60.0%</td><td>100.0%</td><td>90.0%</td></tr>
+              <tr class="ours"><td>BridgeVLA++</td><td><span class="yes">✓</span></td><td class="best">100.0%</td><td class="best">100.0%</td><td class="best">80.0%</td><td class="best">100.0%</td><td class="best">100.0%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 6 — DOBOT, basic setting.</b> Ten trials per language instruction. <em>Put in
+          Drawer</em> and <em>Put on Shelf</em> are each evaluated with two instructions (upper and
+          lower target) and reported as their average.
+        </p>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Method</th><th rowspan="2">Mem.</th><th rowspan="2">Basic</th>
+                <th colspan="5" style="border-left:1px solid rgba(95,104,184,.25)">Visual disturbance</th>
+              </tr>
+              <tr>
+                <th style="border-left:1px solid rgba(95,104,184,.25)">Distractor</th>
+                <th>Background</th><th>Height</th><th>Lighting</th><th class="avg"><em>Avg.</em></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="group-head"><td colspan="8">Memory-dependent tasks</td></tr>
+              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td><span class="yes">✓</span></td><td>30.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>3.3%</td><td class="avg">0.8%</td></tr>
+              <tr class="ours"><td>BridgeVLA <span class="cite">(base)</span></td><td><span class="no">✗</span></td><td>20.0%</td><td>20.0%</td><td>23.3%</td><td>6.7%</td><td>13.3%</td><td class="avg">15.8%</td></tr>
+              <tr class="ours"><td>BridgeVLA++</td><td><span class="yes">✓</span></td><td class="best">93.3%</td><td class="best">73.3%</td><td class="best">86.7%</td><td class="best">76.7%</td><td class="best">76.7%</td><td class="avg best">78.3%</td></tr>
+              <tr class="group-head"><td colspan="8">Memory-free tasks</td></tr>
+              <tr><td>SAM2Act+ <span class="cite">[Fang et al. 2025]</span></td><td><span class="yes">✓</span></td><td>40.0%</td><td>0.0%</td><td>0.0%</td><td>0.0%</td><td>7.5%</td><td class="avg">1.9%</td></tr>
+              <tr class="ours"><td>BridgeVLA <span class="cite">(base)</span></td><td><span class="no">✗</span></td><td>95.0%</td><td>57.5%</td><td>72.5%</td><td>67.5%</td><td>67.5%</td><td class="avg">66.3%</td></tr>
+              <tr class="ours"><td>BridgeVLA++</td><td><span class="yes">✓</span></td><td class="best">100.0%</td><td class="best">70.0%</td><td class="best">100.0%</td><td class="best">82.5%</td><td class="best">75.0%</td><td class="avg best">81.9%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 7 — DOBOT, all settings.</b> Each entry is the unweighted mean over the three
+          memory-dependent or two memory-free tasks; <em>Avg.</em> averages the four disturbance
+          settings. The memory advantage survives every disturbance, and on tasks that never needed
+          memory BridgeVLA++ is no weaker than the base model in any setting.
+        </p>
+      </div>
+    </div>
 
       </div>
 
@@ -1877,181 +2117,6 @@
           <figcaption class="figcap"><b>Rollouts (II)</b> — keyframe sequences on the Franka task
             suite.</figcaption>
         </figure>
-      </div>
-    </div>
-
-    <h4 class="subhead-sm reveal">Browse the rollouts</h4>
-    <p class="lede reveal" style="margin-top:-.35rem">
-      Thirteen basic-task instructions and six generalization settings. Each generalization setting
-      has <b>three rollouts</b>, on three different tasks — switch with the <em>Rollout</em> buttons
-      over the video. The basic-task clips are still being prepared; every selection already shows
-      the paper's success counts and the exact file it will play once the recording lands.
-      All real-Franka clips play at <b>6×</b> real time, as the badge in the corner marks.
-    </p>
-
-    <script type="application/json" id="franka-demo-data">
-{
-  "methods": ["BridgeVLA (10 demos)", "BridgeVLA (3 demos)", "RVT-2"],
-  "groups": [
-    {
-      "id": "basic",
-      "label": "Basic task",
-      "note": "Trained from 10 kinesthetic demonstrations per task; success counted over 10 trials in the same environment as training."
-    },
-    {
-      "id": "generalization",
-      "label": "Generalization",
-      "note": ""
-    }
-  ],
-  "items": [
-    { "id": "redbull_top_shelf", "group": "basic", "label": "RedBull", "sub": "top shelf",
-      "instruction": "Put the RedBull can in the top shelf", "scores": [10, 9, 9] },
-    { "id": "soda_bottom_shelf", "group": "basic", "label": "Soda Can", "sub": "bottom shelf",
-      "instruction": "Put the soda can in the bottom shelf", "scores": [9, 9, 10] },
-    { "id": "redbull_bottom_shelf", "group": "basic", "label": "RedBull", "sub": "bottom shelf",
-      "instruction": "Put the RedBull can in the bottom shelf", "scores": [10, 10, 10] },
-    { "id": "coke_top_shelf", "group": "basic", "label": "Coke", "sub": "top shelf",
-      "instruction": "Put the coke can in the top shelf", "scores": [10, 10, 10] },
-    { "id": "red_block_blue_plate", "group": "basic", "label": "Red Block", "sub": "blue plate",
-      "instruction": "Place the red block in the blue plate", "scores": [10, 10, 8] },
-    { "id": "orange_block_green_plate", "group": "basic", "label": "Orange Block", "sub": "green plate",
-      "instruction": "Place the orange block in the green plate", "scores": [10, 10, 10] },
-    { "id": "red_block_purple_plate", "group": "basic", "label": "Red Block", "sub": "purple plate",
-      "instruction": "Place the red block in the purple plate", "scores": [10, 10, 9] },
-    { "id": "yellow_block_green_plate", "group": "basic", "label": "Yellow Block", "sub": "green plate",
-      "instruction": "Place the yellow block in the green plate", "scores": [10, 10, 9] },
-    { "id": "press_sanitizer", "group": "basic", "label": "Press Sanitizer",
-      "instruction": "Press sanitizer", "scores": [10, 10, 10] },
-    { "id": "zebra_upper_drawer", "group": "basic", "label": "Zebra", "sub": "upper drawer",
-      "instruction": "Put the zebra in the upper drawer", "scores": [9, 9, 7] },
-    { "id": "zebra_lower_drawer", "group": "basic", "label": "Zebra", "sub": "lower drawer",
-      "instruction": "Put the zebra in the lower drawer", "scores": [10, 10, 8] },
-    { "id": "giraffe_lower_drawer", "group": "basic", "label": "Giraffe", "sub": "lower drawer",
-      "instruction": "Put the giraffe in the lower drawer", "scores": [9, 10, 8] },
-    { "id": "wolf_upper_drawer", "group": "basic", "label": "Wolf", "sub": "upper drawer",
-      "instruction": "Put the wolf in the upper drawer", "scores": [9, 7, 9] },
-
-    { "id": "distractor", "group": "generalization", "label": "Distractor",
-      "note": "Distractor objects visually similar to at least one target object are added to the workspace.",
-      "clips": [
-        { "id": "distractor",   "instruction": "Place the orange block in the green plate" },
-        { "id": "distractor_2", "instruction": "Put the giraffe in the lower drawer" },
-        { "id": "distractor_3", "instruction": "Press sanitizer" }
-      ] },
-    { "id": "lighting", "group": "generalization", "label": "Lighting",
-      "note": "Room lights off. The widest margin over RVT-2 of any setting.",
-      "clips": [
-        { "id": "lighting",   "instruction": "Put the RedBull can in the top shelf" },
-        { "id": "lighting_2", "instruction": "Press sanitizer" },
-        { "id": "lighting_3", "instruction": "Put the giraffe in the lower drawer" }
-      ] },
-    { "id": "background", "group": "generalization", "label": "Background",
-      "note": "The tablecloth is swapped, in three variants unseen in training.",
-      "clips": [
-        { "id": "background",   "instruction": "Place the red block in the blue plate" },
-        { "id": "background_2", "instruction": "Put the RedBull can in the top shelf" },
-        { "id": "background_3", "instruction": "Put the zebra in the upper drawer" }
-      ] },
-    { "id": "height", "group": "generalization", "label": "Height",
-      "note": "Some target objects are raised onto a drawer or box, off the table plane the demonstrations were collected on.",
-      "clips": [
-        { "id": "height",   "instruction": "Place the red block in the blue plate" },
-        { "id": "height_2", "instruction": "Press sanitizer" },
-        { "id": "height_3", "instruction": "Put the soda can in the bottom shelf" }
-      ] },
-    { "id": "combination", "group": "generalization", "label": "Combination",
-      "note": "Thirteen object–skill pairings, each seen in training but never demonstrated together. Together with Category, the setting where 2D-heatmap pre-training matters most.",
-      "clips": [
-        { "id": "combination",   "instruction": "Put the orange block in the lower drawer" },
-        { "id": "combination_2", "instruction": "Put the RedBull can in the green plate" },
-        { "id": "combination_3", "instruction": "Place the yellow block in the purple plate" }
-      ] },
-    { "id": "category", "group": "generalization", "label": "Category",
-      "note": "Seven objects from categories entirely absent from the robot training data.",
-      "clips": [
-        { "id": "category",   "instruction": "Put the peach in the bottom shelf" },
-        { "id": "category_2", "instruction": "Place the bottle in the blue plate" },
-        { "id": "category_3", "instruction": "Put the panda in the lower drawer" }
-      ] }
-  ]
-}
-    </script>
-
-    <div class="demo-explorer reveal" id="franka-explorer"
-         data-video-root="static/videos/real/franka"
-         data-poster-root="static/images/franka_posters">
-
-      <div class="picker-group">
-        <span class="picker-label"><span class="dot-mem" aria-hidden="true"></span>Basic tasks</span>
-        <div class="chip-row" data-fr-group="basic" role="group" aria-label="Basic tasks"></div>
-      </div>
-      <div class="picker-group">
-        <span class="picker-label"><span class="dot-free" aria-hidden="true"></span>Generalization settings</span>
-        <div class="chip-row" data-fr-group="generalization" role="group" aria-label="Generalization settings"></div>
-      </div>
-
-      <div class="demo-stage demo-stage--wide">
-        <div class="demo-video demo-video--wide">
-          <span class="demo-badge" data-fr-badge>Basic</span>
-          <video data-fr-video muted loop playsinline controls preload="none"
-                 aria-label="Selected Franka rollout"></video>
-          <div class="demo-unavailable">
-            <strong>Video coming soon</strong>
-            <span class="demo-path" data-fr-missing-note></span>
-          </div>
-        </div>
-
-        <div class="demo-info">
-          <span class="demo-family" data-fr-family></span>
-          <p class="demo-instruction" data-fr-instruction></p>
-          <p class="demo-setting-note" data-fr-note></p>
-          <div class="score-block" data-fr-scoreblock>
-            <h5>Success over 10 trials — basic setting</h5>
-            <div data-fr-scores></div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <h4 class="subhead-sm reveal">Where it still fails</h4>
-    <p class="lede reveal" style="margin-top:-.35rem">
-      <em>Category</em> is the one setting whose absolute success rate stays low, and all three
-      failures below come from it. They are not a collapse of the pre-trained grounding — the model
-      still predicts accurate heatmaps on pre-training samples after fine-tuning. Two gaps are more
-      likely: the pre-training images are third-person photographs rather than orthographic
-      projections of a point cloud, and pre-training only ever asks for object localization, while
-      manipulation needs keypoints that sit on no object at all.
-    </p>
-
-    <div class="media-grid cols-3 reveal" style="margin-top:1rem">
-      <div class="media-card">
-        <span class="task-chip is-fail">Failure · category</span>
-        <div class="media-slot">
-          <video muted loop playsinline controls preload="metadata" poster="static/images/franka_posters/failure__bread_green_plate.jpg">
-            <source src="static/videos/real/franka/failure/bread_green_plate.mp4" type="video/mp4">
-          </video>
-        </div>
-        <p class="media-caption"><b>“Place the bread in the green plate”</b></p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip is-fail">Failure · category</span>
-        <div class="media-slot">
-          <video muted loop playsinline controls preload="metadata" poster="static/images/franka_posters/failure__apple_top_shelf.jpg">
-            <source src="static/videos/real/franka/failure/apple_top_shelf.mp4" type="video/mp4">
-          </video>
-        </div>
-        <p class="media-caption"><b>“Put the apple in the top shelf”</b></p>
-      </div>
-      <div class="media-card">
-        <span class="task-chip is-fail">Failure · category</span>
-        <div class="media-slot">
-          <video muted loop playsinline controls preload="metadata" poster="static/images/franka_posters/failure__peach_bottom_shelf.jpg">
-            <source src="static/videos/real/franka/failure/peach_bottom_shelf.mp4" type="video/mp4">
-          </video>
-        </div>
-        <p class="media-caption"><b>“Put the peach in the bottom shelf”</b></p>
       </div>
     </div>
 

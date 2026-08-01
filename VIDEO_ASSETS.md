@@ -7,7 +7,6 @@
 | 分区 | 状态 | 数量 |
 | --- | --- | --- |
 | 真机 · DOBOT CR5A（7 任务 × 5 设置） | ✅ 已就位 | 35（全满） |
-| 真机 · Franka 基础任务（选择式浏览器） | ⬜ 待补 | 13 |
 | 真机 · Franka 泛化设置（选择式浏览器，每设置 3 段） | ✅ 已就位 | 18（全满） |
 | 真机 · Franka 失败案例（Category） | ✅ 已就位 | 3（全满） |
 | 仿真 · RLBench（18 任务） | ✅ 13 / ⬜ 5 | 18 |
@@ -15,8 +14,11 @@
 | 仿真 · MemoryBench（3 任务） | ✅ 已就位 | 3（全满） |
 
 仿真视频分别位于「Simulation」的对应基准面板里（RMBench / RLBench / MemoryBench
-选项卡）；Franka 视频由真机区的 **Franka 浏览器**（`#franka-explorer`）驱动，
-未就位的选项显示占位卡和期望路径。面板处于隐藏状态不影响占位检测。
+选项卡）。真机视频集中在真机区**开头的独立视频模组**（`#rollout-videos`，自带
+DOBOT / Franka 切换，和下方文字叙述的切换互相独立）：DOBOT 由 `#dobot-explorer`
+驱动、Franka 由 `#franka-explorer` 驱动。Franka 的 13 个基础任务**从未录像、也不会
+再录**，已从页面整体移除（2026-08）——Franka 侧只剩泛化 18 段 + 失败 3 段，全满。
+面板处于隐藏状态不影响占位检测。
 
 编码建议：
 
@@ -181,16 +183,16 @@ python3 tools/import_bridgevla_assets.py       # --dry-run 只看会拷哪些
 来源 episode、原始分辨率、时长、处理方式都记在
 `static/videos/IMPORTED_MANIFEST.json`。
 
-**每段真机片子都烧了 `X6` 角标，是 6 倍速**——页面上「Browse the rollouts」那段
-lede 里已经写明，换素材时别忘了同步。
+**每段真机片子都烧了 `X6` 角标，是 6 倍速**——页面上「Browse the generalization
+rollouts」那段 lede 里已经写明，换素材时别忘了同步。
 
 ### 泛化设置的三段 rollout
 
-Franka 浏览器现在支持一个 chip 挂多段录像：`#franka-demo-data` 里给该项写一个
+Franka 浏览器支持一个 chip 挂多段录像：`#franka-demo-data` 里给该项写一个
 `clips` 数组，每项 `{ "id": …, "instruction": … }`，视频右上角就会出现
-**Rollout 1 / 2 / 3** 切换，指令行跟着换。路径仍按 `<group>/<id>.mp4` 推导，
-所以 `clips[i].id` 就是文件名。没有 `clips` 的项（13 个基础任务）走老路径
-`<group>/<item.id>.mp4`。
+**Rollout 1 / 2 / 3** 切换，指令行跟着换。路径按 `<group>/<clips[i].id>.mp4`
+推导，所以 `clips[i].id` 就是文件名（现在所有条目都带 `clips`；不带 `clips`
+的老路径 `<group>/<item.id>.mp4` 仍被 JS 支持）。
 
 | 设置 | Rollout 1 | Rollout 2 | Rollout 3 |
 | --- | --- | --- | --- |
@@ -266,36 +268,12 @@ python3 tools/import_bridgevla_assets.py --with-overview
 | `logs/train_colosseum/7_20_colosseum_all_07_21_00_31` | 20 个任务 × 15 个扰动变体，164 段成功 | 页面 COLOSSEUM 面板目前没有视频区；用来展示「同一任务 × 不同扰动」很合适 |
 | `logs/train_gembench/after_memorybench_06_04_21_14` | 677 段（目录名全是 `SR1.0`），mpeg4 需转码 | 是 6 月 4 日的 run，**不一定**对应论文里 GemBench 的数字，用前需确认 |
 
-### 真机 · Franka 基础任务（13，由 `#franka-explorer` 驱动）
+### ~~真机 · Franka 基础任务（13）~~ —— 已移除（2026-08）
 
-真机区的 Franka 面板是和 DOBOT 同款的**选择式浏览器**：13 个基础任务 chip +
-6 个泛化设置 chip。泛化那 6 个已就位（见下方「从 BridgeVLA 页面导入」），
-13 个基础任务仍显示 "Video coming soon" 占位卡 + 期望路径。
-**把文件放到对应路径即生效，不改 HTML。**
-
-数据（成绩、指令、说明）在 `index.html` 的
-`<script type="application/json" id="franka-demo-data">` 里；路径按
-`static/videos/real/franka/<group>/<id>.mp4` 推导。竖版不需要——Franka 相机正装，
-直接 16:9 横版即可（台面框是 16:9）。可选封面：
-`static/images/franka_posters/<group>__<id>.jpg`。
-
-**基础任务（`basic/`，13 个）**
-
-| 文件名（`static/videos/real/franka/basic/…`） | 指令 |
-| --- | --- |
-| `redbull_top_shelf.mp4` | "Put the RedBull can in the top shelf" |
-| `soda_bottom_shelf.mp4` | "Put the soda can in the bottom shelf" |
-| `redbull_bottom_shelf.mp4` | "Put the RedBull can in the bottom shelf" |
-| `coke_top_shelf.mp4` | "Put the coke can in the top shelf" |
-| `red_block_blue_plate.mp4` | "Place the red block in the blue plate" |
-| `orange_block_green_plate.mp4` | "Place the orange block in the green plate" |
-| `red_block_purple_plate.mp4` | "Place the red block in the purple plate" |
-| `yellow_block_green_plate.mp4` | "Place the yellow block in the green plate" |
-| `press_sanitizer.mp4` | "Press sanitizer" |
-| `zebra_upper_drawer.mp4` | "Put the zebra in the upper drawer" |
-| `zebra_lower_drawer.mp4` | "Put the zebra in the lower drawer" |
-| `giraffe_lower_drawer.mp4` | "Put the giraffe in the lower drawer" |
-| `wolf_upper_drawer.mp4` | "Put the wolf in the upper drawer" |
+13 个基础任务从未录像，确认**不会再录**，因此从 `#franka-demo-data` 和
+picker 里整体删掉了；Franka 视频浏览器只剩 6 个泛化设置 chip（18 段全满）。
+基础任务的成绩仍在文字叙述区的 Table 8 里。若将来真要恢复，`git log` 里能
+找回当年的 13 条 JSON 条目和 `basic/` 文件名清单。
 
 ---
 

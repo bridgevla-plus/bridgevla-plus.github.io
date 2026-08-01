@@ -407,14 +407,11 @@
   })();
 
   /* --------------------------------------------------------- Franka explorer */
-  /* Same stage pattern as the DOBOT explorer, but a flat picker: 13 basic
-     tasks + 6 generalization settings. An item with a `clips` array has one
-     rollout per entry (the six generalization settings were each recorded on
-     three different tasks) and gets a rollout switch over the stage; an item
-     without one derives the single path `<group>/<id>.mp4`. The 13 basic tasks
-     are not recorded yet — a load error swaps in the "coming soon" overlay
-     showing the exact path, so dropping a file in activates it with no HTML
-     change. */
+  /* Same stage pattern as the DOBOT explorer, but only the six generalization
+     settings — the basic tasks were never recorded and never will be, so they
+     are not listed. Each item's `clips` array holds one rollout per entry (a
+     setting was recorded on three different tasks) and gets a rollout switch
+     over the stage; the path is `<group>/<clip.id>.mp4`. */
 
   (function initFrankaExplorer() {
     var root = document.getElementById('franka-explorer');
@@ -546,23 +543,25 @@
         : item.label + ' setting';
       var noteText = item.note || (group && group.note) || '';
       if (!item.scores) {
-        noteText += ' Aggregate success over the 13 tasks is charted in Figure 4 above — BridgeVLA leads RVT-2 in every setting.';
+        noteText += ' Aggregate success over the 13 tasks is charted in Figure 4 in the narrative below — BridgeVLA leads RVT-2 in every setting.';
       }
       note.textContent = noteText;
 
       if (scoreBlock) scoreBlock.hidden = !item.scores;
-      scores.innerHTML = '';
-      (item.scores ? data.methods : []).forEach(function (m, i) {
-        var n = item.scores[i];
-        if (typeof n !== 'number') return;
-        var div = document.createElement('div');
-        div.className = 'score-row' + (i === 0 ? ' is-ours' : '');
-        div.innerHTML =
-          '<span class="name">' + m + '</span>' +
-          '<span class="bar"><i style="width:' + (n * 10) + '%"></i></span>' +
-          '<span class="val">' + n + ' / 10</span>';
-        scores.appendChild(div);
-      });
+      if (scores) {
+        scores.innerHTML = '';
+        (item.scores && data.methods ? data.methods : []).forEach(function (m, i) {
+          var n = item.scores[i];
+          if (typeof n !== 'number') return;
+          var div = document.createElement('div');
+          div.className = 'score-row' + (i === 0 ? ' is-ours' : '');
+          div.innerHTML =
+            '<span class="name">' + m + '</span>' +
+            '<span class="bar"><i style="width:' + (n * 10) + '%"></i></span>' +
+            '<span class="val">' + n + ' / 10</span>';
+          scores.appendChild(div);
+        });
+      }
     }
 
     video.addEventListener('error', function () {
