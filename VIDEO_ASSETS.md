@@ -46,10 +46,10 @@ rollout。只有当前选中的那一个视频会被下载。
    **70.3125%**（1920 × 0.703125 = 1350），35 个组合的全时段都核对过，
    不会切到任何机械臂或物体。
 
-最终 **720×900（4:5 竖版）**，原始约 1.5 GB → **38.7 MB**。
+最终 **720×900（4:5 竖版）**，原始约 1.5 GB → **38.5 MB**。
 
 ```
-static/videos/real/dobot/<task>/<setting>.mp4      35 个，共 38.7 MB，720×900
+static/videos/real/dobot/<task>/<setting>.mp4      35 个，共 38.5 MB，720×900
 static/images/dobot_posters/<task>__<setting>.jpg  35 张 poster（视频首帧）
 static/images/dobot_keyframes/<task>/k1..k5.jpg    35 张关键帧，480×600
 ```
@@ -81,6 +81,14 @@ static/images/dobot_keyframes/<task>/k1..k5.jpg    35 张关键帧，480×600
 - **`press_button` × `height`** 源里有两个 episode（`ep007` 和 `ep022`），页面只用
   **`ep007`**（`height.mp4`）。`ep022` 已从素材和转码脚本中排除（脚本里的
   `EXCLUDE_RE`）。
+- **`shelf_lower` × `basic`** 换成了补录的
+  `/DATA/disk1/zyz/projects/BridgeVLA_sam/data/episode_video2.mp4`（24.8 s，取代
+  `selected_demo` 里 ep004 那段 44 s 的）。素材不在 `selected_demo/videos` 下，所以脚本里
+  用 `OVERRIDE` 数组按 `<slug>/<setting>` 指过去，转码链一模一样。
+  **但关键帧没换**：`k1..k5.jpg` 和 `#dobot-demo-data` 里的 `keyframes=[0,3,5,7,7]`
+  仍来自 ep004——关键帧是从 `selected_demo/<task>/basic/<ep>/step_*/frames/` 的模型
+  step 帧抽的，补录这段只有 mp4，没有对应的 step 目录。两段是同一套桌面布置的不同
+  take，观感上接得住；拿到新 episode 的 step 帧后重跑脚本即可对齐。
 
 多试验的显示能力仍然保留：某个 (task, setting) 若要放第二段录像，把它命名为
 `<setting>_alt.mp4`（poster 同理 `<task>__<setting>_alt.jpg`），再在

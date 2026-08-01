@@ -51,6 +51,12 @@ for s in "${SLUG[@]}"; do mkdir -p "$DST/$s" "$KF/$s"; done
 # 源目录里 Press Button × Height 录了两个 episode；页面只用 ep007。
 EXCLUDE_RE=${EXCLUDE_RE:-'height__press-the-blue-button-three-times-then-press-the-yellow-button__ep022_'}
 
+# 某个 (slug, setting) 换用 selected_demo 之外的补录素材：key 是 <slug>/<setting>，
+# 值是源 mp4 的绝对路径。走的还是下面同一条转码链，只是换了输入。
+declare -A OVERRIDE=(
+  [shelf_lower/basic]=/DATA/disk1/zyz/projects/BridgeVLA_sam/data/episode_video2.mp4
+)
+
 JOBFILE=$(mktemp)
 declare -A TAKEN=()
 for f in "$SRC"/*.mp4; do
@@ -65,7 +71,9 @@ for f in "$SRC"/*.mp4; do
   # 同一 (task, setting) 有第二个 episode 时存为 *_alt（页面上显示 Trial 1/2）
   if [ -n "${TAKEN[$key]:-}" ]; then name="${setting}_alt"; key="$slug/$name"; fi
   TAKEN[$key]=1
-  printf '%s\t%s\t%s\n' "$f" "$DST/$slug/$name.mp4" "$POST/${slug}__${name}.jpg" >> "$JOBFILE"
+  src="${OVERRIDE[$key]:-$f}"
+  [ "$src" = "$f" ] || echo "  override $key <- $(basename "$src")"
+  printf '%s\t%s\t%s\n' "$src" "$DST/$slug/$name.mp4" "$POST/${slug}__${name}.jpg" >> "$JOBFILE"
 done
 
 echo "转码 $(wc -l < "$JOBFILE") 个视频（${VF}, CRF ${CRF}, ${JOBS} 路并行）…"
