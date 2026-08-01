@@ -45,9 +45,11 @@ Everything below is marked in `index.html` with a `TODO(author)` comment or a
    indices in the hero (`.authors`).
 2. **Affiliations** — the three `<span><sup>n</sup>…</span>` entries.
 3. **Venue badge** — currently "Journal extension of BridgeVLA, NeurIPS 2025 · venue TBD".
-4. **Paper links** — arXiv, PDF, code, checkpoints are rendered as disabled
-   "coming soon" buttons. Replace `href="#"`, drop `is-muted` and remove
-   `aria-disabled` to activate one.
+4. **Paper links** — arXiv, PDF and code are still disabled "coming soon"
+   buttons; replace `href="#"`, drop `is-muted` and remove `aria-disabled` to
+   activate one. The **Checkpoints & Data** buttons are already live:
+   [HuggingFace `datasets/LPY/BridgeVLA`](https://huggingface.co/datasets/LPY/BridgeVLA)
+   and the [ModelScope mirror](https://modelscope.cn/models/susetiankong/bridgevla_plus).
 5. **BibTeX** — the BridgeVLA++ entry is a stub; the BridgeVLA (NeurIPS 2025)
    entry below it is real.
 6. **Acknowledgements / funding / contact** — footer.
