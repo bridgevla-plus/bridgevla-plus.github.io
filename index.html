@@ -15,7 +15,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="static/css/bridgevla_plus.css">
+<link rel="stylesheet" href="static/css/bridgevla_plus.css?v=3">
 </head>
 <body>
 
@@ -488,7 +488,8 @@
       strongest baseline.
     </p>
 
-    <div class="media-grid cols-3 reveal" style="margin-top:1rem">
+    <div class="speed-bar reveal" data-speed-for="#rmbench-video-grid"></div>
+    <div class="media-grid cols-3 reveal" id="rmbench-video-grid" style="margin-top:0">
       <div class="media-card">
         <span class="task-chip">RMBench · short-term</span>
         <div class="media-slot ratio-43">
@@ -1644,8 +1645,8 @@
     <h4 class="subhead-sm reveal">Browse the generalization rollouts</h4>
     <p class="lede reveal" style="margin-top:-.35rem">
       Six generalization settings, each recorded on three different tasks — switch with the
-      <em>Rollout</em> buttons over the video. All real-Franka clips play at <b>6×</b> real
-      time, as the badge in the corner marks.
+      <em>Rollout</em> buttons over the video. The raw clips are encoded at <b>6×</b> real time;
+      the <em>Speed</em> switch in the corner multiplies on top of that (default 1×).
     </p>
 
     <script type="application/json" id="franka-demo-data">
@@ -1821,7 +1822,8 @@
       manipulation needs keypoints that sit on no object at all.
     </p>
 
-    <div class="media-grid cols-3 reveal" style="margin-top:1rem">
+    <div class="speed-bar reveal" data-speed-for="#franka-failure-grid" data-speed-default="1"></div>
+    <div class="media-grid cols-3 reveal" id="franka-failure-grid" style="margin-top:0">
       <div class="media-card">
         <span class="task-chip is-fail">Failure · category</span>
         <div class="media-slot">
@@ -2403,6 +2405,6 @@
   </div>
 </footer>
 
-<script src="static/js/bridgevla_plus.js" defer></script>
+<script src="static/js/bridgevla_plus.js?v=3" defer></script>
 </body>
 </html>

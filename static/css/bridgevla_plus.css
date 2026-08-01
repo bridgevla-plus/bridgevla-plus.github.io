@@ -596,6 +596,96 @@ table.data .std { color: #8a93b3; font-size: .84em; font-weight: 500; }
   color: #b0473f;
 }
 
+/* ------------------------------------------------------- speed control */
+/* Explicit 1×/2×/4× playback-rate switch. The default (light) variant sits
+   in the page flow, right-aligned over a video grid; the --overlay variant
+   sits on a video stage, stacked above the trial/rollout buttons. */
+
+.speed-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1rem 0 .6rem;
+}
+
+.speed-control {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .28rem .34rem .28rem .85rem;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--accent-line);
+  box-shadow: var(--shadow-sm);
+}
+.speed-control .sc-label {
+  font-family: var(--font-display);
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.speed-control .sc-seg { display: inline-flex; gap: .22rem; }
+.speed-control .sc-seg button {
+  font: inherit;
+  font-size: .78rem;
+  font-weight: 700;
+  min-width: 2.2rem;
+  padding: .24rem .5rem;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background .18s ease, color .18s ease, box-shadow .18s ease;
+}
+.speed-control .sc-seg button:hover:not([aria-pressed="true"]) {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.speed-control .sc-seg button[aria-pressed="true"] {
+  background: linear-gradient(135deg, #4f60cb, #8155c9);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(79, 96, 203, .28);
+}
+
+/* Column pinned to a stage's top-right corner: speed pill on top, then the
+   Trial/Rollout switch (which used to pin itself there). */
+.stage-controls {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .4rem;
+}
+.speed-control--overlay {
+  gap: .42rem;
+  padding: .2rem .26rem .2rem .7rem;
+  background: rgba(12, 18, 38, .55);
+  border-color: rgba(255, 255, 255, .22);
+  box-shadow: none;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.speed-control--overlay .sc-label { color: rgba(238, 243, 255, .75); }
+.speed-control--overlay .sc-seg button {
+  font-size: .68rem;
+  min-width: 1.9rem;
+  padding: .18rem .42rem;
+  color: #eef3ff;
+}
+.speed-control--overlay .sc-seg button:hover:not([aria-pressed="true"]) {
+  background: rgba(255, 255, 255, .16);
+  color: #fff;
+}
+.speed-control--overlay .sc-seg button[aria-pressed="true"] {
+  background: rgba(79, 96, 203, .9);
+  box-shadow: none;
+}
+
 /* ------------------------------------------------------- demo explorer */
 /* Pick a task, pick a setting, watch that exact rollout. One <video> whose
    src is swapped, so only the selected clip is ever fetched. */

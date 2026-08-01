@@ -13,6 +13,31 @@
   // script failure can never leave sections stranded at opacity 0.
   document.documentElement.classList.add('js-reveal');
 
+  /* ------------------------------------------------------ reveal on scroll */
+  /* Registered first, before anything that could throw: an exception further
+     down this file must never leave the whole page stuck at opacity 0. */
+
+  var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  var revealAll = function () { reveals.forEach(function (el) { el.classList.add('is-in'); }); };
+
+  if ('IntersectionObserver' in window && reveals.length) {
+    // rootMargin lets an element start fading in slightly before it is on
+    // screen; threshold 0 fires even for blocks taller than the viewport.
+    var rev = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+    reveals.forEach(function (el) { rev.observe(el); });
+    // Safety net: whatever happens, nothing stays invisible.
+    setTimeout(revealAll, 6000);
+  } else {
+    revealAll();
+  }
+
   /* ---------------------------------------------------- missing-media stubs */
 
   function markMissing(slot, path, kind) {
@@ -173,6 +198,78 @@
     });
   });
 
+  /* -------------------------------------------------------- speed controls */
+  /* Explicit 1×/2×/4× playback-rate switch for the real-robot players and
+     the RMBench rollout grid. Both playbackRate and defaultPlaybackRate are
+     set: the explorers call load() on every clip swap, which resets the
+     former to the latter, so the chosen speed must live in both. */
+
+  var SPEED_RATES = [1, 2, 4];
+  var SPEED_DEFAULT = 2;
+
+  function makeSpeedControl(getVideos, overlay, defaultRate) {
+    var wrap = document.createElement('div');
+    wrap.className = 'speed-control' + (overlay ? ' speed-control--overlay' : '');
+    wrap.setAttribute('role', 'group');
+    wrap.setAttribute('aria-label', 'Playback speed');
+
+    var label = document.createElement('span');
+    label.className = 'sc-label';
+    label.textContent = 'Speed';
+    wrap.appendChild(label);
+
+    var seg = document.createElement('span');
+    seg.className = 'sc-seg';
+    wrap.appendChild(seg);
+
+    var buttons = SPEED_RATES.map(function (rate) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = rate + '×';
+      b.setAttribute('aria-pressed', 'false');
+      b.setAttribute('aria-label', 'Play at ' + rate + '× speed');
+      b.addEventListener('click', function () { wrap.applyRate(rate); });
+      seg.appendChild(b);
+      return { rate: rate, el: b };
+    });
+
+    function highlight(rate) {
+      buttons.forEach(function (b) {
+        b.el.setAttribute('aria-pressed', b.rate === rate ? 'true' : 'false');
+      });
+    }
+
+    wrap.applyRate = function (rate) {
+      highlight(rate);
+      getVideos().forEach(function (v) {
+        v.defaultPlaybackRate = rate;
+        v.playbackRate = rate;
+      });
+    };
+
+    // Keep the highlight honest if the rate is changed through the native
+    // player menu instead of these buttons.
+    wrap.watch = function (video) {
+      video.addEventListener('ratechange', function () {
+        highlight(video.playbackRate);
+      });
+    };
+
+    wrap.applyRate(defaultRate || SPEED_DEFAULT);
+    return wrap;
+  }
+
+  // Free-standing bars: one control drives every <video> inside the element
+  // that data-speed-for points at (RMBench grid, Franka failure grid).
+  document.querySelectorAll('[data-speed-for]').forEach(function (bar) {
+    var target = document.querySelector(bar.getAttribute('data-speed-for'));
+    if (!target) return;
+    var vids = Array.prototype.slice.call(target.querySelectorAll('video'));
+    if (!vids.length) return;
+    var def = parseFloat(bar.getAttribute('data-speed-default')) || 0;
+    bar.appendChild(makeSpeedControl(function () { return vids; }, false, def));
+  });
+
   /* --------------------------------------------------------- demo explorer */
   /* Task × setting picker over the real-robot rollouts. A single <video>
      whose src is swapped on selection, so only the clip on screen is ever
@@ -254,8 +351,7 @@
     // Trial switch, only shown when a (task, setting) pair has a second episode.
     var trialWrap = document.createElement('div');
     trialWrap.className = 'demo-trials';
-    trialWrap.style.cssText =
-      'position:absolute;top:.6rem;right:.6rem;z-index:2;display:none;gap:.25rem;';
+    trialWrap.style.cssText = 'display:none;gap:.25rem;';
     var trialButtons = [0, 1].map(function (i) {
       var b = document.createElement('button');
       b.type = 'button';
@@ -272,7 +368,13 @@
       trialWrap.appendChild(b);
       return b;
     });
-    root.querySelector('.demo-video').appendChild(trialWrap);
+    var stageControls = document.createElement('div');
+    stageControls.className = 'stage-controls';
+    var speedCtl = makeSpeedControl(function () { return [video]; }, true);
+    speedCtl.watch(video);
+    stageControls.appendChild(speedCtl);
+    stageControls.appendChild(trialWrap);
+    root.querySelector('.demo-video').appendChild(stageControls);
 
     // ---- render ------------------------------------------------------------
 
@@ -477,8 +579,7 @@
     // over the stage, hidden for items with a single clip.
     var clipWrap = document.createElement('div');
     clipWrap.className = 'demo-trials';
-    clipWrap.style.cssText =
-      'position:absolute;top:.6rem;right:.6rem;z-index:2;display:none;gap:.25rem;';
+    clipWrap.style.cssText = 'display:none;gap:.25rem;';
     var clipButtons = [];
     for (var ci = 0; ci < MAX_CLIPS; ci++) {
       clipButtons.push((function (i) {
@@ -498,7 +599,14 @@
         return b;
       })(ci));
     }
-    if (MAX_CLIPS > 1) root.querySelector('.demo-video').appendChild(clipWrap);
+    var stageControls = document.createElement('div');
+    stageControls.className = 'stage-controls';
+    // The Franka clips are already encoded at 6× real time, so start at 1×.
+    var speedCtl = makeSpeedControl(function () { return [video]; }, true, 1);
+    speedCtl.watch(video);
+    stageControls.appendChild(speedCtl);
+    if (MAX_CLIPS > 1) stageControls.appendChild(clipWrap);
+    root.querySelector('.demo-video').appendChild(stageControls);
 
     function render() {
       var item = itemById(state.item);
@@ -602,29 +710,6 @@
       });
     }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
     targets.forEach(function (t) { spy.observe(t); });
-  }
-
-  /* ------------------------------------------------------ reveal on scroll */
-
-  var reveals = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
-  var revealAll = function () { reveals.forEach(function (el) { el.classList.add('is-in'); }); };
-
-  if ('IntersectionObserver' in window && reveals.length) {
-    // rootMargin lets an element start fading in slightly before it is on
-    // screen; threshold 0 fires even for blocks taller than the viewport.
-    var rev = new IntersectionObserver(function (entries, obs) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-in');
-          obs.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
-    reveals.forEach(function (el) { rev.observe(el); });
-    // Safety net: whatever happens, nothing stays invisible.
-    setTimeout(revealAll, 6000);
-  } else {
-    revealAll();
   }
 
   /* ------------------------------------------- horizontal-scroll affordance */
