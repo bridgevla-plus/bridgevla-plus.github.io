@@ -347,6 +347,8 @@ h1, h2, h3, h4 { font-family: var(--font-display); color: var(--heading); line-h
   gap: .9rem;
 }
 @media (min-width: 900px) { .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* A four-card group reads better as 2 × 2 than as a row of three plus an orphan. */
+@media (min-width: 900px) { .stats.is-four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px)  { .stats { grid-template-columns: 1fr; } }
 .stat {
   position: relative;

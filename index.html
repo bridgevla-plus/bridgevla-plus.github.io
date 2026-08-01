@@ -361,8 +361,9 @@
       <span aria-hidden="true" style="font-size:1.3rem">💡</span>
       <div>
         <b>The memory is strictly additive.</b> It adds 269.77M parameters — 9.2% on top of the
-        2.92B-parameter backbone — and raises end-to-end latency from 0.51&nbsp;s to 0.55&nbsp;s per
-        prediction step (+7.8%) on a single RTX&nbsp;4090. Temporal entries are cached as
+        2.92B-parameter backbone — and moves end-to-end latency from 0.35&nbsp;s to 0.57&nbsp;s per
+        prediction step on a single RTX&nbsp;4090, a gap that stays small next to the observation
+        transmission and motion execution of a keyframe step. Temporal entries are cached as
         <em>already-encoded</em> tokens, so history never costs an extra backbone forward pass.
       </div>
     </div>
@@ -1216,6 +1217,20 @@
 <section class="section" style="padding-top:1.4rem">
   <div class="wrap-wide">
 
+    <figure class="figure reveal" style="margin-top:1.6rem">
+      <img src="static/images/paper/real_setup.jpg" alt="Real robot setup: Franka Research 3 and DOBOT CR5A, each observed by a static ZED 2i stereo camera, two summary bar charts, and the basic, generalization and memory evaluation settings.">
+      <figcaption class="figcap">
+        <b>Figure 3 — Real-robot evaluation setup.</b> Top left: the general-manipulation platform — a
+        7-DoF Franka Research 3 with a parallel-jaw gripper, observed by a single static ZED 2i stereo
+        camera that provides the colored point cloud. Top right: the memory platform — a 6-DoF DOBOT
+        CR5A arm with the same camera configuration. Top centre: the average gain of our models over the
+        strongest prior method in each task group — RVT-2 across the seven Franka settings, and SAM2Act+
+        in the DOBOT basic setting. Bottom: the evaluation settings — the Franka suite covers one basic
+        and six generalization settings (Background, Lighting, Distractor, Combination, Height,
+        Category); the DOBOT suite covers the memory-dependent setting.
+      </figcaption>
+    </figure>
+
     <!-- ------------------------------------------------ rollout video module -->
     <div class="platform-explorer" id="rollout-videos">
       <h3 class="subhead reveal">Rollout videos</h3>
@@ -1855,21 +1870,9 @@
       </div>
     </div>
 
-    <figure class="figure reveal">
-      <img src="static/images/paper/real_setup.jpg" alt="Real robot setup: Franka Research 3 and DOBOT CR5A, each observed by a static ZED 2i stereo camera, two summary bar charts, and the basic, generalization and memory evaluation settings.">
-      <figcaption class="figcap">
-        <b>Figure 3 — Real-robot evaluation setup.</b> Top left: the general-manipulation platform — a
-        7-DoF Franka Research 3 with a parallel-jaw gripper, observed by a single static ZED 2i stereo
-        camera that provides the colored point cloud. Top right: the memory platform — a 6-DoF DOBOT
-        CR5A arm with the same camera configuration. Top centre: the average gain of our models over the
-        strongest prior method in each task group — RVT-2 across the seven Franka settings, and SAM2Act+
-        in the DOBOT basic setting. Bottom: the evaluation settings — the Franka suite covers one basic
-        and six generalization settings (Background, Lighting, Distractor, Combination, Height,
-        Category); the DOBOT suite covers the memory-dependent setting.
-      </figcaption>
-    </figure>
-
-    <div class="platform-explorer" id="platform-explorer">
+    <!-- The setup figure used to sit here and separated the two tab strips;
+         with it moved to the top of the section, this one needs its own break. -->
+    <div class="platform-explorer" id="platform-explorer" style="margin-top:2.6rem">
       <div class="platform-tabs reveal" role="tablist" aria-label="Robot platform — narrative">
         <button class="platform-tab" type="button" role="tab" id="platform-tab-dobot"
                 aria-selected="true" aria-controls="platform-panel-dobot" data-tab="dobot">
@@ -2298,26 +2301,17 @@
 
 <section class="section" style="padding-top:1.4rem">
   <div class="wrap">
-    <div class="stats reveal">
+    <div class="stats is-four reveal">
       <div class="stat">
         <div class="value">+9.2%</div>
         <div class="label">Parameters</div>
         <div class="note">269.77M added on a 2.92B backbone: 3 × 83.95M injection blocks + 17.91M sub-goal gate</div>
       </div>
       <div class="stat">
-        <div class="value">+7.8%</div>
+        <div class="value">+0.22 s</div>
         <div class="label">Inference latency</div>
-        <div class="note">0.51 s → 0.55 s per prediction step on a single RTX 4090, averaged over 100 trials</div>
-      </div>
-      <div class="stat">
-        <div class="value">3.0 MiB</div>
-        <div class="label">Per cached keyframe</div>
-        <div class="note">One bf16 coarse-stage token grid; a full RMBench memory (K = 12 + anchor) is 39 MiB</div>
-      </div>
-      <div class="stat">
-        <div class="value">2 → 3</div>
-        <div class="label">Backbone forwards / step</div>
-        <div class="note">The extra one is the re-encoded fine-stage geometric reference; dual-arm goes 3 → 5</div>
+        <div class="note">0.35 s → 0.57 s per prediction step on a single RTX 4090, averaged over 100 trials —
+          small next to the observation transfer and motion execution that dominate a keyframe step</div>
       </div>
       <div class="stat">
         <div class="value">≈ 2 h</div>
@@ -2356,16 +2350,16 @@
 <section class="section" style="padding-top:1.2rem">
   <div class="wrap">
     <div class="todo reveal" style="margin-bottom:1rem">
-      <b>Placeholder.</b> Update the entry below with the final author list, venue and identifier once
-      the journal version is public.
+      <b>Placeholder.</b> The author list, venue and year are left blank until the extended version
+      is public — fill them in then.
     </div>
 
     <pre class="bibtex reveal" id="bib-plus"><code>@article{bridgevlaplus2026,
   title   = {BridgeVLA++: A Data-Efficient, Generalizable, and Memory-Augmented
              Vision-Language-Action Framework for 3D Manipulation},
-  author  = {TODO: Author One and Author Two and Author Three and others},
-  journal = {TODO: IEEE Transactions on Pattern Analysis and Machine Intelligence},
-  year    = {TODO},
+  author  = {},
+  journal = {},
+  year    = {},
   note    = {Extension of the NeurIPS 2025 conference paper BridgeVLA}
 }</code></pre>
     <button class="copy-btn" type="button" data-copy-target="#bib-plus">
