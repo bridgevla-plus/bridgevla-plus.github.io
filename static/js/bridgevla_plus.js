@@ -145,12 +145,19 @@
     });
     if (!tabs.length || !panels.length) return;
 
+    // A tab strip may be duplicated inside every panel (the rollout browser
+    // carries its platform switch in both cards), so a tab is reachable only
+    // while its own panel is the visible one.
+    function isLive(t) {
+      var p = t.closest('[data-panel]');
+      return !p || !p.hidden;
+    }
+
     function activate(id, focusTab) {
       tabs.forEach(function (t) {
         var on = t.getAttribute('data-tab') === id;
         t.setAttribute('aria-selected', on ? 'true' : 'false');
         t.tabIndex = on ? 0 : -1;
-        if (on && focusTab) t.focus();
       });
       panels.forEach(function (p) {
         var show = p.getAttribute('data-panel') === id;
@@ -165,17 +172,31 @@
           Array.prototype.forEach.call(p.querySelectorAll('video'), function (v) { v.pause(); });
         }
       });
+      // Focus only after the panels have been swapped, and only the copy that
+      // ended up visible — focusing one inside a just-hidden panel loses it.
+      if (focusTab) {
+        tabs.some(function (t) {
+          if (t.getAttribute('data-tab') !== id || !isLive(t)) return false;
+          t.focus();
+          return true;
+        });
+      }
       // Tables inside a hidden panel measured 0 wide at load — remeasure.
       measureTables();
     }
 
-    tabs.forEach(function (t, i) {
+    tabs.forEach(function (t) {
       t.addEventListener('click', function () { activate(t.getAttribute('data-tab'), false); });
       t.addEventListener('keydown', function (e) {
         var d = e.key === 'ArrowRight' ? 1 : (e.key === 'ArrowLeft' ? -1 : 0);
         if (!d) return;
         e.preventDefault();
-        var n = tabs[(i + d + tabs.length) % tabs.length];
+        // Step within the strip this tab belongs to: a flat index over every
+        // copy would walk into the hidden panel's duplicate.
+        var strip = Array.prototype.slice.call(
+          t.closest('[role="tablist"]').querySelectorAll('[data-tab]'));
+        var j = strip.indexOf(t);
+        var n = strip[(j + d + strip.length) % strip.length];
         activate(n.getAttribute('data-tab'), true);
       });
     });

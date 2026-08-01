@@ -1235,22 +1235,9 @@
     <div class="platform-explorer" id="rollout-videos">
       <h3 class="subhead reveal">Rollout videos</h3>
       <p class="lede reveal">
-        Every real-robot recording, up front. These two buttons switch the videos only — the
-        written analysis further down the page has its own DOBOT / Franka switch.
+        Every real-robot recording, up front. The browser below switches robot, task and setting on
+        the spot; the written analysis further down the page has its own DOBOT / Franka switch.
       </p>
-
-      <div class="platform-tabs reveal" role="tablist" aria-label="Rollout videos — robot platform">
-        <button class="platform-tab" type="button" role="tab" id="video-tab-dobot"
-                aria-selected="true" aria-controls="video-panel-dobot" data-tab="dobot">
-          <span class="pt-name">DOBOT CR5A</span>
-          <span class="pt-sub">All 35 memory rollouts — 7 instructions × 5 settings</span>
-        </button>
-        <button class="platform-tab" type="button" role="tab" id="video-tab-franka" tabindex="-1"
-                aria-selected="false" aria-controls="video-panel-franka" data-tab="franka">
-          <span class="pt-name">Franka Research 3</span>
-          <span class="pt-sub">Six generalization settings × 3 rollouts, plus the failure cases</span>
-        </button>
-      </div>
 
       <div class="platform-panel" id="video-panel-dobot" role="tabpanel"
            aria-labelledby="video-tab-dobot" data-panel="dobot">
@@ -1606,6 +1593,22 @@
          data-poster-root="static/images/dobot_posters"
          data-keyframe-root="static/images/dobot_keyframes">
 
+      <!-- The platform switch lives inside each browser card, so robot, task and
+           setting read as one control strip. The Franka card carries a second
+           copy of it (ids suffixed -b); the tab script keeps the two in sync. -->
+      <div class="picker-group">
+        <span class="picker-label">Robot platform</span>
+        <div class="chip-row" role="tablist" aria-label="Rollout videos — robot platform">
+          <button class="picker-chip" type="button" role="tab" id="video-tab-dobot"
+                  aria-selected="true" aria-controls="video-panel-dobot" data-tab="dobot">
+            DOBOT CR5A <span class="chip-sub">· 35 memory rollouts</span>
+          </button>
+          <button class="picker-chip" type="button" role="tab" id="video-tab-franka" tabindex="-1"
+                  aria-selected="false" aria-controls="video-panel-franka" data-tab="franka">
+            Franka Research 3 <span class="chip-sub">· 18 generalization rollouts</span>
+          </button>
+        </div>
+      </div>
       <div class="picker-group">
         <span class="picker-label"><span class="dot-mem" aria-hidden="true"></span>Memory-dependent tasks</span>
         <div class="chip-row" data-task-group="memory" role="group" aria-label="Memory-dependent tasks"></div>
@@ -1802,6 +1805,19 @@
          data-video-root="static/videos/real/franka"
          data-poster-root="static/images/franka_posters">
 
+      <div class="picker-group">
+        <span class="picker-label">Robot platform</span>
+        <div class="chip-row" role="tablist" aria-label="Rollout videos — robot platform">
+          <button class="picker-chip" type="button" role="tab" id="video-tab-dobot-b"
+                  aria-selected="true" aria-controls="video-panel-dobot" data-tab="dobot">
+            DOBOT CR5A <span class="chip-sub">· 35 memory rollouts</span>
+          </button>
+          <button class="picker-chip" type="button" role="tab" id="video-tab-franka-b" tabindex="-1"
+                  aria-selected="false" aria-controls="video-panel-franka" data-tab="franka">
+            Franka Research 3 <span class="chip-sub">· 18 generalization rollouts</span>
+          </button>
+        </div>
+      </div>
       <div class="picker-group">
         <span class="picker-label"><span class="dot-free" aria-hidden="true"></span>Generalization settings</span>
         <div class="chip-row" data-fr-group="generalization" role="group" aria-label="Generalization settings"></div>

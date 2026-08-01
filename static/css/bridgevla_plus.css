@@ -731,13 +731,17 @@ table.data .std { color: #8a93b3; font-size: .84em; font-weight: 500; }
   transition: background .2s ease, color .2s ease, border-color .2s ease,
               transform .2s ease, box-shadow .2s ease;
 }
-.picker-chip:hover:not(:disabled):not([aria-pressed="true"]) {
+/* Most pickers are toggles and report state with aria-pressed; the rollout
+   browser's platform switch is a tablist and reports it with aria-selected.
+   Both must light up the same way. */
+.picker-chip:hover:not(:disabled):not([aria-pressed="true"]):not([aria-selected="true"]) {
   background: var(--accent-soft);
   border-color: rgba(99, 112, 190, .3);
   color: var(--accent);
   transform: translateY(-1px);
 }
-.picker-chip[aria-pressed="true"] {
+.picker-chip[aria-pressed="true"],
+.picker-chip[aria-selected="true"] {
   background: linear-gradient(135deg, #4f60cb, #8155c9);
   border-color: transparent;
   color: #fff;
