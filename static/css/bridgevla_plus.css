@@ -95,8 +95,9 @@
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --measure: 1120px;
-  --measure-wide: 1320px;
+  --measure: 1200px;      /* single page column — every wrap shares one left edge   */
+  --measure-wide: 1200px; /* alias of --measure so wide + narrow blocks stay aligned */
+  --gutter: 2.6rem;       /* one horizontal gutter for all wraps (1.3rem each side)  */
 
   --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
   --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -146,8 +147,11 @@ p a:hover, li a:hover { text-decoration-color: currentColor; }
 
 code, pre { font-family: var(--font-mono); }
 
-.wrap { width: min(100% - 2.6rem, var(--measure)); margin-inline: auto; }
-.wrap-wide { width: min(100% - 2.2rem, var(--measure-wide)); margin-inline: auto; }
+/* One column for the whole page. `.wrap` and `.wrap-wide` resolve identically so a
+   section's banner header and its body always start on the same left edge, and every
+   section shares that edge with every other. */
+.wrap { width: min(100% - var(--gutter), var(--measure)); margin-inline: auto; }
+.wrap-wide { width: min(100% - var(--gutter), var(--measure-wide)); margin-inline: auto; }
 
 .section { padding: 3.8rem 0 4.8rem; }
 
