@@ -719,18 +719,46 @@
   var navLinks = Array.prototype.slice.call(document.querySelectorAll('.docnav a[href^="#"]'));
   var targets = navLinks
     .map(function (a) { return document.querySelector(a.getAttribute('href')); })
-    .filter(Boolean);
+    .filter(Boolean)
+    // document order, whatever order the nav lists them in
+    .sort(function (a, b) {
+      return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+    });
 
-  if ('IntersectionObserver' in window && targets.length) {
-    var spy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        navLinks.forEach(function (a) {
-          a.classList.toggle('is-active', a.getAttribute('href') === '#' + entry.target.id);
-        });
+  // A section anchor is a short banner, so an IntersectionObserver over the
+  // anchors alone only fires while that banner is on screen — scrolling back up
+  // leaves the nav on the section below until the previous banner reappears.
+  // Instead treat each anchor as the *start* of a region and pick the last
+  // region whose start is above a fixed reading line. Symmetric in both
+  // directions, and every scroll position maps to exactly one section.
+  if (targets.length) {
+    var spyTicking = false;
+    var syncSpy = function () {
+      spyTicking = false;
+      var line = window.pageYOffset + window.innerHeight * 0.35;
+      var current = targets[0];
+      for (var i = 0; i < targets.length; i++) {
+        if (targets[i].getBoundingClientRect().top + window.pageYOffset > line) break;
+        current = targets[i];
+      }
+      // the last section is usually too short to ever reach the reading line
+      var doc = document.documentElement;
+      if (window.innerHeight + window.pageYOffset >= doc.scrollHeight - 2) {
+        current = targets[targets.length - 1];
+      }
+      navLinks.forEach(function (a) {
+        a.classList.toggle('is-active', a.getAttribute('href') === '#' + current.id);
       });
-    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
-    targets.forEach(function (t) { spy.observe(t); });
+    };
+    var queueSpy = function () {
+      if (spyTicking) return;
+      spyTicking = true;
+      window.requestAnimationFrame(syncSpy);
+    };
+    window.addEventListener('scroll', queueSpy, { passive: true });
+    window.addEventListener('resize', queueSpy);
+    window.addEventListener('load', syncSpy);
+    syncSpy();
   }
 
   /* ------------------------------------------- horizontal-scroll affordance */
