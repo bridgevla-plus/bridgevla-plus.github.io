@@ -182,11 +182,9 @@ h4 { font-family: var(--font-sans); font-weight: 600; color: var(--ink); line-he
   padding: 1.15rem 0 .4rem;
 }
 .hero-topbar .brandline {
-  display: inline-flex; align-items: center; gap: .55rem;
   font-family: var(--font-sans); font-weight: 600; font-size: .95rem;
   color: var(--ink);
 }
-.hero-topbar .brandline img { width: 26px; height: 26px; }
 
 .more-research { position: relative; }
 .more-research > button {
@@ -230,9 +228,15 @@ h4 { font-family: var(--font-sans); font-weight: 600; color: var(--ink); line-he
 .more-research .menu a:hover { background: var(--surface-2); color: var(--ink); }
 .more-research .menu a span { color: var(--ink-faint); }
 
-.hero-inner { padding: 3rem 0 3.9rem; text-align: center; }
+.hero-inner { padding: 2.6rem 0 3.9rem; text-align: center; }
 
-.hero-logo { width: 54px; height: 54px; margin-bottom: 1.4rem; }
+/* The mark is a wide line-art vignette (image stack → bridge → robot arm),
+   sized as a journal-masthead emblem: large enough that the story reads. */
+.hero-logo {
+  width: clamp(128px, 15vw, 168px);
+  height: auto;
+  margin-bottom: 1.2rem;
+}
 
 .hero-venue {
   display: block;
