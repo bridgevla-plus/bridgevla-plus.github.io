@@ -117,6 +117,7 @@
     <a href="#simulation">Simulation</a>
     <a href="#real-robot">Real Robot</a>
     <a href="#method">Method</a>
+    <a href="#ablations">Ablations</a>
     <a href="#efficiency">Efficiency</a>
     <a href="#bibtex">BibTeX</a>
   </div>
@@ -1993,6 +1994,140 @@
         the fine stage — injected in patch-token space without changing the action interface.
       </figcaption>
     </figure>
+
+  </div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- ABLATIONS                                                                -->
+<!-- ======================================================================== -->
+<section class="banner" id="ablations">
+  <div class="wrap">
+    <h2>Ablation Studies</h2>
+    <p>Which design decisions carry the performance — and which memory does what.</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1.4rem">
+  <div class="wrap-wide">
+
+    <h3 class="subhead reveal">Base-model design ablations (RLBench)</h3>
+    <div class="table-card reveal" style="margin-top:.8rem">
+      <div class="table-scroll">
+        <table class="data">
+          <thead>
+            <tr>
+              <th rowspan="2">Variant</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
+              <th rowspan="2" class="avg">Avg. Rank ↓</th>
+              <th>Insert</th><th>Place</th><th>Put in</th><th>Screw</th><th>Sort</th>
+              <th>Stack</th><th>Stack</th>
+            </tr>
+            <tr>
+              <th>Peg</th><th>Cups</th><th>Cupboard</th><th>Bulb</th><th>Shape</th>
+              <th>Blocks</th><th>Cups</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="ours"><td>BridgeVLA <span class="cite">(full base)</span></td><td class="avg best">90.5</td><td class="avg best">4.75</td><td>91.2</td><td>58.4</td><td>91.2</td><td>93.6</td><td>55.2</td><td>84.8</td><td>88.8</td></tr>
+            <tr class="ablation"><td>├ w/ discretized rotation</td><td class="avg">88.2</td><td class="avg">4.86</td><td>88.0</td><td>58.4</td><td>73.6</td><td>87.2</td><td>60.8</td><td>76.8</td><td>81.6</td></tr>
+            <tr class="ablation"><td>├ w/o heatmap decoding</td><td class="avg">31.4</td><td class="avg">12.78</td><td>0.0</td><td>1.3</td><td>5.3</td><td>2.7</td><td>4.0</td><td>0.0</td><td>0.0</td></tr>
+            <tr class="ablation"><td>└ w/ 3D position input</td><td class="avg">56.2</td><td class="avg">10.14</td><td>26.7</td><td>14.7</td><td>10.7</td><td>16.0</td><td>21.3</td><td>17.3</td><td>4.0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        <b>Table 9.&ensp;Base-model ablations.</b> A representative subset of the 18 RLBench columns; the
+        averages and ranks are over all 18 tasks. <em>w/o heatmap decoding</em> and <em>w/ 3D position
+        input</em> use three seeds, the others five.
+      </p>
+    </div>
+
+    <div class="idea-grid reveal" style="margin-top:1.1rem">
+      <div class="idea">
+        <div class="num">A</div>
+        <h4>Predict heatmaps, not coordinates <span class="delta delta-neg">−59.1</span></h4>
+        <p>Regressing target coordinates instead of decoding heatmaps collapses RLBench from 90.5% to 31.4%.</p>
+      </div>
+      <div class="idea">
+        <div class="num">B</div>
+        <h4>Don't feed 3D positions to the VLM <span class="delta delta-neg">−34.3</span></h4>
+        <p>Fusing explicit per-pixel 3D positions shifts the image features off the pre-training distribution.</p>
+      </div>
+      <div class="idea">
+        <div class="num">C</div>
+        <h4>Pre-training carries language generalization</h4>
+        <p>Without 2D-heatmap pre-training, the policy fails to generalize to unseen language in the real world.</p>
+      </div>
+      <div class="idea">
+        <div class="num">D</div>
+        <h4>Continuous 6D rotation beats discretization <span class="delta delta-neg">−2.3</span></h4>
+        <p>The 6D head also avoids the gimbal lock of discretized Euler angles in near-vertical poses.</p>
+      </div>
+    </div>
+
+    <h3 class="subhead reveal">Memory ablations</h3>
+    <p class="lede reveal">
+      Each memory is load-bearing on exactly the benchmark whose difficulty it targets.
+    </p>
+
+    <div class="stack reveal" style="margin-top:1rem">
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Variant</th><th rowspan="2" class="avg">RLBench Avg. ↑</th>
+                <th>Insert</th><th>Place</th><th>Sort</th><th>Stack</th><th>Place</th>
+              </tr>
+              <tr><th>Peg</th><th>Cups</th><th>Shape</th><th>Cups</th><th>Wine</th></tr>
+            </thead>
+            <tbody>
+              <tr class="ours"><td>BridgeVLA++ <span class="cite">(full)</span></td><td class="avg best">93.7</td><td class="best">99.2</td><td class="best">76.8</td><td>72.0</td><td class="best">98.4</td><td class="best">95.2</td></tr>
+              <tr class="ablation"><td>├ w/o spatial memory 𝒮</td><td class="avg">92.0</td><td>95.2</td><td>74.4</td><td>60.8</td><td>92.8</td><td>78.4</td></tr>
+              <tr class="ablation"><td>└ w/o temporal memory 𝒯</td><td class="avg">91.9</td><td>82.4</td><td>57.6</td><td class="best">73.6</td><td>93.6</td><td>90.4</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 10.&ensp;Memory ablations on RLBench.</b> Removing 𝒮 costs most exactly in the
+          occlusion-heavy precision tasks it targets (<em>sort shape</em> 72.0 → 60.8), and removing 𝒯
+          costs most where a stable global reference helps (<em>place cups</em> 76.8 → 57.6) — even
+          though RLBench tasks are not intrinsically memory-dependent.
+        </p>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th rowspan="2">Variant</th>
+                <th class="avg" rowspan="2">Overall Avg. ↑</th>
+                <th class="col-sep"><em>M</em>(1)</th>
+                <th><em>M</em>(<em>n</em>)</th>
+                <th>Rearrange</th><th>Cover</th><th>Press</th>
+              </tr>
+              <tr>
+                <th class="col-sep"><em>Avg.</em></th>
+                <th><em>Avg.</em></th><th>Blocks</th><th>Blocks</th><th>Button</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="ours"><td>BridgeVLA++ <span class="cite">(full)</span></td><td class="avg best">96.0</td><td class="avg">95.2</td><td class="avg best">97.0</td><td class="best">100</td><td class="best">99</td><td class="best">93</td></tr>
+              <tr class="ablation"><td>w/o 𝒮 (spatial memory)</td><td class="avg">95.4</td><td class="avg best">96.2</td><td class="avg">94.5</td><td class="best">100</td><td>91</td><td>92</td></tr>
+              <tr class="ablation"><td>w/o 𝒯 (temporal memory)</td><td class="avg">21.3</td><td class="avg">27.0</td><td class="avg">14.3</td><td>11</td><td>5</td><td>0</td></tr>
+              <tr class="ablation"><td>BridgeVLA <span class="cite">(no memory)</span></td><td class="avg">18.9</td><td class="avg">19.0</td><td class="avg">18.8</td><td>0</td><td>3</td><td>0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="table-note">
+          <b>Table 11.&ensp;Memory ablations on RMBench.</b> The 2×2 memory factorial. Removing 𝒯 collapses
+          the benchmark from 96.0% to 21.3%, essentially back to the memory-free base (18.9%); removing
+          𝒮 is nearly harmless here, because RMBench stresses temporal sequencing rather than
+          geometric alignment.
+        </p>
+      </div>
+    </div>
 
   </div>
 </section>
