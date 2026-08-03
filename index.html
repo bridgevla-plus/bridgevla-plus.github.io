@@ -672,17 +672,12 @@
         <table class="data">
           <thead>
             <tr>
-              <th rowspan="2">Method</th>
-              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
-              <th rowspan="2" class="avg">Avg. Rank ↓</th>
-              <th>All</th><th>MO</th><th>RO</th><th>MO</th><th>RO</th><th>MO</th><th>RO</th>
-              <th>Light</th><th>Table</th><th>Table</th><th rowspan="2">Distractor</th>
-              <th>Background</th><th rowspan="2">RLBench</th><th>Camera</th>
-            </tr>
-            <tr>
-              <th>Perturb.</th><th>Color</th><th>Color</th><th>Texture</th><th>Texture</th>
-              <th>Size</th><th>Size</th><th>Color</th><th>Color</th><th>Texture</th>
-              <th>Texture</th><th>Pose</th>
+              <th>Method</th>
+              <th class="avg">Avg. SR (%) ↑</th>
+              <th class="avg">Avg. Rank ↓</th>
+              <th>All Perturb.</th><th>MO Color</th><th>RO Color</th><th>MO Texture</th><th>RO Texture</th>
+              <th>MO Size</th><th>RO Size</th><th>Light Color</th><th>Table Color</th><th>Table Texture</th>
+              <th>Distractor</th><th>Background Texture</th><th>RLBench</th><th>Camera Pose</th>
             </tr>
           </thead>
           <tbody>
@@ -830,10 +825,9 @@
           <table class="data">
             <thead>
               <tr>
-                <th rowspan="2">Method</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
-                <th>L1</th><th>L2</th><th>L3</th><th>L4</th>
+                <th>Method</th><th class="avg">Avg. SR (%) ↑</th>
+                <th>L1 Placement</th><th>L2 Rigid</th><th>L3 Articulated</th><th>L4 Long-Horizon</th>
               </tr>
-              <tr><th>Placement</th><th>Rigid</th><th>Articulated</th><th>Long-Horizon</th></tr>
             </thead>
             <tbody>
               <tr><td>Hiveformer <span class="cite">[Guhur et al. 2023]</span></td><td class="avg">30.4</td><td>60.3</td><td>26.1</td><td>35.1</td><td>0.0</td></tr>
@@ -1804,17 +1798,11 @@
         <table class="data">
           <thead>
             <tr>
-              <th rowspan="2">Method</th>
-              <th rowspan="2" class="avg">Avg. SR (%) ↑</th>
-              <th>Soda Can</th><th>Giraffe</th><th>Red Block</th><th>Press</th><th>RedBull</th>
-              <th>RedBull</th><th>Coke</th><th>Orange Block</th><th>Red Block</th>
-              <th>Yellow Block</th><th>Zebra</th><th>Zebra</th><th>Wolf</th>
-            </tr>
-            <tr>
-              <th>Bottom Shelf</th><th>Lower Drawer</th><th>Blue Plate</th><th>Sanitizer</th>
-              <th>Top Shelf</th><th>Bottom Shelf</th><th>Top Shelf</th><th>Green Plate</th>
-              <th>Purple Plate</th><th>Green Plate</th><th>Upper Drawer</th><th>Lower Drawer</th>
-              <th>Upper Drawer</th>
+              <th>Method</th>
+              <th class="avg">Avg. SR (%) ↑</th>
+              <th>Soda Can Bottom Shelf</th><th>Giraffe Lower Drawer</th><th>Red Block Blue Plate</th><th>Press Sanitizer</th><th>RedBull Top Shelf</th>
+              <th>RedBull Bottom Shelf</th><th>Coke Top Shelf</th><th>Orange Block Green Plate</th><th>Red Block Purple Plate</th>
+              <th>Yellow Block Green Plate</th><th>Zebra Upper Drawer</th><th>Zebra Lower Drawer</th><th>Wolf Upper Drawer</th>
             </tr>
           </thead>
           <tbody>
@@ -2017,14 +2005,10 @@
         <table class="data">
           <thead>
             <tr>
-              <th rowspan="2">Variant</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
-              <th rowspan="2" class="avg">Avg. Rank ↓</th>
-              <th>Insert</th><th>Place</th><th>Put in</th><th>Screw</th><th>Sort</th>
-              <th>Stack</th><th>Stack</th>
-            </tr>
-            <tr>
-              <th>Peg</th><th>Cups</th><th>Cupboard</th><th>Bulb</th><th>Shape</th>
-              <th>Blocks</th><th>Cups</th>
+              <th>Variant</th><th class="avg">Avg. SR (%) ↑</th>
+              <th class="avg">Avg. Rank ↓</th>
+              <th>Insert Peg</th><th>Place Cups</th><th>Put in Cupboard</th><th>Screw Bulb</th><th>Sort Shape</th>
+              <th>Stack Blocks</th><th>Stack Cups</th>
             </tr>
           </thead>
           <tbody>
@@ -2076,10 +2060,9 @@
           <table class="data">
             <thead>
               <tr>
-                <th rowspan="2">Variant</th><th rowspan="2" class="avg">RLBench Avg. ↑</th>
-                <th>Insert</th><th>Place</th><th>Sort</th><th>Stack</th><th>Place</th>
+                <th>Variant</th><th class="avg">RLBench Avg. ↑</th>
+                <th>Insert Peg</th><th>Place Cups</th><th>Sort Shape</th><th>Stack Cups</th><th>Place Wine</th>
               </tr>
-              <tr><th>Peg</th><th>Cups</th><th>Shape</th><th>Cups</th><th>Wine</th></tr>
             </thead>
             <tbody>
               <tr class="ours"><td>BridgeVLA++ <span class="cite">(full)</span></td><td class="avg best">93.7</td><td class="best">99.2</td><td class="best">76.8</td><td>72.0</td><td class="best">98.4</td><td class="best">95.2</td></tr>
@@ -2101,15 +2084,11 @@
           <table class="data">
             <thead>
               <tr>
-                <th rowspan="2">Variant</th>
-                <th class="avg" rowspan="2">Overall Avg. ↑</th>
-                <th class="col-sep"><em>M</em>(1)</th>
-                <th><em>M</em>(<em>n</em>)</th>
-                <th>Rearrange</th><th>Cover</th><th>Press</th>
-              </tr>
-              <tr>
-                <th class="col-sep"><em>Avg.</em></th>
-                <th><em>Avg.</em></th><th>Blocks</th><th>Blocks</th><th>Button</th>
+                <th>Variant</th>
+                <th class="avg">Overall Avg. ↑</th>
+                <th class="col-sep"><em>M</em>(1) <em>Avg.</em></th>
+                <th><em>M</em>(<em>n</em>) <em>Avg.</em></th>
+                <th>Rearrange Blocks</th><th>Cover Blocks</th><th>Press Button</th>
               </tr>
             </thead>
             <tbody>
@@ -2229,10 +2208,6 @@
       Website template adapted, with permission, from the
       <a href="https://bridgevla.github.io/" target="_blank" rel="noopener">BridgeVLA</a> and MV-VDP
       project pages.
-    </p>
-    <p style="opacity:.8">
-      <!-- TODO(author): acknowledgements, funding, contact e-mail. -->
-      Acknowledgements, funding and contact information: <em>to be added</em>.
     </p>
   </div>
 </footer>

@@ -542,9 +542,10 @@ table.data thead tr:first-child th[rowspan] { border-bottom: 1.5px solid var(--i
 table.data tbody tr:last-child td { border-bottom: 2px solid var(--ink); }
 .col-sep { border-left: 1px solid var(--line-strong); }
 
-/* Pin the row-label column. Scoped to the FIRST header row and to the body:
-   every header here spans two rows, so the second row's first cell is an
-   ordinary data column ("Jar", "Peg", …) and must not be pinned to left: 0. */
+/* Pin the row-label column. Scoped to the FIRST header row and to the body.
+   Most tables now use a single-row header, but a few keep a two-row grouped
+   header (M(1)/M(n) tasks, Memory-dependent/-free, …); there the second row's
+   first cell is an ordinary data column and must not be pinned to left: 0. */
 table.data thead tr:first-child th:first-child,
 table.data tbody td:first-child {
   text-align: left;
