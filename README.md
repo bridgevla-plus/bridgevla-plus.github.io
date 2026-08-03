@@ -12,7 +12,8 @@ python3 start_server.py     # http://localhost:8011
 | File | Role |
 | --- | --- |
 | `index.html` | **The page.** Everything lives here; entry point for GitHub Pages. |
-| `static/css/bridgevla_plus.css` | All styling. Self-contained — no Bulma / FontAwesome / jQuery. |
+| `static/css/bridgevla_plus.css` | All styling. Self-contained — no Bulma / FontAwesome / jQuery. Design tokens (palette, type, radii) are documented at the top of the file. |
+| `static/fonts/` | Self-hosted variable fonts (Newsreader, Geist, Geist Mono — woff2, latin subset). No Google Fonts request at runtime, so the page renders identically behind the GFW. |
 | `static/js/bridgevla_plus.js` | Missing-media placeholders, lazy video playback, tab switchers, the two demo explorers, scroll-spy, BibTeX copy. |
 | `static/images/paper/` | Figures rendered from `manuscript_tpami/figures/*.pdf`. |
 | `static/videos/real/dobot/` | All 35 DOBOT rollouts (7 tasks × 5 settings), rotated upright and re-encoded. |
@@ -205,8 +206,22 @@ front; none of the originals are faststart. Provenance lands in
 `X6` badge and play at 6× real time, which the page states in the explorer's
 lede.
 
+## Design
+
+The visual language is a "journal masthead" system built for the TPAMI
+version: warm paper surface, ink typography (Newsreader display serif,
+Geist UI sans, Geist Mono for data), hairline rules instead of card
+shadows, and a single accent. The accent orange is taken from the paper's
+own figures — in Figure 1 and the radar chart, orange marks "ours" — so
+the same hue highlights our rows in every table, our bars in the demo
+explorer, and the "++" in the wordmark. Light-only by design: every
+figure and table image is white-background, so a dark mode would degrade
+them. `static/images/bridgevla_plus_logo.svg` was recolored to match and
+is still a placeholder mark.
+
 ## Attribution
 
-The layout and visual language are adapted, with the original author's
-permission, from the BridgeVLA and MV-VDP project pages. All MV-VDP text,
-tables, figures and videos have been removed.
+The page structure, interaction design and template are adapted, with the
+original author's permission, from the BridgeVLA and MV-VDP project pages;
+the visual design (type, color, layout) was rebuilt for the journal
+version. All MV-VDP text, tables, figures and videos have been removed.

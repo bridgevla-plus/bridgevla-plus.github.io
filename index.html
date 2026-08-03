@@ -12,17 +12,17 @@
 <meta property="og:image" content="static/images/paper/teaser.png">
 <meta property="og:type" content="website">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="static/css/bridgevla_plus.css?v=4">
+<meta name="theme-color" content="#FAF9F7">
+<link rel="preload" href="static/fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="static/fonts/geist-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="static/css/bridgevla_plus.css?v=5">
 </head>
 <body>
 
 <!-- ======================================================================== -->
 <!-- HERO                                                                     -->
 <!-- ======================================================================== -->
-<header class="hero">
+<header class="hero" id="top">
   <div class="wrap-wide">
     <div class="hero-topbar">
       <span class="brandline">
@@ -30,7 +30,7 @@
         BridgeVLA++
       </span>
       <div class="more-research">
-        <button type="button" aria-expanded="false" aria-controls="more-research-menu">🔥 More Research</button>
+        <button type="button" aria-expanded="false" aria-controls="more-research-menu">More research</button>
         <nav class="menu" id="more-research-menu" aria-label="More research from our group">
           <a href="https://bridgevla.github.io/" target="_blank" rel="noopener">BridgeVLA <span style="opacity:.6">(NeurIPS 2025)</span></a>
           <a href="https://robovlms.github.io/" target="_blank" rel="noopener">RoboVLMs</a>
@@ -43,16 +43,13 @@
 
   <div class="wrap hero-inner">
     <img class="hero-logo" src="static/images/bridgevla_plus_logo.svg" alt="BridgeVLA++ logo">
-    <h1 class="hero-title">BridgeVLA<span style="letter-spacing:-.04em">++</span></h1>
+    <p class="hero-venue">Journal extension of
+      <a href="https://arxiv.org/abs/2506.07961" target="_blank" rel="noopener">BridgeVLA&nbsp;(NeurIPS&nbsp;2025)</a></p>
+    <h1 class="hero-title">BridgeVLA<span class="pp">++</span></h1>
     <p class="hero-subtitle">
       A Data-Efficient, Generalizable, and Memory-Augmented<br>
       Vision-Language-Action Framework for 3D Manipulation
     </p>
-    <span class="hero-venue">
-      <span>Journal extension of
-        <a href="https://arxiv.org/abs/2506.07961" target="_blank" rel="noopener"
-           style="color:#fff;border-bottom:1px solid rgba(255,255,255,.5);white-space:nowrap">BridgeVLA&nbsp;(NeurIPS&nbsp;2025)</a></span>
-    </span>
 
     <div class="authors">
       <span class="author">Peiyan Li<sup>1,2,*</sup></span>
@@ -123,6 +120,7 @@
 <!-- ======================================================================== -->
 <nav class="docnav" aria-label="Section navigation">
   <div class="wrap-wide">
+    <a class="nav-brand" href="#top">BridgeVLA<span class="pp">++</span></a>
     <a href="#overview">Overview</a>
     <a href="#simulation">Simulation</a>
     <a href="#real-robot">Real Robot</a>
@@ -187,6 +185,21 @@
       </div>
     </div>
 
+    <figure class="figure reveal" style="margin-top:2rem">
+      <img src="static/images/paper/teaser.png" alt="Overview of BridgeVLA++: multi-view heatmap alignment plus a unified spatio-temporal memory, with benchmark radar chart and real-world generalization settings.">
+      <figcaption class="figcap">
+        <b>Figure 1.&ensp;Overview of BridgeVLA++.</b>
+        BridgeVLA aligns 3D observations and actions in a shared multi-view 2D heatmap space,
+        enabling data-efficient and generalizable 3D manipulation learning with a pre-trained VLM.
+        BridgeVLA++ further introduces a unified spatio-temporal memory: temporal memory preserves the
+        interaction history to determine <em>what to do next</em>, while spatial memory restores
+        previously observed geometry to determine <em>where exactly to act</em>. Both memories are
+        accessed through a shared memory-injection module in the VLM patch-token space, without
+        changing the heatmap-based action interface. The scene-level memory can also be shared across
+        two arms, extending the framework naturally to bimanual manipulation.
+      </figcaption>
+    </figure>
+
     <h2 class="subhead reveal" id="abstract">Abstract</h2>
     <div class="abstract lede reveal">
       <p>
@@ -217,21 +230,6 @@
       </p>
     </div>
 
-    <figure class="figure reveal" style="margin-top:1.6rem">
-      <img src="static/images/paper/teaser.png" alt="Overview of BridgeVLA++: multi-view heatmap alignment plus a unified spatio-temporal memory, with benchmark radar chart and real-world generalization settings.">
-      <figcaption class="figcap">
-        <b>Figure 1 — Overview of BridgeVLA++.</b>
-        BridgeVLA aligns 3D observations and actions in a shared multi-view 2D heatmap space,
-        enabling data-efficient and generalizable 3D manipulation learning with a pre-trained VLM.
-        BridgeVLA++ further introduces a unified spatio-temporal memory: temporal memory preserves the
-        interaction history to determine <em>what to do next</em>, while spatial memory restores
-        previously observed geometry to determine <em>where exactly to act</em>. Both memories are
-        accessed through a shared memory-injection module in the VLM patch-token space, without
-        changing the heatmap-based action interface. The scene-level memory can also be shared across
-        two arms, extending the framework naturally to bimanual manipulation.
-      </figcaption>
-    </figure>
-
   </div>
 </section>
 
@@ -240,8 +238,7 @@
 <!-- ======================================================================== -->
 <section class="banner" id="simulation">
   <div class="wrap">
-    <p class="eyebrow">Five benchmarks</p>
-    <h2 class="gradient-text">Simulation Experiments</h2>
+    <h2>Simulation Experiments</h2>
     <p>General manipulation, out-of-distribution generalization, and memory-dependent reasoning.</p>
   </div>
 </section>
@@ -302,7 +299,7 @@
         <figure class="figure reveal" style="margin-top:1rem">
           <img src="static/images/paper/rmbench_tasks.jpg" loading="lazy"
                alt="Grid of the nine dual-arm RMBench tasks.">
-          <figcaption class="figcap"><b>The RMBench suite</b> — the nine dual-arm memory tasks,
+          <figcaption class="figcap"><b>The RMBench suite.</b> The nine dual-arm memory tasks,
             three example variants each.</figcaption>
         </figure>
 
@@ -313,14 +310,14 @@
             <tr>
               <th rowspan="2">Method</th>
               <th rowspan="2" class="avg">Overall Avg. ↑</th>
-              <th colspan="6" style="border-left:1px solid rgba(95,104,184,.25)"><em>M</em>(1) tasks</th>
-              <th colspan="5" style="border-left:1px solid rgba(95,104,184,.25)"><em>M</em>(<em>n</em>) tasks</th>
+              <th colspan="6" class="col-sep"><em>M</em>(1) tasks</th>
+              <th colspan="5" class="col-sep"><em>M</em>(<em>n</em>) tasks</th>
             </tr>
             <tr>
-              <th style="border-left:1px solid rgba(95,104,184,.25)">Observe &amp; Pick Up</th>
+              <th class="col-sep">Observe &amp; Pick Up</th>
               <th>Rearrange Blocks</th><th>Put Back Block</th><th>Swap Blocks</th><th>Swap T</th>
               <th class="avg"><em>Avg.</em></th>
-              <th style="border-left:1px solid rgba(95,104,184,.25)">Battery Try</th>
+              <th class="col-sep">Battery Try</th>
               <th>Blocks Ranking Try</th><th>Cover Blocks</th><th>Press Button</th>
               <th class="avg"><em>Avg.</em></th>
             </tr>
@@ -341,7 +338,7 @@
         </table>
       </div>
       <p class="table-note">
-        <b>Table 1 — RMBench.</b> Success rate (%) over 100 episodes per task on the nine dual-arm
+        <b>Table 1.&ensp;RMBench.</b> Success rate (%) over 100 episodes per task on the nine dual-arm
         tasks, grouped by memory complexity. Baseline numbers are quoted from their sources; “—”
         denotes tasks a source does not evaluate. Best per task in bold.
       </p>
@@ -360,63 +357,63 @@
         <div class="media-slot ratio-43">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rmbench__observe_and_pick_up.jpg"><source src="static/videos/sim/rmbench/observe_and_pick_up/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Observe &amp; Pick Up</b> — 81%</p>
+        <p class="media-caption"><b>Observe &amp; Pick Up</b><span class="media-score">81%</span></p>
       </div>
       <div class="media-card">
         <span class="task-chip">RMBench · short-term</span>
         <div class="media-slot ratio-43">
           <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/rearrange_blocks/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Rearrange Blocks</b> — 100%</p>
+        <p class="media-caption"><b>Rearrange Blocks</b><span class="media-score">100%</span></p>
       </div>
       <div class="media-card">
         <span class="task-chip">RMBench · short-term</span>
         <div class="media-slot ratio-43">
           <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/put_back_block/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Put Back Block</b> — 100%</p>
+        <p class="media-caption"><b>Put Back Block</b><span class="media-score">100%</span></p>
       </div>
       <div class="media-card">
         <span class="task-chip">RMBench · short-term</span>
         <div class="media-slot ratio-43">
           <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/swap_blocks/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Swap Blocks</b> — 99%</p>
+        <p class="media-caption"><b>Swap Blocks</b><span class="media-score">99%</span></p>
       </div>
       <div class="media-card">
         <span class="task-chip">RMBench · short-term</span>
         <div class="media-slot ratio-43">
           <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/swap_t/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Swap T</b> — 96%</p>
+        <p class="media-caption"><b>Swap T</b><span class="media-score">96%</span></p>
       </div>
       <div class="media-card">
         <span class="task-chip">RMBench · long-term</span>
         <div class="media-slot ratio-43">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rmbench__battery_try.jpg"><source src="static/videos/sim/rmbench/battery_try/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Battery Try</b> — 96% <span style="color:#8a93b3">(best baseline 45%)</span></p>
+        <p class="media-caption"><b>Battery Try</b><span class="media-score">96% <span class="sub-note">(best baseline 45%)</span></span></p>
       </div>
       <div class="media-card">
         <span class="task-chip">RMBench · long-term</span>
         <div class="media-slot ratio-43">
           <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/blocks_ranking_try/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Blocks Ranking Try</b> — 100%</p>
+        <p class="media-caption"><b>Blocks Ranking Try</b><span class="media-score">100%</span></p>
       </div>
       <div class="media-card">
         <span class="task-chip">RMBench · long-term</span>
         <div class="media-slot ratio-43">
           <video muted loop playsinline controls preload="metadata"><source src="static/videos/sim/rmbench/cover_blocks/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Cover Blocks</b> — 99%</p>
+        <p class="media-caption"><b>Cover Blocks</b><span class="media-score">99%</span></p>
       </div>
       <div class="media-card">
         <span class="task-chip">RMBench · long-term</span>
         <div class="media-slot ratio-43">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rmbench__press_button.jpg"><source src="static/videos/sim/rmbench/press_button/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Press Button</b> — 93%</p>
+        <p class="media-caption"><b>Press Button</b><span class="media-score">93%</span></p>
       </div>
     </div>
       </div>
@@ -435,15 +432,15 @@
       <em>sort shape</em> +16.8 and <em>place cups</em> +18.4.
     </p>
             <ul class="bench-facts reveal">
-              <li><b>Protocol</b> — 100 demonstrations per task; mean over five evaluation runs of 25 episodes.</li>
-              <li><b>93.7%</b> — +6.9 points over SAM2Act (86.8%), the previous state of the art.</li>
-              <li><b>Where the memory helps</b> — occlusion-heavy precision tasks: <em>Sort Shape</em> +16.8, <em>Place Cups</em> +18.4.</li>
+              <li><b>Protocol.</b> 100 demonstrations per task; mean over five evaluation runs of 25 episodes.</li>
+              <li><b>93.7%.</b> +6.9 points over SAM2Act (86.8%), the previous state of the art.</li>
+              <li><b>Where the memory helps.</b> Occlusion-heavy precision tasks: <em>Sort Shape</em> +16.8, <em>Place Cups</em> +18.4.</li>
             </ul>
           </div>
           <figure class="figure reveal">
             <img src="static/images/paper/rlbench_tasks.jpg" loading="lazy"
                  alt="Grid of the 18 RLBench tasks.">
-            <figcaption class="figcap"><b>The RLBench suite</b> — the 18 evaluated tasks.</figcaption>
+            <figcaption class="figcap"><b>The RLBench suite.</b> The 18 evaluated tasks.</figcaption>
           </figure>
         </div>
 
@@ -520,7 +517,7 @@
         </table>
       </div>
       <p class="table-note">
-        <b>Table 2 — RLBench.</b> Success rate (%) on the 18 standard tasks with average success rate
+        <b>Table 2.&ensp;RLBench.</b> Success rate (%) on the 18 standard tasks with average success rate
         and average rank (lower is better). Our rows report the mean over five seeds of 25 episodes;
         per-seed standard deviations are given in the paper. Best average in bold. Design and memory
         ablations of the same table are collected in the <a href="#ablations">Ablations</a> section.
@@ -534,166 +531,148 @@
 
     <div class="media-grid cols-4 reveal" style="margin-top:1rem">
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__close_jar.jpg">
             <source src="static/videos/sim/rlbench/close_jar/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Close Jar</b> — 100.0%</p>
+        <p class="media-caption"><b>Close Jar</b><span class="media-score">100.0%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__drag_stick.jpg">
             <source src="static/videos/sim/rlbench/drag_stick/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Drag Stick</b> — 98.4%</p>
+        <p class="media-caption"><b>Drag Stick</b><span class="media-score">98.4%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__insert_peg.jpg">
             <source src="static/videos/sim/rlbench/insert_peg/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Insert Peg</b> — 99.2%</p>
+        <p class="media-caption"><b>Insert Peg</b><span class="media-score">99.2%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__meat_off_grill.jpg">
             <source src="static/videos/sim/rlbench/meat_off_grill/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Meat off Grill</b> — 100.0%</p>
+        <p class="media-caption"><b>Meat off Grill</b><span class="media-score">100.0%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__open_drawer.jpg">
             <source src="static/videos/sim/rlbench/open_drawer/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Open Drawer</b> — 99.2%</p>
+        <p class="media-caption"><b>Open Drawer</b><span class="media-score">99.2%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__place_cups.jpg">
             <source src="static/videos/sim/rlbench/place_cups/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Place Cups</b> — 76.8%</p>
+        <p class="media-caption"><b>Place Cups</b><span class="media-score">76.8%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__place_wine.jpg">
             <source src="static/videos/sim/rlbench/place_wine/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Place Wine</b> — 95.2%</p>
+        <p class="media-caption"><b>Place Wine</b><span class="media-score">95.2%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__push_buttons.jpg">
             <source src="static/videos/sim/rlbench/push_buttons/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Push Buttons</b> — 100.0%</p>
+        <p class="media-caption"><b>Push Buttons</b><span class="media-score">100.0%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__put_in_cupboard.jpg">
             <source src="static/videos/sim/rlbench/put_in_cupboard/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Put in Cupboard</b> — 92.0%</p>
+        <p class="media-caption"><b>Put in Cupboard</b><span class="media-score">92.0%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__put_in_drawer.jpg">
             <source src="static/videos/sim/rlbench/put_in_drawer/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Put in Drawer</b> — 99.2%</p>
+        <p class="media-caption"><b>Put in Drawer</b><span class="media-score">99.2%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__put_in_safe.jpg">
             <source src="static/videos/sim/rlbench/put_in_safe/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Put in Safe</b> — 92.8%</p>
+        <p class="media-caption"><b>Put in Safe</b><span class="media-score">92.8%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__screw_bulb.jpg">
             <source src="static/videos/sim/rlbench/screw_bulb/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Screw Bulb</b> — 95.2%</p>
+        <p class="media-caption"><b>Screw Bulb</b><span class="media-score">95.2%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__slide_block.jpg">
             <source src="static/videos/sim/rlbench/slide_block/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Slide Block</b> — 96.0%</p>
+        <p class="media-caption"><b>Slide Block</b><span class="media-score">96.0%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__sort_shape.jpg">
             <source src="static/videos/sim/rlbench/sort_shape/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Sort Shape</b> — 72.0%</p>
+        <p class="media-caption"><b>Sort Shape</b><span class="media-score">72.0%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__stack_blocks.jpg">
             <source src="static/videos/sim/rlbench/stack_blocks/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Stack Blocks</b> — 85.6%</p>
+        <p class="media-caption"><b>Stack Blocks</b><span class="media-score">85.6%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__stack_cups.jpg">
             <source src="static/videos/sim/rlbench/stack_cups/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Stack Cups</b> — 98.4%</p>
+        <p class="media-caption"><b>Stack Cups</b><span class="media-score">98.4%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__sweep_to_dustpan.jpg">
             <source src="static/videos/sim/rlbench/sweep_to_dustpan/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Sweep to Dustpan</b> — 97.6%</p>
+        <p class="media-caption"><b>Sweep to Dustpan</b><span class="media-score">97.6%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">RLBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/rlbench__turn_tap.jpg">
             <source src="static/videos/sim/rlbench/turn_tap/trial_1.mp4" type="video/mp4">
           </video>
         </div>
-        <p class="media-caption"><b>Turn Tap</b> — 89.6%</p>
+        <p class="media-caption"><b>Turn Tap</b><span class="media-score">89.6%</span></p>
       </div>
     </div>
       </div>
@@ -717,7 +696,7 @@
             <img src="static/images/paper/colosseum_perturbations_b.jpg" loading="lazy"
                  alt="COLOSSEUM perturbation axes, second half.">
           </div>
-          <figcaption class="figcap"><b>The COLOSSEUM suite</b> — the perturbation axes, none of
+          <figcaption class="figcap"><b>The COLOSSEUM suite.</b> The perturbation axes, none of
             which appear in the training data.</figcaption>
         </figure>
 
@@ -786,7 +765,7 @@
         </table>
       </div>
       <p class="table-note">
-        <b>Table 3 — COLOSSEUM.</b> Success rate (%) across the 14 evaluation settings. MO and RO
+        <b>Table 3.&ensp;COLOSSEUM.</b> Success rate (%) across the 14 evaluation settings. MO and RO
         denote perturbations of the manipulated object and the receptacle object. Baseline numbers for
         R3M-MLP, MVP-MLP, PerAct and RVT are quoted from the benchmark; RVT-2 and our models were
         trained and evaluated by us (mean over three test repetitions; variances in the paper).
@@ -799,63 +778,54 @@
 
     <div class="media-grid cols-3 reveal" style="margin-top:1rem">
       <div class="media-card">
-        <span class="task-chip">COLOSSEUM</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/colosseum__scoop_with_spatula.jpg"><source src="static/videos/sim/colosseum/scoop_with_spatula/trial_1.mp4" type="video/mp4"></video>
         </div>
         <p class="media-caption"><b>Scoop with Spatula</b></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">COLOSSEUM</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/colosseum__insert_square_peg.jpg"><source src="static/videos/sim/colosseum/insert_square_peg/trial_1.mp4" type="video/mp4"></video>
         </div>
         <p class="media-caption"><b>Insert onto Square Peg</b></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">COLOSSEUM</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/colosseum__close_laptop_lid.jpg"><source src="static/videos/sim/colosseum/close_laptop_lid/trial_1.mp4" type="video/mp4"></video>
         </div>
         <p class="media-caption"><b>Close Laptop Lid</b></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">COLOSSEUM</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/colosseum__move_hanger.jpg"><source src="static/videos/sim/colosseum/move_hanger/trial_1.mp4" type="video/mp4"></video>
         </div>
         <p class="media-caption"><b>Move Hanger</b></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">COLOSSEUM</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/colosseum__basketball_in_hoop.jpg"><source src="static/videos/sim/colosseum/basketball_in_hoop/trial_1.mp4" type="video/mp4"></video>
         </div>
         <p class="media-caption"><b>Basketball in Hoop</b></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">COLOSSEUM</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/colosseum__reach_and_drag.jpg"><source src="static/videos/sim/colosseum/reach_and_drag/trial_1.mp4" type="video/mp4"></video>
         </div>
         <p class="media-caption"><b>Reach and Drag</b></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">COLOSSEUM</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/colosseum__straighten_rope.jpg"><source src="static/videos/sim/colosseum/straighten_rope/trial_1.mp4" type="video/mp4"></video>
         </div>
         <p class="media-caption"><b>Straighten Rope</b></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">COLOSSEUM</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/colosseum__turn_oven_on.jpg"><source src="static/videos/sim/colosseum/turn_oven_on/trial_1.mp4" type="video/mp4"></video>
         </div>
         <p class="media-caption"><b>Turn Oven On</b></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">COLOSSEUM</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/colosseum__hockey.jpg"><source src="static/videos/sim/colosseum/hockey/trial_1.mp4" type="video/mp4"></video>
         </div>
@@ -877,16 +847,16 @@
       episodic memory finally gives the policy something to sequence over.
     </p>
             <ul class="bench-facts reveal">
-              <li><b>L1 Novel placements</b> — 88.6%</li>
-              <li><b>L2 Novel rigid objects</b> — 68.9%, the best of all methods.</li>
-              <li><b>L3 Novel articulated objects</b> — 38.5% (base BridgeVLA: 43.8%, the best).</li>
-              <li><b>L4 Long-horizon</b> — 0.0% → 8.2%: the episodic memory finally gives the policy something to sequence over.</li>
+              <li><b>L1 Novel placements.</b> 88.6%</li>
+              <li><b>L2 Novel rigid objects.</b> 68.9%, the best of all methods.</li>
+              <li><b>L3 Novel articulated objects.</b> 38.5% (base BridgeVLA: 43.8%, the best).</li>
+              <li><b>L4 Long-horizon.</b> 0.0% → 8.2%: the episodic memory finally gives the policy something to sequence over.</li>
             </ul>
           </div>
           <figure class="figure reveal">
             <img src="static/images/paper/gembench_tasks.jpg" loading="lazy"
                  alt="Grid of the GemBench task suite.">
-            <figcaption class="figcap"><b>The GemBench suite</b> — the four generalization levels.</figcaption>
+            <figcaption class="figcap"><b>The GemBench suite.</b> The four generalization levels.</figcaption>
           </figure>
         </div>
 
@@ -913,7 +883,7 @@
           </table>
         </div>
         <p class="table-note">
-          <b>Table 4 — GemBench.</b> Success rate (%) over 20 trials per task variation, five random
+          <b>Table 4.&ensp;GemBench.</b> Success rate (%) over 20 trials per task variation, five random
           seeds; per-level standard deviations are given in the paper. Baselines are quoted from the
           GemBench benchmark [Garcia et al. 2024], except the 3D Diffuser Actor average, recomputed
           as the mean of its four levels (its source prints 44.0). Our rows were trained and
@@ -927,63 +897,54 @@
 
       <div class="media-grid cols-3 reveal" style="margin-top:1rem">
         <div class="media-card">
-          <span class="task-chip">GemBench</span>
           <div class="media-slot">
             <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/gembench__stack_blocks.jpg"><source src="static/videos/sim/gembench/stack_blocks/trial_1.mp4" type="video/mp4"></video>
           </div>
           <p class="media-caption"><b>Stack Blocks</b></p>
         </div>
         <div class="media-card">
-          <span class="task-chip">GemBench</span>
           <div class="media-slot">
             <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/gembench__stack_cups.jpg"><source src="static/videos/sim/gembench/stack_cups/trial_1.mp4" type="video/mp4"></video>
           </div>
           <p class="media-caption"><b>Stack Cups</b></p>
         </div>
         <div class="media-card">
-          <span class="task-chip">GemBench</span>
           <div class="media-slot">
             <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/gembench__put_money_in_safe.jpg"><source src="static/videos/sim/gembench/put_money_in_safe/trial_1.mp4" type="video/mp4"></video>
           </div>
           <p class="media-caption"><b>Put Money in Safe</b></p>
         </div>
         <div class="media-card">
-          <span class="task-chip">GemBench</span>
           <div class="media-slot">
             <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/gembench__close_laptop_lid.jpg"><source src="static/videos/sim/gembench/close_laptop_lid/trial_1.mp4" type="video/mp4"></video>
           </div>
           <p class="media-caption"><b>Close Laptop Lid</b></p>
         </div>
         <div class="media-card">
-          <span class="task-chip">GemBench</span>
           <div class="media-slot">
             <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/gembench__close_microwave.jpg"><source src="static/videos/sim/gembench/close_microwave/trial_1.mp4" type="video/mp4"></video>
           </div>
           <p class="media-caption"><b>Close Microwave</b></p>
         </div>
         <div class="media-card">
-          <span class="task-chip">GemBench</span>
           <div class="media-slot">
             <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/gembench__close_grill.jpg"><source src="static/videos/sim/gembench/close_grill/trial_1.mp4" type="video/mp4"></video>
           </div>
           <p class="media-caption"><b>Close Grill</b></p>
         </div>
         <div class="media-card">
-          <span class="task-chip">GemBench</span>
           <div class="media-slot">
             <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/gembench__push_button.jpg"><source src="static/videos/sim/gembench/push_button/trial_1.mp4" type="video/mp4"></video>
           </div>
           <p class="media-caption"><b>Push Button</b></p>
         </div>
         <div class="media-card">
-          <span class="task-chip">GemBench</span>
           <div class="media-slot">
             <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/gembench__take_shoe_out_of_box.jpg"><source src="static/videos/sim/gembench/take_shoe_out_of_box/trial_1.mp4" type="video/mp4"></video>
           </div>
           <p class="media-caption"><b>Take Shoe Out of Box</b></p>
         </div>
         <div class="media-card">
-          <span class="task-chip">GemBench</span>
           <div class="media-slot">
             <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/gembench__toilet_seat_up.jpg"><source src="static/videos/sim/gembench/toilet_seat_up/trial_1.mp4" type="video/mp4"></video>
           </div>
@@ -1006,7 +967,7 @@
         <figure class="figure reveal" style="margin-top:1rem">
           <img src="static/images/paper/memorybench_tasks.jpg" loading="lazy"
                alt="Grid of the three MemoryBench tasks.">
-          <figcaption class="figcap"><b>The MemoryBench suite</b> — the three single-arm memory
+          <figcaption class="figcap"><b>The MemoryBench suite.</b> The three single-arm memory
             tasks: Reopen Drawer, Put Block Back, Rearrange Block.</figcaption>
         </figure>
 
@@ -1030,7 +991,7 @@
           </table>
         </div>
         <p class="table-note">
-          <b>Table 5 — MemoryBench.</b> Single-arm memory-dependent suite. Baselines are quoted from
+          <b>Table 5.&ensp;MemoryBench.</b> Single-arm memory-dependent suite. Baselines are quoted from
           [Fang et al. 2025] as mean±std over four evaluation runs; in the Avg. column the deviation
           is the spread across the three tasks. Our rows are mean±std over five evaluation seeds.
           The memory-free base policy collapses to 11.3%, confirming that these tasks genuinely
@@ -1040,25 +1001,22 @@
 
     <div class="media-grid cols-3 reveal" style="margin-top:1rem">
       <div class="media-card">
-        <span class="task-chip">MemoryBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/memorybench__reopen_drawer.jpg"><source src="static/videos/sim/memorybench/reopen_drawer/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Reopen Drawer</b> — 100.0%</p>
+        <p class="media-caption"><b>Reopen Drawer</b><span class="media-score">100.0%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">MemoryBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/memorybench__put_block_back.jpg"><source src="static/videos/sim/memorybench/put_block_back/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Put Block Back</b> — 99.8%</p>
+        <p class="media-caption"><b>Put Block Back</b><span class="media-score">99.8%</span></p>
       </div>
       <div class="media-card">
-        <span class="task-chip">MemoryBench</span>
         <div class="media-slot">
           <video muted loop playsinline controls preload="metadata" poster="static/images/sim_posters/memorybench__rearrange_block.jpg"><source src="static/videos/sim/memorybench/rearrange_block/trial_1.mp4" type="video/mp4"></video>
         </div>
-        <p class="media-caption"><b>Rearrange Block</b> — 99.2%</p>
+        <p class="media-caption"><b>Rearrange Block</b><span class="media-score">99.2%</span></p>
       </div>
     </div>
       </div>
@@ -1072,8 +1030,7 @@
 <!-- ======================================================================== -->
 <section class="banner" id="real-robot">
   <div class="wrap">
-    <p class="eyebrow">Two embodiments, ten demonstrations per language instruction</p>
-    <h2 class="gradient-text">Real-Robot Experiments</h2>
+    <h2>Real-Robot Experiments</h2>
     <p>A 7-DoF Franka Research 3 for general manipulation, and a held-out 6-DoF DOBOT CR5A for memory.</p>
   </div>
 </section>
@@ -1084,7 +1041,7 @@
     <figure class="figure reveal" style="margin-top:1.6rem">
       <img src="static/images/paper/real_setup.jpg" alt="Real robot setup: Franka Research 3 and DOBOT CR5A, each observed by a static ZED 2i stereo camera, two summary bar charts, and the basic, generalization and memory evaluation settings.">
       <figcaption class="figcap">
-        <b>Figure 2 — Real-robot evaluation setup.</b> Top left: the general-manipulation platform — a
+        <b>Figure 2.&ensp;Real-robot evaluation setup.</b> Top left: the general-manipulation platform — a
         7-DoF Franka Research 3 with a parallel-jaw gripper, observed by a single static ZED 2i stereo
         camera that provides the colored point cloud. Top right: the memory platform — a 6-DoF DOBOT
         CR5A arm with the same camera configuration. Top centre: the average gain of our models over the
@@ -1512,7 +1469,7 @@
           </div>
 
           <div class="keyframe-block">
-            <h5>Keyframe rollout <span style="text-transform:none;letter-spacing:0;font-weight:500">(basic setting)</span></h5>
+            <h5>Keyframe rollout <span class="light">(basic setting)</span></h5>
             <div class="keyframe-strip" data-demo-keyframes></div>
           </div>
         </div>
@@ -1782,7 +1739,7 @@
     <div class="idea-grid reveal" style="margin-top:1.1rem">
       <div class="idea">
         <div class="num">①</div>
-        <h4>Press Button — <em>counting</em></h4>
+        <h4>Press Button · <em>counting</em></h4>
         <p>
           Press the blue button exactly <em>N</em> times (given in words, “twice” / “three times”),
           then the yellow button once. A press leaves no visible trace, so every post-press frame is
@@ -1792,7 +1749,7 @@
       </div>
       <div class="idea">
         <div class="num">②</div>
-        <h4>Cover Blocks — <em>occlusion</em></h4>
+        <h4>Cover Blocks · <em>occlusion</em></h4>
         <p>
           Cover all three blocks, then uncover only the block of the instructed color. Covering erases
           the color evidence from the scene, so the second phase is solvable only from the
@@ -1801,7 +1758,7 @@
       </div>
       <div class="idea">
         <div class="num">③</div>
-        <h4>Swap Eggplant — <em>rearrangement</em></h4>
+        <h4>Swap Eggplant · <em>rearrangement</em></h4>
         <p>
           Two look-alike eggplants must end up each on the other's initial plate, using a third plate
           as a buffer that must be empty again at the end. Intermediate configurations recur across
@@ -1817,13 +1774,13 @@
             <thead>
               <tr>
                 <th rowspan="2">Method</th><th rowspan="2">Mem.</th>
-                <th colspan="3" style="border-left:1px solid rgba(95,104,184,.25)">Memory-dependent</th>
-                <th colspan="2" style="border-left:1px solid rgba(95,104,184,.25)">Memory-free</th>
+                <th colspan="3" class="col-sep">Memory-dependent</th>
+                <th colspan="2" class="col-sep">Memory-free</th>
               </tr>
               <tr>
-                <th style="border-left:1px solid rgba(95,104,184,.25)">Cover Blocks</th>
+                <th class="col-sep">Cover Blocks</th>
                 <th>Press Button</th><th>Swap Eggplant</th>
-                <th style="border-left:1px solid rgba(95,104,184,.25)">Put in Drawer</th>
+                <th class="col-sep">Put in Drawer</th>
                 <th>Put on Shelf</th>
               </tr>
             </thead>
@@ -1835,7 +1792,7 @@
           </table>
         </div>
         <p class="table-note">
-          <b>Table 6 — DOBOT, basic setting.</b> Ten trials per language instruction. <em>Put in
+          <b>Table 6.&ensp;DOBOT, basic setting.</b> Ten trials per language instruction. <em>Put in
           Drawer</em> and <em>Put on Shelf</em> are each evaluated with two instructions (upper and
           lower target) and reported as their average.
         </p>
@@ -1847,10 +1804,10 @@
             <thead>
               <tr>
                 <th rowspan="2">Method</th><th rowspan="2">Mem.</th><th rowspan="2">Basic</th>
-                <th colspan="5" style="border-left:1px solid rgba(95,104,184,.25)">Visual disturbance</th>
+                <th colspan="5" class="col-sep">Visual disturbance</th>
               </tr>
               <tr>
-                <th style="border-left:1px solid rgba(95,104,184,.25)">Distractor</th>
+                <th class="col-sep">Distractor</th>
                 <th>Background</th><th>Height</th><th>Lighting</th><th class="avg"><em>Avg.</em></th>
               </tr>
             </thead>
@@ -1867,7 +1824,7 @@
           </table>
         </div>
         <p class="table-note">
-          <b>Table 7 — DOBOT, all settings.</b> Each entry is the unweighted mean over the three
+          <b>Table 7.&ensp;DOBOT, all settings.</b> Each entry is the unweighted mean over the three
           memory-dependent or two memory-free tasks; <em>Avg.</em> averages the four disturbance
           settings. The memory advantage survives every disturbance, and on tasks that never needed
           memory BridgeVLA++ is no weaker than the base model in any setting.
@@ -1920,7 +1877,7 @@
         </table>
       </div>
       <p class="table-note">
-        <b>Table 8 — Real Franka results, basic setting.</b> Success counts over 10 trials per task.
+        <b>Table 8.&ensp;Real Franka results, basic setting.</b> Success counts over 10 trials per task.
         All methods use 10 demonstrations per task except SpatialVLA&nbsp;(50) and the
         3-demonstration reference row. ACT is trained single-task, as it is not language-conditioned;
         test scenes are photographed and manually aligned across methods.
@@ -1928,7 +1885,6 @@
     </div>
 
     <div class="callout reveal" style="margin-top:1rem">
-      <span aria-hidden="true" style="font-size:1.3rem">📉</span>
       <div>
         <b>Data efficiency.</b> Cutting training data from 10 to <b>3 demonstrations per task</b> costs
         1.5 points — 96.9% → <b>95.4%</b>. Over the same 13 tasks, π<sub>0</sub> reaches 3.8% and
@@ -1949,7 +1905,7 @@
     <figure class="figure reveal" style="margin-top:1rem">
       <img loading="lazy" src="static/images/paper/real_results.png" alt="Bar chart of average success rate over the 13 Franka tasks in the basic setting and six generalization settings, comparing RVT-2, BridgeVLA without pre-training and BridgeVLA.">
       <figcaption class="figcap">
-        <b>Figure 3 — Real-robot generalization.</b> Average success rate over the 13 Franka tasks in
+        <b>Figure 3.&ensp;Real-robot generalization.</b> Average success rate over the 13 Franka tasks in
         the basic setting and the six generalization settings. The <em>w/o Pre-train</em> bars ablate
         the 2D-heatmap pre-training: without it the policy cannot generalize in either
         language-related setting and does not even match RVT-2, while the full model is best in both.
@@ -1969,37 +1925,37 @@
         <figure class="is-active">
           <img src="static/images/paper/real_perturbation_settings.jpg" loading="lazy"
                alt="The distractor, lighting, background and height settings on the Franka platform.">
-          <figcaption class="figcap"><b>Visual-disturbance settings</b> — Distractor, Lighting,
+          <figcaption class="figcap"><b>Visual-disturbance settings.</b> Distractor, Lighting,
             Background and Height, none seen during training.</figcaption>
         </figure>
         <figure>
           <img src="static/images/paper/combination_within.jpg" loading="lazy"
                alt="The combination setting, part I: unseen object–skill pairings.">
-          <figcaption class="figcap"><b>Combination setting (I)</b> — objects and skills each seen in
+          <figcaption class="figcap"><b>Combination setting (I).</b> Objects and skills each seen in
             training, paired in ways never demonstrated together.</figcaption>
         </figure>
         <figure>
           <img src="static/images/paper/combination_across.jpg" loading="lazy"
                alt="The combination setting, part II: unseen object–skill pairings.">
-          <figcaption class="figcap"><b>Combination setting (II)</b> — further unseen object–skill
+          <figcaption class="figcap"><b>Combination setting (II).</b> Further unseen object–skill
             pairings.</figcaption>
         </figure>
         <figure>
           <img src="static/images/paper/category_setting.jpg" loading="lazy"
                alt="The category setting: object categories unseen in the robot data.">
-          <figcaption class="figcap"><b>Category setting</b> — seven objects from categories absent
+          <figcaption class="figcap"><b>Category setting.</b> Seven objects from categories absent
             from the robot training data.</figcaption>
         </figure>
         <figure>
           <img src="static/images/paper/real_rollouts_1.jpg" loading="lazy"
                alt="Real robot rollouts on the Franka task suite, part I.">
-          <figcaption class="figcap"><b>Rollouts (I)</b> — keyframe sequences on the Franka task
+          <figcaption class="figcap"><b>Rollouts (I).</b> Keyframe sequences on the Franka task
             suite.</figcaption>
         </figure>
         <figure>
           <img src="static/images/paper/real_rollouts_2.jpg" loading="lazy"
                alt="Real robot rollouts on the Franka task suite, part II.">
-          <figcaption class="figcap"><b>Rollouts (II)</b> — keyframe sequences on the Franka task
+          <figcaption class="figcap"><b>Rollouts (II).</b> Keyframe sequences on the Franka task
             suite.</figcaption>
         </figure>
       </div>
@@ -2016,8 +1972,7 @@
 <!-- ======================================================================== -->
 <section class="banner" id="method">
   <div class="wrap">
-    <p class="eyebrow">How it works</p>
-    <h2 class="gradient-text">Method</h2>
+    <h2>Method</h2>
     <p>From input–output alignment to a unified spatio-temporal memory.</p>
   </div>
 </section>
@@ -2025,7 +1980,7 @@
 <section class="section" style="padding-top:1.4rem">
   <div class="wrap">
 
-    <h3 class="subhead reveal">Part I — BridgeVLA: spatial input–output alignment</h3>
+    <h3 class="subhead reveal">Part I. BridgeVLA: spatial input–output alignment</h3>
     <p class="lede reveal">
       A pre-trained VLM is fluent in 2D images and language, not in point clouds and 6-DoF poses.
       BridgeVLA closes that gap from both sides: the <em>input</em> is rendered back into images, and
@@ -2067,7 +2022,7 @@
       </div>
     </div>
 
-    <h3 class="subhead reveal">Part II — BridgeVLA++: unified spatio-temporal memory</h3>
+    <h3 class="subhead reveal">Part II. BridgeVLA++: unified spatio-temporal memory</h3>
     <p class="lede reveal">
       The coarse-to-fine design exposes exactly two stages where past observations help, and they need
       different things. The coarse stage reasons over the whole workspace and must know
@@ -2129,7 +2084,7 @@
     <figure class="figure reveal" style="margin-top:1.8rem">
       <img src="static/images/paper/architecture.png" alt="BridgeVLA and BridgeVLA++ architecture: 2D-heatmap pre-training, 3D-action fine-tuning, and the temporal and spatial memory injection blocks. The temporal block runs cross- and self-attention over history keyframes and an anchor frame chosen by a keyframe selector; the spatial block attends to a local point-cloud projection of the initial scene.">
       <figcaption class="figcap">
-        <b>Figure 4 — Architecture.</b> Top: the 2D-heatmap pre-training and 3D-action fine-tuning
+        <b>Figure 4.&ensp;Architecture.</b> Top: the 2D-heatmap pre-training and 3D-action fine-tuning
         pipeline of BridgeVLA. Bottom: the spatio-temporal memory of BridgeVLA++. At the coarse stage
         the temporal memory supplies interaction history; at the fine stage the spatial memory
         re-renders an earlier, less-occluded point cloud under the current zoom. Memory is injected in
@@ -2138,7 +2093,6 @@
     </figure>
 
     <div class="callout reveal" style="margin-top:1.4rem">
-      <span aria-hidden="true" style="font-size:1.3rem">💡</span>
       <div>
         <b>The memory is strictly additive.</b> It adds 269.77M parameters — 9.2% on top of the
         2.92B-parameter backbone — and moves end-to-end latency from 0.35&nbsp;s to 0.57&nbsp;s per
@@ -2156,8 +2110,7 @@
 <!-- ======================================================================== -->
 <section class="banner" id="ablations">
   <div class="wrap">
-    <p class="eyebrow">What actually matters</p>
-    <h2 class="gradient-text">Ablation Studies</h2>
+    <h2>Ablation Studies</h2>
     <p>Which design decisions carry the performance — and which memory does what.</p>
   </div>
 </section>
@@ -2190,7 +2143,7 @@
         </table>
       </div>
       <p class="table-note">
-        <b>Table 9 — Base-model ablations.</b> A representative subset of the 18 RLBench columns; the
+        <b>Table 9.&ensp;Base-model ablations.</b> A representative subset of the 18 RLBench columns; the
         averages and ranks are over all 18 tasks. <em>w/o heatmap decoding</em> and <em>w/ 3D position
         input</em> use three seeds, the others five.
       </p>
@@ -2199,7 +2152,7 @@
     <div class="idea-grid reveal" style="margin-top:1.1rem">
       <div class="idea">
         <div class="num">A</div>
-        <h4>Predict heatmaps, not coordinates <span style="color:#b34a4a">−59.1</span></h4>
+        <h4>Predict heatmaps, not coordinates <span class="delta delta-neg">−59.1</span></h4>
         <p>
           Swapping convex upsampling for a parameter-matched Transformer decoder that regresses target
           positions under an MSE loss collapses RLBench from <b>90.5% to 31.4%</b>, and the ablated
@@ -2210,7 +2163,7 @@
       </div>
       <div class="idea">
         <div class="num">B</div>
-        <h4>Do <em>not</em> feed 3D positions to the VLM <span style="color:#b34a4a">−34.3</span></h4>
+        <h4>Do <em>not</em> feed 3D positions to the VLM <span class="delta delta-neg">−34.3</span></h4>
         <p>
           Fusing per-pixel 3D positions into the image features through a 3D convolutional module
           injects richer spatial cues — and drops success from <b>90.5% to 56.2%</b>, because the image
@@ -2230,7 +2183,7 @@
       </div>
       <div class="idea">
         <div class="num">D</div>
-        <h4>Continuous 6D rotation beats discretization <span style="color:#b34a4a">−2.3</span></h4>
+        <h4>Continuous 6D rotation beats discretization <span class="delta delta-neg">−2.3</span></h4>
         <p>
           Replacing the continuous 6D rotation head with the discretized per-axis Euler classification
           of the conference version costs <b>90.5% → 88.2%</b>, concentrated in tasks demanding precise
@@ -2265,7 +2218,7 @@
           </table>
         </div>
         <p class="table-note">
-          <b>Table 10 — Memory ablations on RLBench.</b> Removing 𝒮 costs most exactly in the
+          <b>Table 10.&ensp;Memory ablations on RLBench.</b> Removing 𝒮 costs most exactly in the
           occlusion-heavy precision tasks it targets (<em>sort shape</em> 72.0 → 60.8), and removing 𝒯
           costs most where a stable global reference helps (<em>place cups</em> 76.8 → 57.6) — even
           though RLBench tasks are not intrinsically memory-dependent.
@@ -2279,12 +2232,12 @@
               <tr>
                 <th rowspan="2">Variant</th>
                 <th class="avg" rowspan="2">Overall Avg. ↑</th>
-                <th style="border-left:1px solid rgba(95,104,184,.25)"><em>M</em>(1)</th>
+                <th class="col-sep"><em>M</em>(1)</th>
                 <th><em>M</em>(<em>n</em>)</th>
                 <th>Rearrange</th><th>Cover</th><th>Press</th>
               </tr>
               <tr>
-                <th style="border-left:1px solid rgba(95,104,184,.25)"><em>Avg.</em></th>
+                <th class="col-sep"><em>Avg.</em></th>
                 <th><em>Avg.</em></th><th>Blocks</th><th>Blocks</th><th>Button</th>
               </tr>
             </thead>
@@ -2297,7 +2250,7 @@
           </table>
         </div>
         <p class="table-note">
-          <b>Table 11 — Memory ablations on RMBench.</b> The 2×2 memory factorial. Removing 𝒯 collapses
+          <b>Table 11.&ensp;Memory ablations on RMBench.</b> The 2×2 memory factorial. Removing 𝒯 collapses
           the benchmark from 96.0% to 21.3%, essentially back to the memory-free base (18.9%); removing
           𝒮 is nearly harmless here, because RMBench stresses temporal sequencing rather than
           geometric alignment.
@@ -2313,8 +2266,7 @@
 <!-- ======================================================================== -->
 <section class="banner" id="efficiency">
   <div class="wrap">
-    <p class="eyebrow">What the memory costs</p>
-    <h2 class="gradient-text">Overhead &amp; Efficiency</h2>
+    <h2>Overhead &amp; Efficiency</h2>
     <p>The memory is designed to be additive: cached tokens, one extra forward, no interface change.</p>
   </div>
 </section>
@@ -2346,7 +2298,6 @@
     </div>
 
     <div class="callout reveal" style="margin-top:1.3rem">
-      <span aria-hidden="true" style="font-size:1.3rem">🧠</span>
       <div>
         Temporal entries are stored <b>already encoded</b>, so the number of backbone forwards per step
         does <em>not</em> grow with the history length <em>K</em> — only the cache size does. The
@@ -2362,8 +2313,7 @@
 <!-- ======================================================================== -->
 <section class="banner" id="bibtex">
   <div class="wrap">
-    <p class="eyebrow">Cite us</p>
-    <h2 class="gradient-text">BibTeX</h2>
+    <h2>BibTeX</h2>
   </div>
 </section>
 
@@ -2419,6 +2369,6 @@
   </div>
 </footer>
 
-<script src="static/js/bridgevla_plus.js?v=4" defer></script>
+<script src="static/js/bridgevla_plus.js?v=5" defer></script>
 </body>
 </html>

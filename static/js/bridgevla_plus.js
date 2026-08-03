@@ -380,7 +380,7 @@
       b.style.cssText =
         'font:inherit;font-size:.68rem;font-weight:700;letter-spacing:.04em;' +
         'padding:.2rem .55rem;border-radius:999px;cursor:pointer;' +
-        'border:1px solid rgba(255,255,255,.22);background:rgba(12,18,38,.55);color:#eef3ff;' +
+        'border:1px solid rgba(255,255,255,.25);background:rgba(23,20,15,.55);color:#faf9f7;' +
         'backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);';
       b.addEventListener('click', function () {
         state.trial = i;
@@ -437,7 +437,7 @@
       var showTrials = hasAlt(state.task, state.setting) && !missing;
       trialWrap.style.display = showTrials ? 'flex' : 'none';
       trialButtons.forEach(function (b, i) {
-        b.style.background = (i === state.trial) ? 'rgba(79,96,203,.85)' : 'rgba(12,18,38,.55)';
+        b.style.background = (i === state.trial) ? 'rgba(210,98,14,.92)' : 'rgba(23,20,15,.55)';
       });
 
       var stem = state.setting + (showTrials && state.trial === 1 ? '_alt' : '');
@@ -610,7 +610,7 @@
         b.style.cssText =
           'font:inherit;font-size:.68rem;font-weight:700;letter-spacing:.04em;' +
           'padding:.2rem .55rem;border-radius:999px;cursor:pointer;' +
-          'border:1px solid rgba(255,255,255,.22);background:rgba(12,18,38,.55);color:#eef3ff;' +
+          'border:1px solid rgba(255,255,255,.25);background:rgba(23,20,15,.55);color:#faf9f7;' +
           'backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);';
         b.addEventListener('click', function () {
           state.clip = i;
@@ -644,7 +644,7 @@
       clipWrap.style.display = clips.length > 1 ? 'flex' : 'none';
       clipButtons.forEach(function (b, i) {
         b.style.display = i < clips.length ? '' : 'none';
-        b.style.background = (i === state.clip) ? 'rgba(79,96,203,.85)' : 'rgba(12,18,38,.55)';
+        b.style.background = (i === state.clip) ? 'rgba(210,98,14,.92)' : 'rgba(23,20,15,.55)';
         b.title = clips[i] ? clips[i].instruction : '';
       });
 
@@ -716,7 +716,7 @@
 
   /* -------------------------------------------------------------- scrollspy */
 
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.docnav a[href^="#"]'));
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.docnav a[href^="#"]:not(.nav-brand)'));
   var targets = navLinks
     .map(function (a) { return document.querySelector(a.getAttribute('href')); })
     .filter(Boolean)
@@ -774,7 +774,7 @@
       if (overflows && !card.querySelector('.scroll-hint')) {
         var hint = document.createElement('p');
         hint.className = 'scroll-hint';
-        hint.textContent = 'Scroll the table sideways for the remaining columns →';
+        hint.textContent = 'Scroll sideways for the remaining columns →';
         box.insertAdjacentElement('afterend', hint);
       }
     });
