@@ -15,7 +15,7 @@
 <meta name="theme-color" content="#FAF9F7">
 <link rel="preload" href="static/fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="static/fonts/geist-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="static/css/bridgevla_plus.css?v=5">
+<link rel="stylesheet" href="static/css/bridgevla_plus.css?v=6">
 </head>
 <body>
 
@@ -123,7 +123,6 @@
     <a href="#simulation">Simulation</a>
     <a href="#real-robot">Real Robot</a>
     <a href="#method">Method</a>
-    <a href="#ablations">Ablations</a>
     <a href="#efficiency">Efficiency</a>
     <a href="#bibtex">BibTeX</a>
   </div>
@@ -187,14 +186,10 @@
       <img src="static/images/paper/teaser.png" alt="Overview of BridgeVLA++: multi-view heatmap alignment plus a unified spatio-temporal memory, with benchmark radar chart and real-world generalization settings.">
       <figcaption class="figcap">
         <b>Figure 1.&ensp;Overview of BridgeVLA++.</b>
-        BridgeVLA aligns 3D observations and actions in a shared multi-view 2D heatmap space,
-        enabling data-efficient and generalizable 3D manipulation learning with a pre-trained VLM.
-        BridgeVLA++ further introduces a unified spatio-temporal memory: temporal memory preserves the
-        interaction history to determine <em>what to do next</em>, while spatial memory restores
-        previously observed geometry to determine <em>where exactly to act</em>. Both memories are
-        accessed through a shared memory-injection module in the VLM patch-token space, without
-        changing the heatmap-based action interface. The scene-level memory can also be shared across
-        two arms, extending the framework naturally to bimanual manipulation.
+        BridgeVLA aligns 3D observations and actions in a shared multi-view 2D heatmap space for
+        data-efficient, generalizable manipulation. BridgeVLA++ adds a unified spatio-temporal memory,
+        injected through a shared module in the VLM patch-token space and shareable across two arms for
+        bimanual manipulation.
       </figcaption>
     </figure>
 
@@ -246,11 +241,9 @@
 
 <!-- --------------------------------------------------- benchmark switcher -->
     <p class="lede reveal">
-      One recipe, five suites. <b>RMBench</b> and <b>MemoryBench</b> are the memory-dependent ones —
-      the tasks BridgeVLA++ was built for; <b>RLBench</b>, <b>COLOSSEUM</b> and <b>GemBench</b> check
-      that the base capabilities survive the memory extension: general manipulation, robustness to
-      unseen perturbations, and systematic generalization. Pick a suite — every number mirrors the
-      paper's tables.
+      One recipe, five suites. <b>RMBench</b> and <b>MemoryBench</b> are the memory-dependent ones
+      BridgeVLA++ was built for; <b>RLBench</b>, <b>COLOSSEUM</b> and <b>GemBench</b> check that the
+      base capabilities survive the memory extension. Pick a suite.
     </p>
 
     <div class="bench-explorer" id="bench-explorer">
@@ -287,11 +280,9 @@
            aria-labelledby="bench-tab-rmbench" data-panel="rmbench">
 
     <p class="lede reveal">
-      Nine dual-arm tasks that cannot be solved from the current frame alone, split into short-term
-      <em>M</em>(1) and long-term <em>M</em>(<em>n</em>) horizons; 50 demonstrations per task, 100
-      evaluation episodes. This is simultaneously the validation of the bimanual extension.
-      BridgeVLA++ reaches a near-perfect <b>96.0%</b>, ranking best or tied-best on eight of the nine
-      tasks, while the memory-free base collapses to 18.9%.
+      Nine dual-arm tasks that cannot be solved from the current frame alone — also the validation of
+      the bimanual extension. BridgeVLA++ reaches a near-perfect <b>96.0%</b>, while the memory-free
+      base collapses to 18.9%.
     </p>
 
         <figure class="figure reveal" style="margin-top:1rem">
@@ -423,11 +414,9 @@
         <div class="bench-head">
           <div>
     <p class="lede reveal">
-      18 multi-task RLBench tasks, 100 demonstrations per task, mean success rate over five evaluation
-      runs of 25 episodes. BridgeVLA reaches <b>90.5%</b>, already 3.7 points above the previous state
-      of the art; its remaining failures concentrate in occlusion-heavy tasks — exactly what the
-      spatio-temporal memory addresses, lifting BridgeVLA++ to <b>93.7%</b> with
-      <em>sort shape</em> +16.8 and <em>place cups</em> +18.4.
+      BridgeVLA reaches <b>90.5%</b>, already above the previous state of the art; its remaining
+      failures concentrate in occlusion-heavy tasks — exactly what the memory addresses, lifting
+      BridgeVLA++ to <b>93.7%</b>.
     </p>
             <ul class="bench-facts reveal">
               <li><b>Protocol.</b> 100 demonstrations per task; mean over five evaluation runs of 25 episodes.</li>
@@ -517,14 +506,12 @@
       <p class="table-note">
         <b>Table 2.&ensp;RLBench.</b> Success rate (%) on the 18 standard tasks with average success rate
         and average rank (lower is better). Our rows report the mean over five seeds of 25 episodes;
-        per-seed standard deviations are given in the paper. Best average in bold. Design and memory
-        ablations of the same table are collected in the <a href="#ablations">Ablations</a> section.
+        per-seed standard deviations are given in the paper. Best average in bold.
       </p>
     </div>
 
     <p class="lede reveal" style="margin-top:1.2rem">
-      One successful BridgeVLA++ rollout per task, taken straight from the evaluation logs.
-      Percentages repeat the BridgeVLA++ row of Table 2.
+      One successful BridgeVLA++ rollout per task, straight from the evaluation logs.
     </p>
 
     <div class="media-grid cols-4 reveal" style="margin-top:1rem">
@@ -680,11 +667,10 @@
            aria-labelledby="bench-tab-colosseum" data-panel="colosseum" hidden>
 
     <p class="lede reveal">
-      All models are trained on unperturbed RLBench data for the 20 COLOSSEUM tasks and evaluated under
-      12 perturbation axes never seen in training, plus the original RLBench variation and a combined
-      all-perturbations setting. BridgeVLA reaches <b>64.0%</b>, over 7 points above RVT-2, and the
-      memory extension keeps that robustness (<b>65.2%</b>) — with its largest single gain exactly in
-      the hardest <em>all perturbations</em> setting (18.7% → 38.9%).
+      Trained on unperturbed RLBench data, then evaluated under 12 perturbation axes never seen in
+      training. BridgeVLA reaches <b>64.0%</b>, over 7 points above RVT-2, and the memory extension
+      keeps that robustness (<b>65.2%</b>) — its largest gain in the hardest <em>all perturbations</em>
+      setting (18.7% → 38.9%).
     </p>
 
         <figure class="figure reveal bench-fig-pair" style="margin-top:1rem">
@@ -839,10 +825,8 @@
         <div class="bench-head">
           <div>
     <p class="lede reveal">
-      Trained on 16 tasks (31 variations) and evaluated on 44 held-out tasks (92 variations) across four
-      generalization levels. BridgeVLA sets a state-of-the-art <b>50.0%</b> average, and BridgeVLA++
-      raises it to <b>51.1%</b> — notably turning the long-horizon L4 level from 0.0% to 8.2%, where the
-      episodic memory finally gives the policy something to sequence over.
+      Trained on 16 tasks, evaluated on 44 held-out tasks across four generalization levels. BridgeVLA
+      sets a state-of-the-art <b>50.0%</b> average; BridgeVLA++ raises it to <b>51.1%</b>.
     </p>
             <ul class="bench-facts reveal">
               <li><b>L1 Novel placements.</b> 88.6%</li>
@@ -957,9 +941,7 @@
 
         <p class="lede reveal">
           The memory generalizes beyond bimanual coordination: on the three single-arm MemoryBench
-          scenarios BridgeVLA++ reaches <b>99.7 ± 0.3%</b>, against 94.3% for SAM2Act+ — while the
-          memory-free base model collapses to 11.3%, confirming that these tasks genuinely require
-          episodic memory.
+          scenarios BridgeVLA++ reaches <b>99.7 ± 0.3%</b>, against 94.3% for SAM2Act+.
         </p>
 
         <figure class="figure reveal" style="margin-top:1rem">
@@ -1039,14 +1021,10 @@
     <figure class="figure reveal" style="margin-top:1.6rem">
       <img src="static/images/paper/real_setup.jpg" alt="Real robot setup: Franka Research 3 and DOBOT CR5A, each observed by a static ZED 2i stereo camera, two summary bar charts, and the basic, generalization and memory evaluation settings.">
       <figcaption class="figcap">
-        <b>Figure 2.&ensp;Real-robot evaluation setup.</b> Top left: the general-manipulation platform — a
-        7-DoF Franka Research 3 with a parallel-jaw gripper, observed by a single static ZED 2i stereo
-        camera that provides the colored point cloud. Top right: the memory platform — a 6-DoF DOBOT
-        CR5A arm with the same camera configuration. Top centre: the average gain of our models over the
-        strongest prior method in each task group — RVT-2 across the seven Franka settings, and SAM2Act+
-        in the DOBOT basic setting. Bottom: the evaluation settings — the Franka suite covers one basic
-        and six generalization settings (Background, Lighting, Distractor, Combination, Height,
-        Category); the DOBOT suite covers the memory-dependent setting.
+        <b>Figure 2.&ensp;Real-robot evaluation setup.</b> Two platforms under a single static ZED 2i
+        stereo camera: a 7-DoF Franka Research 3 for general manipulation (one basic plus six
+        generalization settings) and a held-out 6-DoF DOBOT CR5A for memory. Centre: our average gain
+        over the strongest prior method in each group.
       </figcaption>
     </figure>
 
@@ -1063,9 +1041,7 @@
 
     <h4 class="subhead-sm reveal">Browse every rollout</h4>
     <p class="lede reveal" style="margin-top:-.35rem">
-      All seven language instructions across all five evaluation settings, as recorded on the DOBOT
-      platform. Pick a task, then a setting — the panel shows that exact rollout together with the
-      success count behind it.
+      Every DOBOT rollout: pick a task, then a setting, and see that exact clip with its success count.
     </p>
 
     <script type="application/json" id="dobot-demo-data">
@@ -1727,11 +1703,9 @@
 
     <h3 class="subhead reveal">Memory on a held-out embodiment</h3>
     <p class="lede reveal">
-      The Franka suite is near-saturated, which proves those tasks are solvable from the current frame
-      alone. So the memory is tested on a second, held-out embodiment with three tasks built so that
-      the current observation <em>underdetermines</em> the next action — plus two ordinary
-      pick-and-place families that check the memory costs nothing on tasks that never needed it.
-      All methods train on the same 70 demonstrations (10 per language instruction).
+      Memory is tested on a second, held-out arm with three tasks where the current observation
+      <em>underdetermines</em> the next action — plus two ordinary pick-and-place families that check
+      the memory costs nothing when it isn't needed. All methods train on the same 70 demonstrations.
     </p>
 
     <div class="idea-grid reveal" style="margin-top:1.1rem">
@@ -1838,11 +1812,9 @@
 
     <h3 class="subhead reveal">General manipulation with 10 demonstrations</h3>
     <p class="lede reveal">
-      13 tasks spanning 3–9 keyframes each, from simple pick-and-place to long-horizon drawer
-      manipulation, trained from 10 kinesthetic demonstrations per task and evaluated over 10 trials
-      per task per method. BridgeVLA completes <b>96.9%</b> of trials and never falls below 9/10 on any
-      task. The cleanest evidence for the alignment argument is π<sub>0</sub>: it shares the same
-      PaliGemma backbone and differs only in the action interface — and it reaches 3.8%.
+      13 tasks, 10 demonstrations each. BridgeVLA completes <b>96.9%</b> of trials and never falls
+      below 9/10 on any task. The cleanest evidence for the alignment argument is π<sub>0</sub>: same
+      PaliGemma backbone, different only in the action interface — and it reaches 3.8%.
     </p>
 
     <div class="table-card reveal" style="margin-top:1rem">
@@ -1892,12 +1864,9 @@
 
     <h4 class="subhead-sm reveal">Generalization to unseen conditions and instructions</h4>
     <p class="lede reveal">
-      Six generalization settings. Four probe robustness to visual disturbance — <em>Distractor</em>,
-      <em>Lighting</em>, <em>Background</em>, <em>Height</em> — and two probe instruction-level
-      generalization: <em>Combination</em> (object–skill pairings each seen in training, never
-      demonstrated together) and <em>Category</em> (object categories absent from the robot data).
-      BridgeVLA beats RVT-2, the strongest baseline of this suite, in <b>all seven settings, by 32% on
-      average</b>, with the widest margins under Lighting and Combination.
+      Six settings probe visual disturbance (<em>Distractor</em>, <em>Lighting</em>,
+      <em>Background</em>, <em>Height</em>) and instruction-level generalization (<em>Combination</em>,
+      <em>Category</em>). BridgeVLA beats RVT-2 in <b>all seven settings, by 32% on average</b>.
     </p>
 
     <figure class="figure reveal" style="margin-top:1rem">
@@ -1978,283 +1947,71 @@
 <section class="section" style="padding-top:1.4rem">
   <div class="wrap">
 
-    <h3 class="subhead reveal">Part I. BridgeVLA: spatial input–output alignment</h3>
-    <p class="lede reveal">
-      A pre-trained VLM is fluent in 2D images and language, not in point clouds and 6-DoF poses.
-      BridgeVLA closes that gap from both sides: the <em>input</em> is rendered back into images, and
-      the <em>output</em> is expressed as heatmaps that live in the very same image space.
-    </p>
+    <div class="method-part reveal">
+      <p class="eyebrow">Part I · Base model</p>
+      <h3 class="subhead">BridgeVLA — spatial input–output alignment</h3>
+      <p class="lede">
+        A pre-trained VLM is fluent in images and language, not in point clouds and 6-DoF poses.
+        BridgeVLA closes the gap from both ends — the input is rendered back into images, the output
+        is expressed as heatmaps in that same image space.
+      </p>
 
-    <div class="idea-grid reveal" style="margin-top:1.2rem">
-      <div class="idea">
-        <div class="num">1</div>
-        <h4>Multi-view orthographic projection</h4>
-        <p>
-          RGB-D observations from calibrated cameras are fused into a colored point cloud and rendered
-          into three orthographic views (top, front, right), following RVT / RVT-2. The VLM sees only
-          images and language — no proprioceptive state is injected into its forward pass, which keeps
-          the input distribution close to pre-training.
-        </p>
-      </div>
-      <div class="idea">
-        <div class="num">2</div>
-        <h4>2D-heatmap pre-training</h4>
-        <p>
-          Before any robot data is touched, the VLM (PaliGemma: SigLIP + Gemma) is taught to ground
-          language-specified objects as spatial heatmaps on the 120K object-detection split of
-          RoboPoint. Output image tokens are rearranged into a patch grid and decoded by a
-          convex-upsampling module, supervised with a cross-entropy loss against truncated Gaussian
-          targets.
-        </p>
-      </div>
-      <div class="idea">
-        <div class="num">3</div>
-        <h4>Coarse-to-fine 3D action decoding</h4>
-        <p>
-          Candidate 3D locations are scored by summing the per-view heatmap values at their
-          projections; the arg-max becomes the next-keyframe translation. A second pass re-renders a
-          zoomed crop around the coarse prediction for precision. Rotation (continuous 6D), gripper
-          state and the collision flag come from a three-layer MLP on pooled global plus local
-          per-view tokens.
-        </p>
+      <div class="idea-grid" style="margin-top:1.5rem">
+        <div class="idea">
+          <div class="num">1</div>
+          <h4>Render 3D back into 2D</h4>
+          <p>Point clouds become three orthographic views, so the VLM keeps seeing the kind of images it was pre-trained on.</p>
+        </div>
+        <div class="idea">
+          <div class="num">2</div>
+          <h4>Pre-train on heatmaps</h4>
+          <p>Before any robot data, the VLM learns to ground language as 2D spatial heatmaps.</p>
+        </div>
+        <div class="idea">
+          <div class="num">3</div>
+          <h4>Coarse-to-fine action</h4>
+          <p>Per-view heatmaps vote on the next waypoint; a zoomed second pass sharpens it.</p>
+        </div>
       </div>
     </div>
 
-    <h3 class="subhead reveal">Part II. BridgeVLA++: unified spatio-temporal memory</h3>
-    <p class="lede reveal">
-      The coarse-to-fine design exposes exactly two stages where past observations help, and they need
-      different things. The coarse stage reasons over the whole workspace and must know
-      <em>what has already happened</em>; the fine stage localizes inside a zoomed crop and must see
-      <em>geometry the arm is currently hiding</em>. BridgeVLA++ therefore injects a different memory
-      at each stage — both in the VLM patch-token space, so the heatmap action interface is unchanged.
-    </p>
+    <div class="method-part reveal">
+      <p class="eyebrow">Part II · Memory</p>
+      <h3 class="subhead">BridgeVLA++ — unified spatio-temporal memory</h3>
+      <p class="lede">
+        The coarse-to-fine design exposes exactly two places where the past helps: the coarse stage must
+        know <em>what has already happened</em>; the fine stage must see <em>geometry the arm is now
+        hiding</em>. Each gets its own memory — both in patch-token space, so the heatmap action
+        interface never changes.
+      </p>
 
-    <div class="idea-grid reveal" style="margin-top:1.2rem">
-      <div class="idea">
-        <div class="num">𝒯</div>
-        <h4>Temporal memory → <em>what to do next</em></h4>
-        <p>
-          Injected at the <b>coarse</b> stage as three token banks:
-          <b>initial anchor views</b> (the episode's first render, a fixed global reference),
-          <b>neighbouring keyframes</b> (the most recent <em>n</em> = 2 executed keyframes, short-term
-          context), and <b>sub-goal keyframes</b> (longer-term evidence of completed milestones).
-        </p>
-        <p>
-          A lightweight <b>adaptive sub-goal gate</b> decides what is worth keeping: a learnable query
-          token pools the <em>memory-conditioned</em> tokens and a small MLP predicts a retention
-          probability, so a frame is stored only when it adds information the memory does not already
-          hold.
-        </p>
-      </div>
-      <div class="idea">
-        <div class="num">𝒮</div>
-        <h4>Spatial memory → <em>where exactly to act</em></h4>
-        <p>
-          Injected at the <b>fine</b> stage. The colored point cloud of the initial observation,
-          <em>P</em><sub>0</sub>, is stored once and — unlike a fixed 2D image — can be
-          <b>re-rendered under any later zoom</b>. Once the coarse stage picks a waypoint, the same
-          crop is applied to both the live cloud and <em>P</em><sub>0</sub>, and the reference is
-          re-rendered through the fine-stage virtual cameras.
-        </p>
-        <p>
-          Because the two share a camera configuration they are aligned view by view, so tokens of each
-          current view attend only to memory tokens of the corresponding reference view: complementary
-          geometry, never a replacement for the live observation.
-        </p>
-      </div>
-      <div class="idea">
-        <div class="num">⇄</div>
-        <h4>Injection &amp; bimanual extension</h4>
-        <p>
-          Each memory-injection block is two attention layers: current tokens are queries,
-          memory tokens are keys/values in cross-attention, then self-attention and a feed-forward
-          fuse the result. The output keeps the input token-grid shape (<em>V</em>×<em>N</em>×<em>d</em>),
-          so the convex-upsampling decoder and action heads run unmodified.
-        </p>
-        <p>
-          Because both memories describe the <em>scene</em> rather than an arm, bimanual manipulation
-          needs only duplicated upsampling modules and action heads on a shared VLM backbone, shared
-          memories and a shared sub-goal gate.
-        </p>
+      <div class="idea-grid" style="margin-top:1.5rem">
+        <div class="idea">
+          <div class="num">𝒯</div>
+          <h4>Temporal memory → <em>what to do next</em></h4>
+          <p>At the coarse stage: the interaction history, with a lightweight gate that keeps only the keyframes worth remembering.</p>
+        </div>
+        <div class="idea">
+          <div class="num">𝒮</div>
+          <h4>Spatial memory → <em>where exactly to act</em></h4>
+          <p>At the fine stage: the initial, less-occluded point cloud, re-rendered under the current zoom as complementary geometry.</p>
+        </div>
+        <div class="idea">
+          <div class="num">⇄</div>
+          <h4>Additive &amp; bimanual</h4>
+          <p>Memory is injected without touching the action heads; one shared scene memory extends the framework to two arms.</p>
+        </div>
       </div>
     </div>
 
-    <figure class="figure reveal" style="margin-top:1.8rem">
+    <figure class="figure reveal" style="margin-top:2.6rem">
       <img src="static/images/paper/architecture.png" alt="BridgeVLA and BridgeVLA++ architecture: 2D-heatmap pre-training, 3D-action fine-tuning, and the temporal and spatial memory injection blocks. The temporal block runs cross- and self-attention over history keyframes and an anchor frame chosen by a keyframe selector; the spatial block attends to a local point-cloud projection of the initial scene.">
       <figcaption class="figcap">
-        <b>Figure 4.&ensp;Architecture.</b> Top: the 2D-heatmap pre-training and 3D-action fine-tuning
-        pipeline of BridgeVLA. Bottom: the spatio-temporal memory of BridgeVLA++. At the coarse stage
-        the temporal memory supplies interaction history; at the fine stage the spatial memory
-        re-renders an earlier, less-occluded point cloud under the current zoom. Memory is injected in
-        the VLM patch-token space without modifying the heatmap-based action interface.
+        <b>Figure 4.&ensp;Architecture.</b> Top: BridgeVLA's 2D-heatmap pre-training and 3D-action
+        fine-tuning. Bottom: the two memories of BridgeVLA++ — temporal at the coarse stage, spatial at
+        the fine stage — injected in patch-token space without changing the action interface.
       </figcaption>
     </figure>
-
-    <div class="callout reveal" style="margin-top:1.4rem">
-      <div>
-        <b>The memory is strictly additive.</b> It adds 269.77M parameters — 9.2% on top of the
-        2.92B-parameter backbone — and moves end-to-end latency from 0.35&nbsp;s to 0.57&nbsp;s per
-        prediction step on a single RTX&nbsp;4090, a gap that stays small next to the observation
-        transmission and motion execution of a keyframe step. Temporal entries are cached as
-        <em>already-encoded</em> tokens, so history never costs an extra backbone forward pass.
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ======================================================================== -->
-<!-- ABLATIONS                                                                -->
-<!-- ======================================================================== -->
-<section class="banner" id="ablations">
-  <div class="wrap">
-    <h2>Ablation Studies</h2>
-    <p>Which design decisions carry the performance — and which memory does what.</p>
-  </div>
-</section>
-
-<section class="section" style="padding-top:1.4rem">
-  <div class="wrap-wide">
-
-    <h3 class="subhead reveal">Base-model design ablations (RLBench)</h3>
-    <div class="table-card reveal" style="margin-top:.8rem">
-      <div class="table-scroll">
-        <table class="data">
-          <thead>
-            <tr>
-              <th rowspan="2">Variant</th><th rowspan="2" class="avg">Avg. SR (%) ↑</th>
-              <th rowspan="2" class="avg">Avg. Rank ↓</th>
-              <th>Insert</th><th>Place</th><th>Put in</th><th>Screw</th><th>Sort</th>
-              <th>Stack</th><th>Stack</th>
-            </tr>
-            <tr>
-              <th>Peg</th><th>Cups</th><th>Cupboard</th><th>Bulb</th><th>Shape</th>
-              <th>Blocks</th><th>Cups</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="ours"><td>BridgeVLA <span class="cite">(full base)</span></td><td class="avg best">90.5</td><td class="avg best">4.75</td><td>91.2</td><td>58.4</td><td>91.2</td><td>93.6</td><td>55.2</td><td>84.8</td><td>88.8</td></tr>
-            <tr class="ablation"><td>├ w/ discretized rotation</td><td class="avg">88.2</td><td class="avg">4.86</td><td>88.0</td><td>58.4</td><td>73.6</td><td>87.2</td><td>60.8</td><td>76.8</td><td>81.6</td></tr>
-            <tr class="ablation"><td>├ w/o heatmap decoding</td><td class="avg">31.4</td><td class="avg">12.78</td><td>0.0</td><td>1.3</td><td>5.3</td><td>2.7</td><td>4.0</td><td>0.0</td><td>0.0</td></tr>
-            <tr class="ablation"><td>└ w/ 3D position input</td><td class="avg">56.2</td><td class="avg">10.14</td><td>26.7</td><td>14.7</td><td>10.7</td><td>16.0</td><td>21.3</td><td>17.3</td><td>4.0</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p class="table-note">
-        <b>Table 9.&ensp;Base-model ablations.</b> A representative subset of the 18 RLBench columns; the
-        averages and ranks are over all 18 tasks. <em>w/o heatmap decoding</em> and <em>w/ 3D position
-        input</em> use three seeds, the others five.
-      </p>
-    </div>
-
-    <div class="idea-grid reveal" style="margin-top:1.1rem">
-      <div class="idea">
-        <div class="num">A</div>
-        <h4>Predict heatmaps, not coordinates <span class="delta delta-neg">−59.1</span></h4>
-        <p>
-          Swapping convex upsampling for a parameter-matched Transformer decoder that regresses target
-          positions under an MSE loss collapses RLBench from <b>90.5% to 31.4%</b>, and the ablated
-          model is markedly harder to optimize (batch 192 vs 64, careful LR tuning). The heatmap gives
-          denser supervision, injects a 3D→2D spatial prior, and shares the spatial structure of the
-          input images.
-        </p>
-      </div>
-      <div class="idea">
-        <div class="num">B</div>
-        <h4>Do <em>not</em> feed 3D positions to the VLM <span class="delta delta-neg">−34.3</span></h4>
-        <p>
-          Fusing per-pixel 3D positions into the image features through a 3D convolutional module
-          injects richer spatial cues — and drops success from <b>90.5% to 56.2%</b>, because the image
-          features shift away from the distribution the VLM was pre-trained on. For a pre-trained VLM,
-          input alignment outweighs explicit 3D input.
-        </p>
-      </div>
-      <div class="idea">
-        <div class="num">C</div>
-        <h4>2D-heatmap pre-training carries language generalization</h4>
-        <p>
-          Without pre-training, the policy fails to generalize in both language-related real-world
-          settings (Combination, Category) and cannot even match RVT-2, while the full model is best in
-          both (Figure 4). Fine-tuning on a handful of robot trajectories cannot instil grounding of
-          language semantics in the heatmap space.
-        </p>
-      </div>
-      <div class="idea">
-        <div class="num">D</div>
-        <h4>Continuous 6D rotation beats discretization <span class="delta delta-neg">−2.3</span></h4>
-        <p>
-          Replacing the continuous 6D rotation head with the discretized per-axis Euler classification
-          of the conference version costs <b>90.5% → 88.2%</b>, concentrated in tasks demanding precise
-          end-effector orientations. The 6D form also avoids the gimbal lock of discretized Euler
-          angles in near-vertical gripper poses.
-        </p>
-      </div>
-    </div>
-
-    <h3 class="subhead reveal">Memory ablations</h3>
-    <p class="lede reveal">
-      The two memories are not redundant: each one is load-bearing on exactly the benchmark whose
-      difficulty it targets.
-    </p>
-
-    <div class="stack reveal" style="margin-top:1rem">
-      <div class="table-card">
-        <div class="table-scroll">
-          <table class="data">
-            <thead>
-              <tr>
-                <th rowspan="2">Variant</th><th rowspan="2" class="avg">RLBench Avg. ↑</th>
-                <th>Insert</th><th>Place</th><th>Sort</th><th>Stack</th><th>Place</th>
-              </tr>
-              <tr><th>Peg</th><th>Cups</th><th>Shape</th><th>Cups</th><th>Wine</th></tr>
-            </thead>
-            <tbody>
-              <tr class="ours"><td>BridgeVLA++ <span class="cite">(full)</span></td><td class="avg best">93.7</td><td class="best">99.2</td><td class="best">76.8</td><td>72.0</td><td class="best">98.4</td><td class="best">95.2</td></tr>
-              <tr class="ablation"><td>├ w/o spatial memory 𝒮</td><td class="avg">92.0</td><td>95.2</td><td>74.4</td><td>60.8</td><td>92.8</td><td>78.4</td></tr>
-              <tr class="ablation"><td>└ w/o temporal memory 𝒯</td><td class="avg">91.9</td><td>82.4</td><td>57.6</td><td class="best">73.6</td><td>93.6</td><td>90.4</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="table-note">
-          <b>Table 10.&ensp;Memory ablations on RLBench.</b> Removing 𝒮 costs most exactly in the
-          occlusion-heavy precision tasks it targets (<em>sort shape</em> 72.0 → 60.8), and removing 𝒯
-          costs most where a stable global reference helps (<em>place cups</em> 76.8 → 57.6) — even
-          though RLBench tasks are not intrinsically memory-dependent.
-        </p>
-      </div>
-
-      <div class="table-card">
-        <div class="table-scroll">
-          <table class="data">
-            <thead>
-              <tr>
-                <th rowspan="2">Variant</th>
-                <th class="avg" rowspan="2">Overall Avg. ↑</th>
-                <th class="col-sep"><em>M</em>(1)</th>
-                <th><em>M</em>(<em>n</em>)</th>
-                <th>Rearrange</th><th>Cover</th><th>Press</th>
-              </tr>
-              <tr>
-                <th class="col-sep"><em>Avg.</em></th>
-                <th><em>Avg.</em></th><th>Blocks</th><th>Blocks</th><th>Button</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="ours"><td>BridgeVLA++ <span class="cite">(full)</span></td><td class="avg best">96.0</td><td class="avg">95.2</td><td class="avg best">97.0</td><td class="best">100</td><td class="best">99</td><td class="best">93</td></tr>
-              <tr class="ablation"><td>w/o 𝒮 (spatial memory)</td><td class="avg">95.4</td><td class="avg best">96.2</td><td class="avg">94.5</td><td class="best">100</td><td>91</td><td>92</td></tr>
-              <tr class="ablation"><td>w/o 𝒯 (temporal memory)</td><td class="avg">21.3</td><td class="avg">27.0</td><td class="avg">14.3</td><td>11</td><td>5</td><td>0</td></tr>
-              <tr class="ablation"><td>BridgeVLA <span class="cite">(no memory)</span></td><td class="avg">18.9</td><td class="avg">19.0</td><td class="avg">18.8</td><td>0</td><td>3</td><td>0</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="table-note">
-          <b>Table 11.&ensp;Memory ablations on RMBench.</b> The 2×2 memory factorial. Removing 𝒯 collapses
-          the benchmark from 96.0% to 21.3%, essentially back to the memory-free base (18.9%); removing
-          𝒮 is nearly harmless here, because RMBench stresses temporal sequencing rather than
-          geometric alignment.
-        </p>
-      </div>
-    </div>
 
   </div>
 </section>
@@ -2275,13 +2032,12 @@
       <div class="stat">
         <div class="value">+9.2%</div>
         <div class="label">Parameters</div>
-        <div class="note">269.77M added on a 2.92B backbone: 3 × 83.95M injection blocks + 17.91M sub-goal gate</div>
+        <div class="note">269.77M added on a 2.92B-parameter backbone</div>
       </div>
       <div class="stat">
         <div class="value">+0.22 s</div>
         <div class="label">Inference latency</div>
-        <div class="note">0.35 s → 0.57 s per prediction step on a single RTX 4090, averaged over 100 trials —
-          small next to the observation transfer and motion execution that dominate a keyframe step</div>
+        <div class="note">0.35 s → 0.57 s per step on a single RTX 4090 — small next to observation transfer and motion execution</div>
       </div>
       <div class="stat">
         <div class="value">≈ 2 h</div>
@@ -2297,10 +2053,8 @@
 
     <div class="callout reveal" style="margin-top:1.3rem">
       <div>
-        Temporal entries are stored <b>already encoded</b>, so the number of backbone forwards per step
-        does <em>not</em> grow with the history length <em>K</em> — only the cache size does. The
-        injection block's cross-attention grows linearly in <em>K</em>, which is negligible next to a
-        backbone forward.
+        Temporal entries are stored <b>already encoded</b>, so history never costs an extra backbone
+        forward — only the cache grows with the history length.
       </div>
     </div>
   </div>

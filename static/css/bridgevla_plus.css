@@ -149,7 +149,7 @@ code, pre { font-family: var(--font-mono); }
 .wrap { width: min(100% - 2.6rem, var(--measure)); margin-inline: auto; }
 .wrap-wide { width: min(100% - 2.2rem, var(--measure-wide)); margin-inline: auto; }
 
-.section { padding: 3.4rem 0 4.2rem; }
+.section { padding: 3.8rem 0 4.8rem; }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
@@ -367,7 +367,9 @@ h4 { font-family: var(--font-sans); font-weight: 600; color: var(--ink); line-he
 
 /* ---------------------------------------------------------- section header */
 
-.banner { padding: 4.4rem 0 0; }
+/* A hairline plus generous top space makes each major section start
+   unmistakable — explicit "separation" without clutter. */
+.banner { padding: 5.2rem 0 0; border-top: 1px solid var(--line); }
 .banner .wrap::before {
   content: '';
   display: block;
@@ -389,8 +391,18 @@ h4 { font-family: var(--font-sans); font-weight: 600; color: var(--ink); line-he
 
 .subhead {
   font-size: clamp(1.35rem, 2.6vw, 1.65rem);
-  margin: 2.9rem 0 .75rem;
+  margin: 3.4rem 0 .9rem;
 }
+
+/* Small monospace-caps kicker above a subhead (e.g. "Part I · Base model"). */
+.eyebrow {
+  margin: 0 0 .15rem;
+  font-family: var(--font-sans);
+  font-size: .72rem; font-weight: 600;
+  letter-spacing: .13em; text-transform: uppercase;
+  color: var(--accent-ink);
+}
+.eyebrow + .subhead { margin-top: .2rem; }
 .subhead-sm {
   font-family: var(--font-sans);
   font-size: 1.04rem;
@@ -1122,10 +1134,14 @@ table.data .std { color: var(--ink-faint); font-size: .84em; font-weight: 400; }
 
 /* --------------------------------------------------------------- key ideas */
 
-.idea-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.4rem 2rem; }
+/* Two method parts, each an eyebrow + subhead + card row; the gap between
+   them carries the "Part I / Part II" separation. */
+.method-part + .method-part { margin-top: 3.6rem; }
+
+.idea-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.9rem 2.1rem; }
 .idea {
   border-top: 1px solid var(--line-strong);
-  padding-top: 1rem;
+  padding-top: 1.05rem;
 }
 .idea .num {
   display: block;
