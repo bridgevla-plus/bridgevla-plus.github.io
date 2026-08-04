@@ -250,6 +250,8 @@ h4 { font-family: var(--font-sans); font-weight: 600; color: var(--ink); line-he
   height: auto;
   margin: 0;
   flex: 0 0 auto;
+  /* Nudge up slightly so the mark's optical centre lines up with the wordmark. */
+  transform: translateY(-0.45rem);
 }
 
 .hero-venue {
