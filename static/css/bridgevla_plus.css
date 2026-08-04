@@ -246,7 +246,7 @@ h4 { font-family: var(--font-sans); font-weight: 600; color: var(--ink); line-he
   margin-bottom: 1rem;
 }
 .hero-logo {
-  width: clamp(150px, 19vw, 232px);
+  width: clamp(128px, 16vw, 196px);
   height: auto;
   margin: 0;
   flex: 0 0 auto;
