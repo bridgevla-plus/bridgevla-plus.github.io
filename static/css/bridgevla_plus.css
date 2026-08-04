@@ -236,10 +236,20 @@ h4 { font-family: var(--font-sans); font-weight: 600; color: var(--ink); line-he
 
 /* The mark is a wide line-art vignette (image stack → bridge → robot arm),
    sized as a journal-masthead emblem: large enough that the story reads. */
+/* Icon sits to the left of the wordmark, forming a masthead lockup. */
+.hero-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(.6rem, 2vw, 1.4rem);
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
 .hero-logo {
-  width: clamp(128px, 15vw, 168px);
+  width: clamp(150px, 19vw, 232px);
   height: auto;
-  margin-bottom: 1.2rem;
+  margin: 0;
+  flex: 0 0 auto;
 }
 
 .hero-venue {
@@ -262,7 +272,7 @@ h4 { font-family: var(--font-sans); font-weight: 600; color: var(--ink); line-he
   font-size: clamp(3rem, 7vw, 4.7rem);
   line-height: 1.05;
   letter-spacing: -0.02em;
-  margin: 0 0 1rem;
+  margin: 0;
 }
 .hero-title .pp { color: var(--accent); letter-spacing: -0.05em; margin-left: -0.04em; }
 
