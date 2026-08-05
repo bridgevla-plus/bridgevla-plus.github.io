@@ -179,7 +179,7 @@
       <div class="stat">
         <div class="value">93.3%</div>
         <div class="label">Real memory tasks</div>
-        <div class="note">DOBOT CR5A, 10 demos per instruction; 20.0% without memory</div>
+        <div class="note">Dobot CR5A, 10 demos per instruction; 20.0% without memory</div>
       </div>
     </div>
 
@@ -993,7 +993,7 @@
 <section class="banner" id="real-robot">
   <div class="wrap">
     <h2>Real-Robot Experiments</h2>
-    <p>A 7-DoF Franka Research 3 for general manipulation, and a held-out 6-DoF DOBOT CR5A for memory.</p>
+    <p>A 7-DoF Franka Research 3 for general manipulation, and a held-out 6-DoF Dobot CR5A for memory.</p>
   </div>
 </section>
 
@@ -1001,11 +1001,11 @@
   <div class="wrap-wide">
 
     <figure class="figure reveal" style="margin-top:1.6rem">
-      <img src="static/images/paper/real_setup.jpg" alt="Real robot setup: Franka Research 3 and DOBOT CR5A, each observed by a static ZED 2i stereo camera, two summary bar charts, and the basic, generalization and memory evaluation settings.">
+      <img src="static/images/paper/real_setup.jpg" alt="Real robot setup: Franka Research 3 and Dobot CR5A, each observed by a static ZED 2i stereo camera, two summary bar charts, and the basic, generalization and memory evaluation settings.">
       <figcaption class="figcap">
         <b>Figure 2.&ensp;Real-robot evaluation setup.</b> Two platforms under a single static ZED 2i
         stereo camera: a 7-DoF Franka Research 3 for general manipulation (one basic plus six
-        generalization settings) and a held-out 6-DoF DOBOT CR5A for memory. Centre: our average gain
+        generalization settings) and a held-out 6-DoF Dobot CR5A for memory. Centre: our average gain
         over the strongest prior method in each group.
       </figcaption>
     </figure>
@@ -1015,7 +1015,7 @@
       <h3 class="subhead reveal">Rollout videos</h3>
       <p class="lede reveal">
         Every real-robot recording, up front. The browser below switches robot, task and setting on
-        the spot; the written analysis further down the page has its own DOBOT / Franka switch.
+        the spot; the written analysis further down the page has its own Dobot / Franka switch.
       </p>
 
       <div class="platform-panel" id="video-panel-dobot" role="tabpanel"
@@ -1023,7 +1023,7 @@
 
     <h4 class="subhead-sm reveal">Browse every rollout</h4>
     <p class="lede reveal" style="margin-top:-.35rem">
-      Every DOBOT rollout: pick a task, then a setting, and see that exact clip with its success count.
+      Every Dobot rollout: pick a task, then a setting, and see that exact clip with its success count.
     </p>
 
     <script type="application/json" id="dobot-demo-data">
@@ -1378,7 +1378,7 @@
         <div class="chip-row" role="tablist" aria-label="Rollout videos — robot platform">
           <button class="picker-chip" type="button" role="tab" id="video-tab-dobot"
                   aria-selected="true" aria-controls="video-panel-dobot" data-tab="dobot">
-            DOBOT CR5A <span class="chip-sub">· 35 memory rollouts</span>
+            Dobot CR5A <span class="chip-sub">· 35 memory rollouts</span>
           </button>
           <button class="picker-chip" type="button" role="tab" id="video-tab-franka" tabindex="-1"
                   aria-selected="false" aria-controls="video-panel-franka" data-tab="franka">
@@ -1587,7 +1587,7 @@
         <div class="chip-row" role="tablist" aria-label="Rollout videos — robot platform">
           <button class="picker-chip" type="button" role="tab" id="video-tab-dobot-b"
                   aria-selected="true" aria-controls="video-panel-dobot" data-tab="dobot">
-            DOBOT CR5A <span class="chip-sub">· 35 memory rollouts</span>
+            Dobot CR5A <span class="chip-sub">· 35 memory rollouts</span>
           </button>
           <button class="picker-chip" type="button" role="tab" id="video-tab-franka-b" tabindex="-1"
                   aria-selected="false" aria-controls="video-panel-franka" data-tab="franka">
@@ -1669,7 +1669,7 @@
       <div class="platform-tabs reveal" role="tablist" aria-label="Robot platform — narrative">
         <button class="platform-tab" type="button" role="tab" id="platform-tab-dobot"
                 aria-selected="true" aria-controls="platform-panel-dobot" data-tab="dobot">
-          <span class="pt-name">DOBOT CR5A</span>
+          <span class="pt-name">Dobot CR5A</span>
           <span class="pt-sub">Memory on a held-out embodiment — tasks, tables and analysis</span>
         </button>
         <button class="platform-tab" type="button" role="tab" id="platform-tab-franka" tabindex="-1"
@@ -1679,7 +1679,7 @@
         </button>
       </div>
 
-      <!-- --------------------------------------------- DOBOT: memory platform -->
+      <!-- --------------------------------------------- Dobot: memory platform -->
       <div class="platform-panel" id="platform-panel-dobot" role="tabpanel"
            aria-labelledby="platform-tab-dobot" data-panel="dobot">
 
@@ -1746,7 +1746,7 @@
           </table>
         </div>
         <p class="table-note">
-          <b>Table 6.&ensp;DOBOT, basic setting.</b> Ten trials per language instruction. <em>Put in
+          <b>Table 6.&ensp;Dobot, basic setting.</b> Ten trials per language instruction. <em>Put in
           Drawer</em> and <em>Put on Shelf</em> are each evaluated with two instructions (upper and
           lower target) and reported as their average.
         </p>
@@ -1778,7 +1778,7 @@
           </table>
         </div>
         <p class="table-note">
-          <b>Table 7.&ensp;DOBOT, all settings.</b> Each entry is the unweighted mean over the three
+          <b>Table 7.&ensp;Dobot, all settings.</b> Each entry is the unweighted mean over the three
           memory-dependent or two memory-free tasks; <em>Avg.</em> averages the four disturbance
           settings. The memory advantage survives every disturbance, and on tasks that never needed
           memory BridgeVLA++ is no weaker than the base model in any setting.
