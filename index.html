@@ -80,12 +80,13 @@
     </div>
 
     <div class="links">
-      <a class="link-btn is-muted" href="#" aria-disabled="true" title="TODO: link the arXiv preprint">
+      <a class="link-btn" href="https://arxiv.org/abs/2608.05042" target="_blank" rel="noopener"
+         title="BridgeVLA++ on arXiv">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v2H4zm0 5h16v2H4zm0 5h10v2H4zm0 5h10v2H4z"/></svg>
-        <span>arXiv &nbsp;(coming soon)</span>
+        <span>arXiv</span>
       </a>
-      <a class="link-btn" href="static/pdfs/bridgevla_plus.pdf" target="_blank" rel="noopener"
-         title="BridgeVLA++ paper (PDF, 35 MB)">
+      <a class="link-btn" href="https://arxiv.org/pdf/2608.05042" target="_blank" rel="noopener"
+         title="BridgeVLA++ paper (PDF on arXiv)">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm8 1.5V8h4.5L14 3.5zM8 13h8v1.6H8zm0 3.4h8V18H8z"/></svg>
         <span>Paper PDF</span>
       </a>
@@ -141,14 +142,10 @@
     <div class="tldr reveal">
       <h2>TL;DR</h2>
       <p>
-        <b>BridgeVLA</b> makes 3D manipulation learning data-efficient by aligning
-        <em>both</em> ends of a pre-trained VLM: point clouds are rendered into multi-view
-        orthographic images, and actions are predicted as 2D heatmaps in that same image space.
-        <b>BridgeVLA++</b> adds a <b>unified spatio-temporal memory</b> — temporal memory keeps the
-        interaction history to decide <em>what to do next</em>, spatial memory re-renders earlier,
-        less-occluded geometry to decide <em>where exactly to act</em> — reaching state of the art on
-        memory-dependent manipulation <em>without</em> giving up the data efficiency or
-        out-of-distribution generalization of the base model.
+        <b>BridgeVLA++</b> achieves <b>state of the art</b> across five manipulation benchmarks with
+        only <b>9.2% additional parameters</b>, adding powerful <em>spatio-temporal memory</em> while
+        fully improving or preserving <b>BridgeVLA</b>'s exceptional data efficiency and OOD
+        generalization.
       </p>
     </div>
 
@@ -2125,18 +2122,18 @@
 
 <section class="section" style="padding-top:1.2rem">
   <div class="wrap">
-    <div class="todo reveal" style="margin-bottom:1rem">
-      <b>Placeholder.</b> The author list, venue and year are left blank until the extended version
-      is public — fill them in then.
-    </div>
-
-    <pre class="bibtex reveal" id="bib-plus"><code>@article{bridgevlaplus2026,
-  title   = {BridgeVLA++: A Data-Efficient, Generalizable, and Memory-Augmented
-             Vision-Language-Action Framework for 3D Manipulation},
-  author  = {},
-  journal = {},
-  year    = {},
-  note    = {Extension of the NeurIPS 2025 conference paper BridgeVLA}
+    <pre class="bibtex reveal" id="bib-plus"><code>@misc{li2026bridgevlaplus,
+  title         = {BridgeVLA++: A Data-Efficient, Generalizable, and Memory-Augmented
+                   Vision-Language-Action Framework for 3D Manipulation},
+  author        = {Peiyan Li and Yuze Zhu and Yixiang Chen and Qisen Ma and Yuan Xu
+                   and Jiabing Yang and He Guan and Yan Huang and Hongtao Wu and Xiao Ma
+                   and Tao Kong and Liang Wang and Tieniu Tan},
+  year          = {2026},
+  eprint        = {2608.05042},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.RO},
+  url           = {https://arxiv.org/abs/2608.05042},
+  note          = {Extension of the NeurIPS 2025 conference paper BridgeVLA}
 }</code></pre>
     <button class="copy-btn" type="button" data-copy-target="#bib-plus">
       <span>Copy BridgeVLA++ BibTeX</span>
